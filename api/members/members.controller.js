@@ -1,7 +1,9 @@
 const {
  createMember,
  createSpouseMember,
- createChildrens
+ createChildrens,
+ getUserByMemberEmail,
+ getMemberById
 } = require("./members.service");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
@@ -61,6 +63,10 @@ module.exports = {
     });
 
     }else{
+      var uniqueid = new Date().valueOf();
+      body.registration_id = uniqueid;
+      body.member_id = '';
+      var member_insertid = '';
     createMember(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -69,9 +75,11 @@ module.exports = {
           message: "Database connection errror"
         });
       }
-    });
-
-    createSpouseMember(body, (err, results) => {
+      var member_insertid = results.insertId;
+      const arr = body.childrens;
+    arr.forEach(element => { 
+    element.member_id = member_insertid;
+   createChildrens(element, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -79,55 +87,82 @@ module.exports = {
           message: "Database connection errror"
         });
       }
+    });
+     });
+
+    body.member_id = member_insertid;
+    body.registration_id = uniqueid+'S';
+    createSpouseMember(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Database connection error"
+        });
+      }
       return res.status(200).json({
-        success: 1,
+        success: true,
         data: results
       });
     });
 
-
-    // createChildrens(body, (err, results) => {
-    //   if (err) {
-    //     console.log(err);
-    //     return res.status(500).json({
-    //       success: 0,
-    //       message: "Database connection errror"
-    //     });
-    //   }
-    //   return res.status(200).json({
-    //     success: 1,
-    //     data: results
-    //   });
-    // });
-
-
-
+    });
 
     }
 
   },
 
-  getMember: (req, res) => {
-    const arr = [['1','cat','dog','fish'],['1','1','2','3']];
-    arr.forEach(element => { 
-    //    console.log(element[0]+''+element[1]+''+element[2]);
-   var test= Object.assign({}, element); // {0: 'one', 1: 'two'} 
-
-   createChildrens(test, (err, results) => {
+    MemberLogin: (req, res) => {
+    const body = req.body;
+    getUserByMemberEmail(body.email, (err, results) => {
       if (err) {
         console.log(err);
-        return res.status(500).json({
+      }
+      if (!results) {
+        return res.json({
           success: 0,
-          message: "Database connection errror"
+          data: "Invalid email or password"
         });
       }
-      return res.status(200).json({
+      const result = compareSync(body.password, results.password);
+      if (result) {
+        results.password = undefined;
+        const jsontoken = sign({ result: results }, "qwe1234", {
+          expiresIn: "1h"
+        });
+        return res.json({
+          success: 1,
+          message: "login successfully",
+          token: jsontoken
+        });
+      } else {
+        return res.json({
+          success: 0,
+          data: "Invalid email or password"
+        });
+      }
+    });
+  },
+
+getMemberById: (req, res) => {
+    const id = req.params.id;
+    getMemberById(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          message: "Record not Found"
+        });
+      }
+      results.password = undefined;
+      return res.json({
         success: 1,
         data: results
       });
     });
+  },
 
-     });
-  }
-  
 };
