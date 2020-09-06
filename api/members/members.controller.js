@@ -133,7 +133,8 @@ module.exports = {
         return res.json({
           success: 1,
           message: "login successfully",
-          token: jsontoken
+          token: jsontoken,
+          memberdata:results
         });
       } else {
         return res.json({
