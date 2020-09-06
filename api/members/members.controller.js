@@ -3,7 +3,9 @@ const {
  createSpouseMember,
  createChildrens,
  getUserByMemberEmail,
- getMemberById
+ getMemberById,
+ getSpouseBymemberId,
+ getChildrensBymemberId
 } = require("./members.service");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
@@ -133,8 +135,7 @@ module.exports = {
         return res.json({
           success: 1,
           message: "login successfully",
-          token: jsontoken,
-          memberdata:results
+          token: jsontoken
         });
       } else {
         return res.json({
@@ -146,7 +147,7 @@ module.exports = {
   },
 
 getMemberById: (req, res) => {
-    const id = req.params.id;
+    const id = req.decoded.result.id;
     getMemberById(id, (err, results) => {
       if (err) {
         console.log(err);
@@ -165,5 +166,76 @@ getMemberById: (req, res) => {
       });
     });
   },
+
+  getSpouseBymemberId: (req, res) => {
+    const id = req.decoded.result.id;
+    getSpouseBymemberId(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          message: "Record not Found"
+        });
+      }
+      results.password = undefined;
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+   getChildrensBymemberId: (req, res) => {
+    const id = req.decoded.result.id;
+    getChildrensBymemberId(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          message: "Record not Found"
+        });
+      }
+      results.password = undefined;
+      return res.json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+   TestMail: (req, res) => {
+    console.log(req.decoded.result.id);
+// const nodemailer = require('nodemailer');
+// let transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 587,
+//     secure: false,
+//     requireTLS: true,
+//     auth: {
+//         user: 'sathish.svapps@gmail.com',
+//         pass: 'sathish586'
+//     } 
+// });
+// let mailOptions = {
+//     from: 'sathish.svapps@gmail.com',
+//     to: 'msthsh5@gmail.com',
+//     subject: 'Test',
+//     text: 'Hello World!',
+//     html: '<b>Welcome Email From Sts</b>'
+// };
+// transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//         return console.log(error.message);
+//     }
+//     console.log('success');
+// });
+
+  }
 
 };

@@ -121,4 +121,30 @@ module.exports = {
     );
   },
 
+  getSpouseBymemberId: (id, callBack) => {
+    pool.query(
+      `select * from members_master where member_id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getChildrensBymemberId: (id, callBack) => {
+    pool.query(
+      `select * from childrens_master where member_id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 };
