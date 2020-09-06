@@ -16,12 +16,12 @@ module.exports = {
     const body = req.body;
     // console.log(body);
     body.created_on = current_date;
-    var uniqueid = new Date().valueOf();
-      body.registration_id = uniqueid;
-      body.member_id = '';
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
     if(body.membershiptype_id==1 || body.membershiptype_id==2){
+      var uniqueid = new Date().valueOf();
+      body.registration_id = uniqueid;
+      body.member_id = '';
       createMember(body, (err, results) => {
       if (err) {
         console.log(err);
