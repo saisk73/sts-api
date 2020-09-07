@@ -1,13 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require('cors');
+// const cors = require('cors');
 const nodeMailer = require('nodemailer');
 const app = express();
 const userRouter = require("./api/users/user.router");
 const membershiptypesRouter = require("./api/membershiptypes/membershiptypes.router"); //
 const membersRouter = require("./api/members/members.router"); //
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
+app.use(require('cors')({ origin: '*' }));
 
 app.use("/api/users", userRouter);
 app.use("/api/membershiptypes", membershiptypesRouter); //
