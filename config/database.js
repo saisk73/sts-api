@@ -9,4 +9,6 @@ const pool = createPool({
   connectionLimit: 10
 });
 
+// console.log(pool)
+
 module.exports = pool;

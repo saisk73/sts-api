@@ -8,6 +8,11 @@ const membershiptypesRouter = require("./api/membershiptypes/membershiptypes.rou
 const membersRouter = require("./api/members/members.router"); //
 app.use(cors());
 app.use(express.json());
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 app.use("/api/users", userRouter);
 app.use("/api/membershiptypes", membershiptypesRouter); //
