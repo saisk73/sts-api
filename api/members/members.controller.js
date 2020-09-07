@@ -10,6 +10,7 @@ const {
  getUserBymembermerificationid,
  updateUsers
 } = require("./members.service");
+require("dotenv").config();
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var moment = require('moment');
@@ -39,7 +40,8 @@ module.exports = {
 
       // //mail Sending//
       rand3=Math.floor((Math.random() * 30000000000000000) + 34);
-  host=req.get('host');
+  // host=req.get('host');
+      host= process.env.WEB_URL;
   linkse="http://"+req.get('host')+"/setpassword?token="+rand3;
       body.member_verifycode=rand3;
        let transporter = nodeMailer.createTransport({
@@ -88,7 +90,8 @@ module.exports = {
       }
 
       rand=Math.floor((Math.random() * 10000000000000000) + 94);
-  host=req.get('host');
+  // host=req.get('host');
+  host= process.env.WEB_URL;
   link="http://"+req.get('host')+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
@@ -148,7 +151,8 @@ module.exports = {
       }
 
   rand2=Math.floor((Math.random() * 20000000000000000) + 54);
-  host=req.get('host');
+  // host=req.get('host');
+  host= process.env.WEB_URL;
   links="http://"+req.get('host')+"/setpassword?token="+rand2;
   body.member_verifycode=rand2;
      let mailOptionse = {
