@@ -5,14 +5,17 @@ const {
  getUserByMemberEmail,
  getMemberById,
  getSpouseBymemberId,
- getChildrensBymemberId
+ getChildrensBymemberId,
+ // ResetPassword, 
+ getUserBymembermerificationid,
+ updateUsers
 } = require("./members.service");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var moment = require('moment');
 var nodeMailer = require('nodemailer');
 var current_date =  moment().format('YYYY-MM-DD');
-
+var rand,rand2,host,link,links,linkse,rand3;
 module.exports = {
   createMember: (req, res) => {
     const body = req.body;
@@ -35,31 +38,34 @@ module.exports = {
       // console.log(results.insertId);
 
       // //mail Sending//
-      //   let transporter = nodeMailer.createTransport({
-      //     host: 'smtp.gmail.com',
-      //     port: 465,
-      //     secure: true,
-      //     auth: {
-      //         user: 'msthsh5@gmail.com',
-      //         pass: 'sathish586'
-      //     }
-      // });
-      // let mailOptions = {
-      //     from: 'msthsh5@gmail.com', // sender address
-      //     to: body.email, // list of receivers
-      //     subject: 'Welcome Mail', // Subject line
-      //     text: 'Welcome to STS', // plain text body
-      //     html: '<b>Welcome Email From STS</b>' // html body
-      // };
+      rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+  host=req.get('host');
+  linkse="http://"+req.get('host')+"/setpassword?token="+rand3;
+      body.member_verifycode=rand3;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'New Member Registration', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+      };
 
-      // transporter.sendMail(mailOptions, (error, info) => {
-      //     if (error) {
-      //         return console.log(error);
-      //     }
-      //     console.log('Message %s sent: %s', info.messageId, info.response);
-      //         res.render('index');
-      //     });
-
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          });
       // //mail Send//
       return res.status(200).json({
         success: 1,
@@ -80,6 +86,41 @@ module.exports = {
           message: "Database connection errror"
         });
       }
+
+      rand=Math.floor((Math.random() * 10000000000000000) + 94);
+  host=req.get('host');
+  link="http://"+req.get('host')+"/setpassword?token="+rand;
+      body.member_id = '';
+      var member_insertid = '';
+    body.member_verifycode=rand;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'New Member Registration', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          });
+    
+
+
+
       var member_insertid = results.insertId;
       const arr = body.childrens;
     arr.forEach(element => { 
@@ -105,6 +146,27 @@ module.exports = {
           message: "Database connection error"
         });
       }
+
+  rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+  host=req.get('host');
+  links="http://"+req.get('host')+"/setpassword?token="+rand2;
+  body.member_verifycode=rand2;
+     let mailOptionse = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.s_email,// list of receivers
+          subject: 'New Member Registration', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+          html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+      };
+
+      transporter.sendMail(mailOptionse, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          });
+
       return res.status(200).json({
         success: true,
         data: results
@@ -208,6 +270,26 @@ getMemberById: (req, res) => {
       return res.json({
         success: 1,
         data: results
+      });
+    });
+  },
+
+  updateUsers: (req, res) => {
+    const body = req.body;
+  
+    const salt = genSaltSync(10);
+   body.password = hashSync(body.password, salt);
+   
+    updateUsers(body, (err, results) => {
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "updated successfully"
       });
     });
   },

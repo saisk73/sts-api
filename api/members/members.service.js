@@ -147,4 +147,40 @@ module.exports = {
     );
   },
 
+  updateUsers: (data, callBack) => {
+     console.log(data);
+    pool.query(
+      `update members_master set password=?,question1=?,question2=?,question3=?,answer1=?,answer2=?,answer3=?,member_verifycode='' where member_verifycode = ?`,
+      [
+    data.password,
+    data.question1,
+    data.question2,
+    data.question3,
+    data.answer1,
+    data.answer2,
+    data.answer3,
+    data.member_verifycode
+        
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  getUserBymembermerificationid: (member_verifycode, callBack) => {
+    pool.query(
+      `select * from members_master where member_verifycode = ?`,
+      [member_verifycode],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 };
