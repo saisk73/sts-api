@@ -280,6 +280,19 @@ getMemberById: (req, res) => {
 
   updateUsers: (req, res) => {
     const body = req.body;
+
+  getUserBymembermerificationid(body.member_verifycode, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Invalid Verification Code"
+        });
+      }
+    else
+    {
   
     const salt = genSaltSync(10);
    body.password = hashSync(body.password, salt);
@@ -295,7 +308,7 @@ getMemberById: (req, res) => {
         success: 1,
         message: "updated successfully"
       });
-    });
+    })}; });
   },
 
    TestMail: (req, res) => {
