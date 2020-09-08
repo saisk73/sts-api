@@ -170,6 +170,23 @@ module.exports = {
       }
     );
   },
+
+  changepasswordBymemberId: (data, callBack) => {
+    pool.query(
+      `update members_master set password=? where id = ?`,
+      [
+    data.new_password,
+    data.id   
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  
   getUserBymembermerificationid: (member_verifycode, callBack) => {
     pool.query(
       `select * from members_master where member_verifycode = ?`,

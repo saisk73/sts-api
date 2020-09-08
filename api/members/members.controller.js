@@ -8,7 +8,8 @@ const {
  getChildrensBymemberId,
  // ResetPassword, 
  getUserBymembermerificationid,
- updateUsers
+ updateUsers,
+ changepasswordBymemberId
 } = require("./members.service");
 require("dotenv").config();
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
@@ -310,6 +311,45 @@ getMemberById: (req, res) => {
       });
     })}; });
   },
+
+  changepasswordBymemberId: (req, res) => {
+    const body = req.body;
+    const id = req.decoded.result.id;
+    body.id = id;
+    const salt = genSaltSync(10);
+    body.new_password = hashSync(body.new_password, salt);
+  getMemberById(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (!results) {
+          return res.json({
+          success: 0,
+          message: "Record not Found"
+        });
+      }
+  const result = compareSync(body.current_password, results.password);
+  if(result){
+       changepasswordBymemberId(body, (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "updated successfully"
+      });  
+    });
+    }else{
+        return res.json({
+          success: 0,
+          data: "Invalid Current Password"
+        });
+      }
+    });
+  },
+
 
    TestMail: (req, res) => {
     console.log(req.decoded.result.id);

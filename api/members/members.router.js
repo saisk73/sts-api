@@ -7,6 +7,7 @@ const {
   getSpouseBymemberId,
   getChildrensBymemberId,
   updateUsers,
+  changepasswordBymemberId,
   TestMail
 } = require("./members.controller");
 
@@ -16,6 +17,7 @@ router.get("/", checkToken, getMemberById);
 router.get("/spouse", checkToken, getSpouseBymemberId);
 router.get("/childrens", checkToken, getChildrensBymemberId);
 router.patch("/reset", updateUsers);
+router.get("/changepassword", checkToken, changepasswordBymemberId);
 router.get("/mail", checkToken, TestMail);
 
 
