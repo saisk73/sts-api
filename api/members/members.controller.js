@@ -25,6 +25,16 @@ module.exports = {
     body.created_on = current_date;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
+      getUserByMemberEmail(body.email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (results) {
+        return res.json({
+          success: 0,
+          data: "Email already exist."
+        });
+      }
     if(body.membershiptype_id==1 || body.membershiptype_id==2){
        var uniqueid = new Date().valueOf();
       body.registration_id = uniqueid;
@@ -181,6 +191,7 @@ module.exports = {
     });
 
     }
+  });
 
   },
 
