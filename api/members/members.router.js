@@ -17,7 +17,7 @@ router.get("/", checkToken, getMemberById);
 router.get("/spouse", checkToken, getSpouseBymemberId);
 router.get("/childrens", checkToken, getChildrensBymemberId);
 router.patch("/reset", updateUsers);
-router.get("/changepassword", checkToken, changepasswordBymemberId);
+router.post("/changepassword", checkToken, changepasswordBymemberId);
 router.get("/mail", checkToken, TestMail);
 
 
