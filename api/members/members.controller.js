@@ -16,6 +16,8 @@ Updatememberpassword,
 // Updatepassworddetails
 } = require("./members.service");
 require("dotenv").config();
+const ejs = require("ejs");
+const path=require("path");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var moment = require('moment');
