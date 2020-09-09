@@ -420,7 +420,7 @@ getMemberById: (req, res) => {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: results.full_name,
-      confirm_link:"http://"+req.get('host')+"/resetpassword?token=" + rand4
+      confirm_link:"http://"+host+"/resetpassword?token=" + rand4
     })
   .then(result => {
     emailTemplatems=result;
