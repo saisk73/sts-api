@@ -148,7 +148,6 @@ module.exports = {
   },
 
   updateUsers: (data, callBack) => {
-     console.log(data);
     pool.query(
       `update members_master set password=?,question1=?,question2=?,question3=?,answer1=?,answer2=?,answer3=?,member_verifycode='' where member_verifycode = ?`,
       [
@@ -186,7 +185,7 @@ module.exports = {
       }
     );
   },
-  
+
   getUserBymembermerificationid: (member_verifycode, callBack) => {
     pool.query(
       `select * from members_master where member_verifycode = ?`,

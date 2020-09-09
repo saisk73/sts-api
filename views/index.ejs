@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+    <title>Set Password</title>
+
+    <style>
+     body{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            text-align: center;
+        }
+        .mail-part{
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #ececec;
+            padding-bottom: 40px;
+            
+        }
+        a{
+            
+            color:#fff;
+            padding: 8px 20px;
+            font-size: 14px;
+            background-color: #d8071a;
+            text-decoration: none;
+            display: inline-block;
+
+        }
+        a:hover{
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="mail-part" style="color: #000">
+   <img src="http://drpt.in/frontend/setpassword-mail.jpg" alt="" width="100%">
+   <p>Hello <%= user_firstname %></p>
+    <h4>Thanks for trusting us and becoming a member of STS. You're all set to go.</h4>
+    <p>To start exploring the STS and avail the benefits, create a new password using the below link.</p>
+    <a href=<%= confirm_link  %> ><font color="white">Set Password</font></a>
+</div>
+</body>
+</html>

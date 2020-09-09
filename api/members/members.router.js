@@ -8,6 +8,8 @@ const {
   getChildrensBymemberId,
   updateUsers,
   changepasswordBymemberId,
+  Forgotpassword,
+  Updatememberpassword,
   TestMail
 } = require("./members.controller");
 
@@ -18,6 +20,8 @@ router.get("/spouse", checkToken, getSpouseBymemberId);
 router.get("/childrens", checkToken, getChildrensBymemberId);
 router.patch("/reset", updateUsers);
 router.post("/changepassword", checkToken, changepasswordBymemberId);
+router.patch("/forgotpassword", Forgotpassword);
+router.patch("/updatepassword", Updatememberpassword);
 router.get("/mail", checkToken, TestMail);
 
 

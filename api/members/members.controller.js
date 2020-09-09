@@ -9,7 +9,11 @@ const {
  // ResetPassword, 
  getUserBymembermerificationid,
  updateUsers,
- changepasswordBymemberId
+ changepasswordBymemberId,
+ updateUsersVerification,
+// Forgotpassword,
+Updatememberpassword,
+// Updatepassworddetails
 } = require("./members.service");
 require("dotenv").config();
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
@@ -25,7 +29,7 @@ module.exports = {
     body.created_on = current_date;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
-      getUserByMemberEmail(body.email, (err, results) => {
+    getUserByMemberEmail(body.email, (err, results) => {
       if (err) {
         console.log(err);
       }
@@ -35,6 +39,7 @@ module.exports = {
           data: "Email already exist."
         });
       }
+
     if(body.membershiptype_id==1 || body.membershiptype_id==2){
        var uniqueid = new Date().valueOf();
       body.registration_id = uniqueid;
@@ -292,19 +297,6 @@ getMemberById: (req, res) => {
 
   updateUsers: (req, res) => {
     const body = req.body;
-
-  getUserBymembermerificationid(body.member_verifycode, (err, results) => {
-         if (err) {
-        console.log(err);
-      }
-      if (!results) {
-        return res.json({
-          success: 0,
-          mesagee: "Invalid Verification Code"
-        });
-      }
-    else
-    {
   
     const salt = genSaltSync(10);
    body.password = hashSync(body.password, salt);
@@ -320,7 +312,7 @@ getMemberById: (req, res) => {
         success: 1,
         message: "updated successfully"
       });
-    })}; });
+    });
   },
 
   changepasswordBymemberId: (req, res) => {
@@ -359,6 +351,110 @@ getMemberById: (req, res) => {
         });
       }
     });
+  },
+
+  Updatememberpassword: (req, res) => {
+    const body = req.body;
+
+  getUserBymembermerificationid(body.member_verifycode, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Invalid Verification Code"
+        });
+      }
+    else
+    {
+  
+    const salt = genSaltSync(10);
+   body.password = hashSync(body.password, salt);
+   
+    Updatepassworddetails(body, (err, results) => {
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Password updated successfully"
+      });
+    })}; });
+  },
+
+  Forgotpassword: (req, res) => {
+    const body = req.body;
+
+  getUserByMemberEmail(body.email, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Email Not Found"
+        });
+      }else{
+  
+      rand4=Math.floor((Math.random() * 90000000000000000) + 34);
+  // host=req.get('host');
+      host= process.env.WEB_URL;
+  linksef="http://"+req.get('host')+"/setpassword?token="+rand4;
+      body.member_verifycode=rand4;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: results.full_name,
+      confirm_link:"http://"+req.get('host')+"/resetpassword?token=" + rand4
+    })
+  .then(result => {
+    emailTemplatems=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Forgot Password', // Subject line
+          text:'Password Reset', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+  })});
+   body.member_verifycode=rand4;
+   
+    updateUsersVerification(body, (err, results) => {
+    
+    
+    
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Verification Sent successfully to your mail"
+      });
+    })}; });
   },
 
 
