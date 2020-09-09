@@ -75,7 +75,7 @@ module.exports = {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: req.body.full_name,
-      confirm_link:"http://localhost:8080/setpassword?token=" + rand3
+      confirm_link:"http://"+host+"/setpassword?token=" + rand3
     })
   .then(result => {
     emailTemplatems=result;
@@ -136,7 +136,7 @@ module.exports = {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: req.body.full_name,
-      confirm_link:"http://localhost:8080/setpassword?token=" + rand
+      confirm_link:"http://"+host+"/setpassword?token=" + rand
     })
   .then(result => {
       emailTemplate = result;
@@ -194,7 +194,7 @@ module.exports = {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: req.body.s_full_name,
-      confirm_link:"http://localhost:8080/setpassword?token=" + rand2
+      confirm_link:"http://"+host+"/setpassword?token=" + rand2
     })  .then(result => {
       emailTemplates = result;
      let mailOptionse = {
