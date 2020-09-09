@@ -71,21 +71,29 @@ module.exports = {
               pass: '2020#2020'
           }
       });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: req.body.full_name,
+      confirm_link:"http://localhost:8080/setpassword?token=" + rand3
+    })
+  .then(result => {
+    emailTemplatems=result;
       let mailOptions = {
           from: 'svapps.websts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
-         html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
       };
-
       transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
               return console.log(error);
           }
           console.log('Message %s sent: %s', info.messageId, info.response);
               res.render('index');
-          });
+         })});
       // //mail Send//
       return res.status(200).json({
         success: 1,
@@ -123,21 +131,30 @@ module.exports = {
               pass: '2020#2020'
           }
       });
+     
+        let emailTemplate;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: req.body.full_name,
+      confirm_link:"http://localhost:8080/setpassword?token=" + rand
+    })
+  .then(result => {
+      emailTemplate = result;
       let mailOptions = {
           from: 'svapps.websts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
-         html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
+      html: emailTemplate
       };
-
       transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
               return console.log(error);
           }
           console.log('Message %s sent: %s', info.messageId, info.response);
               res.render('index');
-          });
+          })});
     
 
 
@@ -173,21 +190,28 @@ module.exports = {
   host= process.env.WEB_URL;
   links="http://"+host+"/setpassword?token="+rand2;
   body.member_verifycode=rand2;
+        let emailTemplates;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: req.body.s_full_name,
+      confirm_link:"http://localhost:8080/setpassword?token=" + rand2
+    })  .then(result => {
+      emailTemplates = result;
      let mailOptionse = {
           from: 'svapps.websts@gmail.com', // sender address
           to: req.body.s_email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
-          html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+          //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+      html:emailTemplates
       };
-
       transporter.sendMail(mailOptionse, (error, info) => {
           if (error) {
               return console.log(error);
           }
           console.log('Message %s sent: %s', info.messageId, info.response);
               res.render('index');
-          });
+          })});
 
       return res.status(200).json({
         success: true,
