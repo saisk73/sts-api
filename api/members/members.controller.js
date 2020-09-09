@@ -60,7 +60,7 @@ module.exports = {
       rand3=Math.floor((Math.random() * 30000000000000000) + 34);
   // host=req.get('host');
       host= process.env.WEB_URL;
-  linkse="http://"+req.get('host')+"/setpassword?token="+rand3;
+  linkse="http://"+host+"/setpassword?token="+rand3;
       body.member_verifycode=rand3;
        let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
@@ -110,7 +110,7 @@ module.exports = {
       rand=Math.floor((Math.random() * 10000000000000000) + 94);
   // host=req.get('host');
   host= process.env.WEB_URL;
-  link="http://"+req.get('host')+"/setpassword?token="+rand;
+  link="http://"+host+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
     body.member_verifycode=rand;
@@ -171,7 +171,7 @@ module.exports = {
   rand2=Math.floor((Math.random() * 20000000000000000) + 54);
   // host=req.get('host');
   host= process.env.WEB_URL;
-  links="http://"+req.get('host')+"/setpassword?token="+rand2;
+  links="http://"+host+"/setpassword?token="+rand2;
   body.member_verifycode=rand2;
      let mailOptionse = {
           from: 'svapps.websts@gmail.com', // sender address
@@ -405,7 +405,7 @@ getMemberById: (req, res) => {
       rand4=Math.floor((Math.random() * 90000000000000000) + 34);
   // host=req.get('host');
       host= process.env.WEB_URL;
-  linksef="http://"+req.get('host')+"/setpassword?token="+rand4;
+  linksef="http://"+host+"/setpassword?token="+rand4;
       body.member_verifycode=rand4;
        let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
