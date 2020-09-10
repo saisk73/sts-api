@@ -46,6 +46,8 @@ module.exports = {
        var uniqueid = new Date().valueOf();
       body.registration_id = uniqueid;
       body.member_id = '';
+        rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+        body.member_verifycode=rand3;
       createMember(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -57,11 +59,10 @@ module.exports = {
       // console.log(results.insertId);
 
       // //mail Sending//
-      rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+    
   // host=req.get('host');
       host= process.env.WEB_URL;
   linkse="http://"+host+"/setpassword?token="+rand3;
-      body.member_verifycode=rand3;
        let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -106,6 +107,8 @@ module.exports = {
       body.registration_id = uniqueid;
       body.member_id = '';
       var member_insertid = '';
+      rand=Math.floor((Math.random() * 10000000000000000) + 94);
+       body.member_verifycode=rand;
     createMember(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -115,13 +118,13 @@ module.exports = {
         });
       }
 
-      rand=Math.floor((Math.random() * 10000000000000000) + 94);
+      
   // host=req.get('host');
   host= process.env.WEB_URL;
   link="http://"+host+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
-    body.member_verifycode=rand;
+   
        let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -161,6 +164,7 @@ module.exports = {
 
       var member_insertid = results.insertId;
       const arr = body.childrens;
+      if(arr){
     arr.forEach(element => { 
     element.member_id = member_insertid;
    createChildrens(element, (err, results) => {
@@ -173,9 +177,11 @@ module.exports = {
       }
     });
      });
-
+    }
     body.member_id = member_insertid;
     body.registration_id = uniqueid+'S';
+    rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+    body.member_verifycode=rand2;
     createSpouseMember(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -185,11 +191,11 @@ module.exports = {
         });
       }
 
-  rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+  
   // host=req.get('host');
   host= process.env.WEB_URL;
   links="http://"+host+"/setpassword?token="+rand2;
-  body.member_verifycode=rand2;
+  
         let emailTemplates;
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
@@ -321,8 +327,21 @@ getMemberById: (req, res) => {
     });
   },
 
-  updateUsers: (req, res) => {
+updateUsers: (req, res) => {
     const body = req.body;
+
+  getUserBymembermerificationid(body.member_verifycode, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Invalid Verification Code"
+        });
+      }
+    else
+    {
   
     const salt = genSaltSync(10);
    body.password = hashSync(body.password, salt);
@@ -338,7 +357,7 @@ getMemberById: (req, res) => {
         success: 1,
         message: "updated successfully"
       });
-    });
+    })}; });
   },
 
   changepasswordBymemberId: (req, res) => {

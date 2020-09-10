@@ -3,8 +3,8 @@ const pool = require("../../config/database");
 module.exports = {
   createMember: (data, callBack) => {
     pool.query(
-      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,created_on) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,member_verifycode,created_on) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.member_id,
         data.registration_id,
@@ -27,6 +27,7 @@ module.exports = {
         data.introducer1,
         data.introducer2,
         data.comments,
+        data.member_verifycode,
         data.created_on
       ],
       (error, results, fields) => {
@@ -40,8 +41,8 @@ module.exports = {
 
     createSpouseMember: (data, callBack) => {
     pool.query(
-      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,created_on) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,member_verifycode,created_on) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.member_id,
         data.registration_id,
@@ -64,6 +65,7 @@ module.exports = {
         data.introducer1,
         data.introducer2,
         data.comments,
+        data.member_verifycode,
         data.created_on
       ],
       (error, results, fields) => {
