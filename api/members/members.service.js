@@ -204,6 +204,25 @@ module.exports = {
     );
   },
 
+    Updatepassworddetails: (data, callBack) => {
+     console.log(data);
+    pool.query(
+      `update members_master set password=?,member_verifycode='' where member_verifycode = ?`,
+      [
+    data.password,
+    
+    data.member_verifycode
+        
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getUserBymembermerificationid: (member_verifycode, callBack) => {
     pool.query(
       `select * from members_master where member_verifycode = ?`,
