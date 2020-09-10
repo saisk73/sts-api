@@ -386,7 +386,6 @@ getMemberById: (req, res) => {
          if (err) {
         console.log(err);
       }
-      console.log(results)
       if (!results) {
         return res.json({
           success: 0,
