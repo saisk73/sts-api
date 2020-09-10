@@ -13,7 +13,7 @@ const {
  updateUsersVerification,
 // Forgotpassword,
 Updatememberpassword,
-// Updatepassworddetails
+Updatepassworddetails
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -386,6 +386,7 @@ getMemberById: (req, res) => {
          if (err) {
         console.log(err);
       }
+      console.log(results)
       if (!results) {
         return res.json({
           success: 0,
