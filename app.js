@@ -6,7 +6,7 @@ const app = express();
 const userRouter = require("./api/users/user.router");
 const membershiptypesRouter = require("./api/membershiptypes/membershiptypes.router"); //
 const membersRouter = require("./api/members/members.router"); //
-app.use(require('cors')({ origin: '*',  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",}));
+app.use(require('cors')({ origin: '*' }));
 app.use(express.json());
 
 const referrerPolicy = require('referrer-policy')
