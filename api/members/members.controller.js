@@ -3,6 +3,7 @@ const {
  createSpouseMember,
  createChildrens,
  getUserByMemberEmail,
+ AddMemberOtp,
  getMemberById,
  getSpouseBymemberId,
  getChildrensBymemberId,
@@ -13,7 +14,11 @@ const {
  updateUsersVerification,
 // Forgotpassword,
 Updatememberpassword,
-Updatepassworddetails
+Updatepassworddetails,
+getMemberotpverification,
+VerifyEmail,
+VerifyOtp,
+deleteOtp
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -356,6 +361,111 @@ updateUsers: (req, res) => {
       return res.json({
         success: 1,
         message: "updated successfully"
+      });
+    })}; });
+  },
+ VerifyOtp: (req, res) => {
+    const body = req.body;
+
+  getMemberotpverification(body.member_verifyotp, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Invalid  Otp Code"
+        });
+      }
+    else
+    {
+  
+   
+   body.member_verifyotpid = results.member_verifyotpid;
+   
+    deleteOtp(body, (err, results) => {
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "otp verified successfully"
+      });
+    })}; });
+  },
+  VerifyEmail: (req, res) => {
+    const body = req.body;
+console.log(body);
+  getUserByMemberEmail(body.email, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (results) {
+        return res.json({
+          success: 0,
+          mesagee: "Email already registered with us"
+        });
+      }
+    else
+    {
+		
+var digits = '0123456789'; 
+    let OTP = ''; 
+    for (let i = 0; i < 6; i++ ) { 
+        OTP += digits[Math.floor(Math.random() * 10)]; 
+    } 
+   
+   
+   body.member_verifyotp = OTP;
+  body.created_on = current_date;
+   
+    AddMemberOtp(body, (err, results) => {
+		let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatemswaw;
+    ejs
+    .renderFile(path.join(__dirname, "views/otp.ejs"), {
+      user_firstname: req.body.full_name,
+	  user_otp:req.body.member_verifyotp
+
+    })
+  .then(result => {
+    emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Otp Verification', // Subject line
+          text:'Please Verify Your Otp', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Otp sent to your email please verify it"
+	
       });
     })}; });
   },

@@ -10,6 +10,8 @@ const {
   changepasswordBymemberId,
   Forgotpassword,
   Updatememberpassword,
+  VerifyEmail,
+  VerifyOtp,
   TestMail
 } = require("./members.controller");
 
@@ -23,6 +25,7 @@ router.post("/changepassword", checkToken, changepasswordBymemberId);
 router.patch("/forgotpassword", Forgotpassword);
 router.patch("/updatepassword", Updatememberpassword);
 router.get("/mail", checkToken, TestMail);
-
+router.patch("/verifyemail",VerifyEmail);
+router.patch("/verifyotp",VerifyOtp);
 
 module.exports = router;

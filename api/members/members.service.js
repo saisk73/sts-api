@@ -76,6 +76,23 @@ module.exports = {
       }
     );
   },
+     AddMemberOtp: (data, callBack) => {
+    pool.query(
+      `insert into  membersverify_otp(member_verifyotp,created_on) 
+                values(?,?)`,
+      [
+        data.member_verifyotp,
+  
+        data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 
  createChildrens: (data, callBack) => {
     pool.query(
@@ -224,11 +241,41 @@ module.exports = {
       }
     );
   },
+      deleteOtp: (data, callBack) => {
+     console.log(data);
+    pool.query(
+      `delete from  membersverify_otp  where member_verifyotpid = ?`,
+      [
+    data.member_verifyotpid
+    
+
+        
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 
   getUserBymembermerificationid: (member_verifycode, callBack) => {
     pool.query(
       `select * from members_master where member_verifycode = ?`,
       [member_verifycode],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+    getMemberotpverification: (member_verifyotp, callBack) => {
+    pool.query(
+      `select * from  membersverify_otp where member_verifyotp = ?`,
+      [member_verifyotp],
       (error, results, fields) => {
         if (error) {
           callBack(error);
