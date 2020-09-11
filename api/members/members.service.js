@@ -285,4 +285,40 @@ module.exports = {
     );
   },
 
+  UpdateSpouse: (data, callBack) => {
+    pool.query(
+      `update members_master set nric_no=?,full_name=?,dob=?,mobile=? where id = ?`,
+      [
+    data.s_nric_no,
+    data.s_full_name,
+    data.s_dob,
+    data.s_mobile,
+    data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateChildrens: (data, callBack) => {
+    pool.query(
+      `update childrens_master set child_name=?,dob=? where id = ?`,
+      [
+        data.child_name,
+        data.child_dob,
+        data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };

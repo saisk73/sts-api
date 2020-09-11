@@ -12,6 +12,8 @@ const {
   Updatememberpassword,
   VerifyEmail,
   VerifyOtp,
+  UpdateSpouse,
+  UpdateChildrens,
   TestMail
 } = require("./members.controller");
 
@@ -27,5 +29,7 @@ router.patch("/updatepassword", Updatememberpassword);
 router.get("/mail", checkToken, TestMail);
 router.patch("/verifyemail",VerifyEmail);
 router.patch("/verifyotp",VerifyOtp);
+router.patch("/updatespouse", checkToken, UpdateSpouse);
+router.patch("/updatechildrens", checkToken, UpdateChildrens);
 
 module.exports = router;
