@@ -18,7 +18,9 @@ Updatepassworddetails,
 getMemberotpverification,
 VerifyEmail,
 VerifyOtp,
-deleteOtp
+deleteOtp,
+UpdateSpouse,
+UpdateChildrens
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -367,11 +369,10 @@ updateUsers: (req, res) => {
  VerifyOtp: (req, res) => {
     const body = req.body;
 
-  getMemberotpverification(body.member_verifyotp,body.member_email, (err, results) => {
+  getMemberotpverification(body.member_verifyotp, (err, results) => {
          if (err) {
         console.log(err);
       }
-	  
       if (!results) {
         return res.json({
           success: 0,
@@ -612,6 +613,117 @@ var digits = '0123456789';
       });
     })}; });
   },
+
+  UpdateSpouse: (req, res) => {
+  const body = req.body;
+  
+  if(body.id){
+UpdateSpouse(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "updated successfully"
+      });
+    })
+  }else{
+    body.member_id = req.decoded.result.id;
+    body.registration_id = req.decoded.result.registration_id+'S';
+    body.membershiptype_id = req.decoded.result.membershiptype_id;
+    body.membership_amount = req.decoded.result.membership_amount;
+    body.street1 = req.decoded.result.street1;
+    body.street2 = req.decoded.result.street2;
+    body.unit_no = req.decoded.result.unit_no;
+    body.postal_code = req.decoded.result.postal_code;
+    body.habbies = req.decoded.result.habbies;
+    body.introducer1 = req.decoded.result.introducer1;
+    body.introducer2 = req.decoded.result.introducer2;
+    body.comments = req.decoded.result.comments;
+    body.created_on = current_date;
+    rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+    body.member_verifycode=rand2;
+    // console.log(body);
+    createSpouseMember(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Database connection error"
+        });
+      }
+  
+  // host=req.get('host');
+  host= process.env.WEB_URL;
+  links="http://"+host+"/setpassword?token="+rand2;
+  
+        let emailTemplates;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: req.body.s_full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand2
+    })  .then(result => {
+      emailTemplates = result;
+     let mailOptionse = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.s_email,// list of receivers
+          subject: 'New Member Registration', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+          //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+      html:emailTemplates
+      };
+      transporter.sendMail(mailOptionse, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          })});
+
+      return res.status(200).json({
+        success: true,
+        data: results
+      });
+    });
+  }
+  },
+
+  UpdateChildrens: (req, res) => {
+    const body = req.body;
+    if(body.id){
+      UpdateChildrens(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "updated successfully"
+      });
+    })
+    }else{
+      body.member_id = req.decoded.result.id;
+      body.created_on = current_date;
+    createChildrens(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: results
+      });
+
+    });
+    }
+
+  },
+
 
 
    TestMail: (req, res) => {

@@ -78,11 +78,10 @@ module.exports = {
   },
      AddMemberOtp: (data, callBack) => {
     pool.query(
-      `insert into  membersverify_otp(member_verifyotp,member_email,created_on) 
-                values(?,?,?)`,
+      `insert into  membersverify_otp(member_verifyotp,created_on) 
+                values(?,?)`,
       [
         data.member_verifyotp,
-		data.email,
   
         data.created_on
       ],
@@ -273,17 +272,51 @@ module.exports = {
       }
     );
   },
-    getMemberotpverification: (member_verifyotp,member_email,callBack) => {
-	
+    getMemberotpverification: (member_verifyotp, callBack) => {
     pool.query(
-	
-      `select * from  membersverify_otp where member_verifyotp=? and member_email=?`,
-      [member_verifyotp,member_email],
+      `select * from  membersverify_otp where member_verifyotp = ?`,
+      [member_verifyotp],
       (error, results, fields) => {
         if (error) {
           callBack(error);
         }
         return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateSpouse: (data, callBack) => {
+    pool.query(
+      `update members_master set nric_no=?,full_name=?,dob=?,mobile=? where id = ?`,
+      [
+    data.s_nric_no,
+    data.s_full_name,
+    data.s_dob,
+    data.s_mobile,
+    data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateChildrens: (data, callBack) => {
+    pool.query(
+      `update childrens_master set child_name=?,dob=? where id = ?`,
+      [
+        data.child_name,
+        data.child_dob,
+        data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
       }
     );
   },
