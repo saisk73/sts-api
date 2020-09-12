@@ -50,9 +50,25 @@ module.exports = {
       }
 
     if(body.membershiptype_id==1 || body.membershiptype_id==2){
-       var uniqueid = new Date().valueOf();
+      var uniqueid = new Date().valueOf();
       body.registration_id = uniqueid;
       body.member_id = '';
+      body.member_type = 0;
+      //Create MEmbership end date-start
+      body.membership_enddate = '';
+    if(body.membershiptype_id==1){
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    var fulldate = new Date(year + 1, month, day);
+    var toDate = fulldate.toISOString().slice(0, 10);
+    body.membership_enddate = toDate;
+    body.membership_type = 0;
+    }else{
+      body.membership_type = 1;
+    }
+    //Create MEmbership end date-end
         rand3=Math.floor((Math.random() * 30000000000000000) + 34);
         body.member_verifycode=rand3;
       createMember(body, (err, results) => {
@@ -113,9 +129,26 @@ module.exports = {
       var uniqueid = new Date().valueOf();
       body.registration_id = uniqueid;
       body.member_id = '';
+      body.member_type = 0;
       var member_insertid = '';
       rand=Math.floor((Math.random() * 10000000000000000) + 94);
        body.member_verifycode=rand;
+
+      //Create MEmbership end date-start
+      body.membership_enddate = '';
+    if(body.membershiptype_id==3){
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    var fulldate = new Date(year + 1, month, day);
+    var toDate = fulldate.toISOString().slice(0, 10);
+    body.membership_enddate = toDate;
+    body.membership_type = 0;
+    }else{
+      body.membership_type = 1;
+    }
+    //Create MEmbership end date-end 
     createMember(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -186,6 +219,22 @@ module.exports = {
      });
     }
     body.member_id = member_insertid;
+    body.member_type = 1;
+     //Create MEmbership end date-start
+      body.membership_enddate = '';
+    if(body.membershiptype_id==3){
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    var fulldate = new Date(year + 1, month, day);
+    var toDate = fulldate.toISOString().slice(0, 10);
+    body.membership_enddate = toDate;
+    body.membership_type = 0;
+    }else{
+      body.membership_type = 1;
+    }
+    //Create MEmbership end date-end
     body.registration_id = uniqueid+'S';
     rand2=Math.floor((Math.random() * 20000000000000000) + 54);
     body.member_verifycode=rand2;
@@ -642,7 +691,10 @@ UpdateSpouse(body, (err, results) => {
     body.introducer1 = req.decoded.result.introducer1;
     body.introducer2 = req.decoded.result.introducer2;
     body.comments = req.decoded.result.comments;
+    body.membership_type = req.decoded.result.membership_type;
+    body.membership_enddate = req.decoded.result.membership_enddate;
     body.created_on = current_date;
+    body.member_type = 1;
     rand2=Math.floor((Math.random() * 20000000000000000) + 54);
     body.member_verifycode=rand2;
     // console.log(body);
@@ -728,7 +780,16 @@ UpdateSpouse(body, (err, results) => {
 
 
    TestMail: (req, res) => {
-    console.log(req.decoded.result.id);
+    var d = new Date("2014-10-29");
+    var year = d.getFullYear();
+    var month = d.getMonth();
+    var day = d.getDate();
+    var fulldate = new Date(year + 1, month, day);
+    var toDate = fulldate.toISOString().slice(0, 10);
+    console.log(toDate);
+    // var date = new Date("2014-10-29"); 
+    //  var todate = date.setFullYear(date.getFullYear() + 1);
+    // console.log(todate);
 // const nodemailer = require('nodemailer');
 // let transporter = nodemailer.createTransport({
 //     host: 'smtp.gmail.com',

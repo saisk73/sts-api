@@ -26,7 +26,7 @@ router.patch("/reset", updateUsers);
 router.post("/changepassword", checkToken, changepasswordBymemberId);
 router.patch("/forgotpassword", Forgotpassword);
 router.patch("/updatepassword", Updatememberpassword);
-router.get("/mail", checkToken, TestMail);
+router.get("/mail", TestMail);
 router.patch("/verifyemail",VerifyEmail);
 router.patch("/verifyotp",VerifyOtp);
 router.patch("/updatespouse", checkToken, UpdateSpouse);
