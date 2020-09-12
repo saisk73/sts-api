@@ -14,6 +14,7 @@ const {
   VerifyOtp,
   UpdateSpouse,
   UpdateChildrens,
+  UpdateMemberShip,
   TestMail
 } = require("./members.controller");
 
@@ -31,5 +32,6 @@ router.patch("/verifyemail",VerifyEmail);
 router.patch("/verifyotp",VerifyOtp);
 router.patch("/updatespouse", checkToken, UpdateSpouse);
 router.patch("/updatechildrens", checkToken, UpdateChildrens);
+router.patch("/updatemembership", checkToken, UpdateMemberShip);
 
 module.exports = router;

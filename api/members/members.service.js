@@ -326,4 +326,165 @@ module.exports = {
     );
   },
 
+  UpdateMemberShipByMember: (data, callBack) => {
+    pool.query(
+      `update members_master set membershiptype_id=?, membership_amount=?, nric_no=?, full_name=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=? where id = ?`,
+      [
+    data.membershiptype_id,
+    data.membership_amount,
+    data.nric_no,
+    data.full_name,
+    data.dob,
+    data.nationality,
+    data.mobile,
+    data.residential_status,
+    data.street1,
+    data.street2,
+    data.unit_no,
+    data.postal_code,
+    data.habbies,
+    data.membership_type,
+    data.membership_enddate,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberShip_spouse: (data, callBack) => {
+    pool.query(
+      `update members_master set membershiptype_id=?, membership_amount=?, street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=?,member_status=? where member_id = ?`,
+      [
+    data.membershiptype_id,
+    data.membership_amount,
+    data.street1,
+    data.street2,
+    data.unit_no,
+    data.postal_code,
+    data.habbies,
+    data.membership_type,
+    data.membership_enddate,
+    data.member_status,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberShip_SpouseInactive: (data, callBack) => {
+    pool.query(
+      `update members_master set member_status=? where member_id = ?`,
+      [
+    data.member_status,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberShip_ChildrensInactive: (data, callBack) => {
+    pool.query(
+      `update childrens_master set status=? where member_id = ?`,
+      [
+    data.status,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberShipBySpouse: (data, callBack) => {
+    pool.query(
+      `update members_master set membershiptype_id=?, membership_amount=?, nric_no=?, full_name=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=? where id = ?`,
+      [
+    data.membershiptype_id,
+    data.membership_amount,
+    data.nric_no,
+    data.full_name,
+    data.dob,
+    data.nationality,
+    data.mobile,
+    data.residential_status,
+    data.street1,
+    data.street2,
+    data.unit_no,
+    data.postal_code,
+    data.habbies,
+    data.membership_type,
+    data.membership_enddate,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberShip_Member: (data, callBack) => {
+    pool.query(
+      `update members_master set membershiptype_id=?, membership_amount=?, street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=?,member_status=? where id = ?`,
+      [
+    data.membershiptype_id,
+    data.membership_amount,
+    data.street1,
+    data.street2,
+    data.unit_no,
+    data.postal_code,
+    data.habbies,
+    data.membership_type,
+    data.membership_enddate,
+    data.member_status,
+    data.member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  createMemberShipHistory: (data, callBack) => {
+    pool.query(
+      `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,created_on) 
+                values(?,?,?,?)`,
+      [
+        data.member_id,
+        data.membershiptype_id,
+        data.membership_amount,
+        data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };

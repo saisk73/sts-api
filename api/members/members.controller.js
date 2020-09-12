@@ -20,7 +20,14 @@ getMemberotpverification,
 // VerifyOtp,
 deleteOtp,
 UpdateSpouse,
-UpdateChildrens
+UpdateChildrens,
+UpdateMemberShipByMember,
+UpdateMemberShip_spouse,
+UpdateMemberShip_SpouseInactive,
+UpdateMemberShip_ChildrensInactive,
+UpdateMemberShipBySpouse,
+UpdateMemberShip_Member,
+createMemberShipHistory
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -774,6 +781,261 @@ UpdateSpouse(body, (err, results) => {
 
     });
     }
+
+  },
+
+  UpdateMemberShip: (req, res) => {
+    const body = req.body;
+    body.membership_type = '';
+    var membershiptype_id = req.decoded.result.membershiptype_id;
+    if(body.member_type==0){
+        if(membershiptype_id==1 && body.membershiptype_id==2){
+          body.membership_type = 1; // 0-> Annual
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            //Create Membership History - Start
+            // body.created_on=current_date;
+            // createMemberShipHistory(body, (err, results) => {
+            //  if(err){
+            //     console.log(err);
+            //   }
+            // });
+          //Create Membership History - End
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+      if(membershiptype_id==1 && body.membershiptype_id==3){
+          var membership_enddate = req.decoded.result.membership_enddate;
+          var d = new Date(membership_enddate);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          body.membership_type = 0; // 0-> Annual
+          body.membership_enddate = toDate;
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+      if(membershiptype_id==1 && body.membershiptype_id==4){
+          body.membership_type = 1; // 0-> Annual
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+      if(membershiptype_id==2 && body.membershiptype_id==3){
+          var d = new Date(current_date);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          body.membership_type = 0; // 0-> Annual
+          body.membership_enddate = toDate;
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+      if(membershiptype_id==2 && body.membershiptype_id==4){
+          body.membership_type = 1; // 1-> Life
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+      if(membershiptype_id==3 && body.membershiptype_id==4){
+          body.membership_type = 1; // 1-> Life
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              body.member_status=0;
+            UpdateMemberShip_spouse(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+      if(membershiptype_id==4 && body.membershiptype_id==2){
+          body.membership_type = 1; // 1-> Life
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            body.member_status=1;
+            UpdateMemberShip_spouse(body, (err, results) => {  //UpdateMemberShip_SpouseInactive
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            body.status=1;
+            UpdateMemberShip_ChildrensInactive(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+        if(membershiptype_id==3 && body.membershiptype_id==1){
+         var membership_enddate = req.decoded.result.membership_enddate;
+          var d = new Date(membership_enddate);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          body.membership_type = 0; // 0-> Annual
+          body.membership_enddate = toDate;
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            body.member_status=1;
+            UpdateMemberShip_spouse(body, (err, results) => {  // UpdateMemberShip_SpouseInactive
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            body.status=1;
+            UpdateMemberShip_ChildrensInactive(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+          if(membershiptype_id==3 && body.membershiptype_id==2){
+          body.membership_type = 1; // 1-> Life
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            body.member_status=1;
+            UpdateMemberShip_spouse(body, (err, results) => { // UpdateMemberShip_SpouseInactive
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            body.status=1;
+            UpdateMemberShip_ChildrensInactive(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+      }else{
+
+          if(membershiptype_id==3 && body.membershiptype_id==4){
+          body.membership_type = 1; // 1-> Life
+          body.membership_enddate = '';
+          body.id = req.decoded.result.id;
+            UpdateMemberShipBySpouse(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              body.member_status=0;
+              body.member_id = req.decoded.result.member_id;
+            UpdateMemberShip_Member(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+
+      }
 
   },
 
