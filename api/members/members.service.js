@@ -241,15 +241,12 @@ module.exports = {
       }
     );
   },
-      deleteOtp: (data, callBack) => {
+    deleteOtp: (data, callBack) => {
      console.log(data);
     pool.query(
       `delete from  membersverify_otp  where member_verifyotpid = ?`,
       [
-    data.member_verifyotpid
-    
-
-        
+    data.member_verifyotpid  
       ],
       (error, results, fields) => {
         if (error) {
@@ -272,10 +269,12 @@ module.exports = {
       }
     );
   },
-    getMemberotpverification: (member_verifyotp, callBack) => {
+    getMemberotpverification: (member_verifyotp,member_email,callBack) => {
+  
     pool.query(
-      `select * from  membersverify_otp where member_verifyotp = ?`,
-      [member_verifyotp],
+  
+      `select * from  membersverify_otp where member_verifyotp=? and member_email=?`,
+      [member_verifyotp,member_email],
       (error, results, fields) => {
         if (error) {
           callBack(error);

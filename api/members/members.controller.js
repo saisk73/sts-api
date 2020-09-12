@@ -16,8 +16,8 @@ const {
 Updatememberpassword,
 Updatepassworddetails,
 getMemberotpverification,
-VerifyEmail,
-VerifyOtp,
+// VerifyEmail,
+// VerifyOtp,
 deleteOtp,
 UpdateSpouse,
 UpdateChildrens
@@ -369,10 +369,11 @@ updateUsers: (req, res) => {
  VerifyOtp: (req, res) => {
     const body = req.body;
 
-  getMemberotpverification(body.member_verifyotp, (err, results) => {
+  getMemberotpverification(body.member_verifyotp,body.member_email, (err, results) => {
          if (err) {
         console.log(err);
       }
+    
       if (!results) {
         return res.json({
           success: 0,
@@ -413,7 +414,7 @@ console.log(body);
       }
     else
     {
-		
+    
 var digits = '0123456789'; 
     let OTP = ''; 
     for (let i = 0; i < 6; i++ ) { 
@@ -425,7 +426,7 @@ var digits = '0123456789';
   body.created_on = current_date;
    
     AddMemberOtp(body, (err, results) => {
-		let transporter = nodeMailer.createTransport({
+    let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
           secure: true,
@@ -438,7 +439,7 @@ var digits = '0123456789';
     ejs
     .renderFile(path.join(__dirname, "views/otp.ejs"), {
       user_firstname: req.body.full_name,
-	  user_otp:req.body.member_verifyotp
+    user_otp:req.body.member_verifyotp
 
     })
   .then(result => {
@@ -467,7 +468,7 @@ var digits = '0123456789';
       return res.json({
         success: 1,
         message: "Otp sent to your email please verify it"
-	
+  
       });
     })}; });
   },
