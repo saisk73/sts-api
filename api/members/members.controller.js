@@ -27,7 +27,8 @@ UpdateMemberShip_SpouseInactive,
 UpdateMemberShip_ChildrensInactive,
 UpdateMemberShipBySpouse,
 UpdateMemberShip_Member,
-createMemberShipHistory
+createMemberShipHistory,
+UpdateLoginOtp
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -309,6 +310,89 @@ module.exports = {
       }
       const result = compareSync(body.password, results.password);
       if (result) {
+        var digits = '0123456789'; 
+    let OTP = ''; 
+    for (let i = 0; i < 6; i++ ) { 
+        OTP += digits[Math.floor(Math.random() * 10)]; 
+    } 
+   body.login_otp = OTP;
+   body.id= results.id;
+    UpdateLoginOtp(body, (err, results) => {
+    let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatemswaw;
+    ejs
+    .renderFile(path.join(__dirname, "views/loginotp.ejs"), {
+      user_firstname: req.body.full_name,
+      user_otp:body.login_otp
+
+    })
+  .then(result => {
+    emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Otp Verification', // Subject line
+          text:'Please Verify Your Otp', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Otp sent to your email please verify it"
+  
+      });
+    });
+
+
+
+        // results.password = undefined;
+        // const jsontoken = sign({ result: results }, "qwe1234", {
+        //   expiresIn: "1h"
+        // });
+        // return res.json({
+        //   success: 1,
+        //   message: "login successfully",
+        //   token: jsontoken
+        // });
+
+      } else {
+        return res.json({
+          success: 0,
+          data: "Invalid email or password"
+        });
+      }
+    });
+  },
+
+  VerifyLoginOtp: (req, res) => {
+    const body = req.body;
+    getUserByMemberEmail(body.email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if(results){
+      if (body.otp==results.login_otp) {
         results.password = undefined;
         const jsontoken = sign({ result: results }, "qwe1234", {
           expiresIn: "1h"
@@ -318,12 +402,20 @@ module.exports = {
           message: "login successfully",
           token: jsontoken
         });
+
       } else {
         return res.json({
           success: 0,
-          data: "Invalid email or password"
+          data: "Invalid OTP"
         });
       }
+    }else{
+      return res.json({
+          success: 0,
+          data: "Invalid OTP"
+        });
+    }
+
     });
   },
 
@@ -476,11 +568,8 @@ var digits = '0123456789';
     for (let i = 0; i < 6; i++ ) { 
         OTP += digits[Math.floor(Math.random() * 10)]; 
     } 
-   
-   
    body.member_verifyotp = OTP;
-  body.created_on = current_date;
-   
+   body.created_on = current_date;
     AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
@@ -526,7 +615,9 @@ var digits = '0123456789';
         message: "Otp sent to your email please verify it"
   
       });
-    })}; });
+    });
+  }
+   });
   },
 
   changepasswordBymemberId: (req, res) => {
@@ -799,12 +890,12 @@ UpdateSpouse(body, (err, results) => {
               return;
                }
             //Create Membership History - Start
-            // body.created_on=current_date;
-            // createMemberShipHistory(body, (err, results) => {
-            //  if(err){
-            //     console.log(err);
-            //   }
-            // });
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
           //Create Membership History - End
             return res.json({
               success: 1,
@@ -829,6 +920,15 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -845,6 +945,15 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -867,6 +976,15 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -883,6 +1001,15 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -898,6 +1025,16 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
               body.member_status=0;
             UpdateMemberShip_spouse(body, (err, results) => {
             if(err){
@@ -921,6 +1058,16 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             body.member_status=1;
             UpdateMemberShip_spouse(body, (err, results) => {  //UpdateMemberShip_SpouseInactive
             if(err){
@@ -958,6 +1105,15 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             body.member_status=1;
             UpdateMemberShip_spouse(body, (err, results) => {  // UpdateMemberShip_SpouseInactive
             if(err){
@@ -988,6 +1144,16 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+
+            //Create Membership History - Start
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             body.member_status=1;
             UpdateMemberShip_spouse(body, (err, results) => { // UpdateMemberShip_SpouseInactive
             if(err){
@@ -1019,6 +1185,7 @@ UpdateSpouse(body, (err, results) => {
               console.log(err);
               return;
                }
+
               body.member_status=0;
               body.member_id = req.decoded.result.member_id;
             UpdateMemberShip_Member(body, (err, results) => {
@@ -1027,6 +1194,17 @@ UpdateSpouse(body, (err, results) => {
               return;
                }
               })
+
+            //Create Membership History - Start
+            body.id = req.decoded.result.member_id;
+            body.created_on=current_date;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+
             return res.json({
               success: 1,
               message: "updated successfully"

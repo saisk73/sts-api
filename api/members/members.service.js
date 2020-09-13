@@ -473,10 +473,26 @@ module.exports = {
       `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,created_on) 
                 values(?,?,?,?)`,
       [
-        data.member_id,
+        data.id,
         data.membershiptype_id,
         data.membership_amount,
         data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateLoginOtp: (data, callBack) => {
+    pool.query(
+      `update members_master set login_otp=? where id = ?`,
+      [
+    data.login_otp,
+    data.id  
       ],
       (error, results, fields) => {
         if (error) {

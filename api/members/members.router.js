@@ -15,11 +15,13 @@ const {
   UpdateSpouse,
   UpdateChildrens,
   UpdateMemberShip,
+  VerifyLoginOtp,
   TestMail
 } = require("./members.controller");
 
 router.post("/", createMember);
 router.post("/login", MemberLogin);
+router.post("/verifyloginotp", VerifyLoginOtp);
 router.get("/", checkToken, getMemberById);
 router.get("/spouse", checkToken, getSpouseBymemberId);
 router.get("/childrens", checkToken, getChildrensBymemberId);
