@@ -382,6 +382,32 @@ module.exports = {
     );
   },
 
+  UpdateSpouseBySpouseId: (data, callBack) => {
+    pool.query(
+      `update members_master set nric_no=?, full_name=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=? where id = ?`,
+      [
+    data.nric_no,
+    data.full_name,
+    data.dob,
+    data.nationality,
+    data.mobile,
+    data.residential_status,
+    data.street1,
+    data.street2,
+    data.unit_no,
+    data.postal_code,
+    data.habbies,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   UpdateMemberShip_spouse: (data, callBack) => {
     pool.query(
       `update members_master set membershiptype_id=?, membership_amount=?, street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=?,member_status=? where member_id = ?`,

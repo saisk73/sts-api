@@ -23,6 +23,7 @@ UpdateSpouse,
 UpdateChildrens,
 UpdateMemberShipByMember,
 UpdateMemberByMemberId,
+UpdateSpouseBySpouseId,
 UpdateMemberShip_spouse,
 UpdateMemberShip_SpouseInactive,
 UpdateMemberShip_ChildrensInactive,
@@ -550,7 +551,7 @@ updateUsers: (req, res) => {
   },
   VerifyEmail: (req, res) => {
     const body = req.body;
-console.log(body);
+// console.log(body);
   getUserByMemberEmail(body.email, (err, results) => {
          if (err) {
         console.log(err);
@@ -560,10 +561,7 @@ console.log(body);
           success: 0,
           mesagee: "Email already registered with us"
         });
-      }
-    else
-    {
-    
+      }else{
 var digits = '0123456789'; 
     let OTP = ''; 
     for (let i = 0; i < 6; i++ ) { 
@@ -1221,6 +1219,20 @@ UpdateSpouse(body, (err, results) => {
             });
           //Create Membership History - End
 
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
+            if(membershiptype_id==body.membershiptype_id){
+            body.id = req.decoded.result.id;
+            UpdateSpouseBySpouseId(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
             return res.json({
               success: 1,
               message: "updated successfully"
