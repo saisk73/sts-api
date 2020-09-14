@@ -841,21 +841,27 @@ UpdateSpouse(body, (err, results) => {
 
   UpdateChildrens: (req, res) => {
     const body = req.body;
-    if(body.id){
-      UpdateChildrens(body, (err, results) => {
+      const arr = body.childrens;
+      if(arr){
+    arr.forEach(element => { 
+    if(element.id){
+    element.member_id = req.decoded.result.id;
+   UpdateChildrens(element, (err, results) => {
       if (err) {
         console.log(err);
-        return;
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
       }
-      return res.json({
-        success: 1,
-        message: "updated successfully"
+      return res.status(200).json({
+        success: true,
+        data: results
       });
-    })
+    });
     }else{
-      body.member_id = req.decoded.result.id;
-      body.created_on = current_date;
-    createChildrens(body, (err, results) => {
+  element.member_id = req.decoded.result.id;
+   createChildrens(element, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -871,6 +877,8 @@ UpdateSpouse(body, (err, results) => {
 
     });
     }
+     });
+    }   
 
   },
 
