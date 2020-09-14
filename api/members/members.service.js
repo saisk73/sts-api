@@ -161,7 +161,7 @@ module.exports = {
 
   getChildrensBymemberId: (id, callBack) => {
     pool.query(
-      `select id,member_id,child_name,dob,gender from childrens_master where member_id = ?`,
+      `select id,member_id,child_name,dob as child_dob,gender as child_gender from childrens_master where member_id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
