@@ -22,6 +22,7 @@ deleteOtp,
 UpdateSpouse,
 UpdateChildrens,
 UpdateMemberShipByMember,
+UpdateMemberByMemberId,
 UpdateMemberShip_spouse,
 UpdateMemberShip_SpouseInactive,
 UpdateMemberShip_ChildrensInactive,
@@ -1174,6 +1175,21 @@ UpdateSpouse(body, (err, results) => {
             });
             })
             }
+
+      if(membershiptype_id==body.membershiptype_id){
+            body.id = req.decoded.result.id;
+            UpdateMemberByMemberId(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+            }
+
       }else{
 
           if(membershiptype_id==3 && body.membershiptype_id==4){
