@@ -1349,6 +1349,7 @@ UpdateSpouse(body, (err, results) => {
         return res.json({
           success: 1,
           message: "login successfully",
+          role_id: results.role_id,
           token: jsontoken
         });
 
