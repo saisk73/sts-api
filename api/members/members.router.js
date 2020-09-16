@@ -16,6 +16,12 @@ const {
   UpdateChildrens,
   UpdateMemberShip,
   VerifyLoginOtp,
+
+  AdminLogin,
+  VerifyAdminLoginOtp,
+  getMembersList,
+  UpdateMemberVerifyStatus,
+  getMemberDetails,
   TestMail
 } = require("./members.controller");
 
@@ -35,5 +41,16 @@ router.patch("/verifyotp",VerifyOtp);
 router.patch("/updatespouse", checkToken, UpdateSpouse);
 router.patch("/updatechildrens", checkToken, UpdateChildrens);
 router.patch("/updatemembership", checkToken, UpdateMemberShip);
+
+router.post("/adminlogin", AdminLogin);
+router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);
+router.get("/memberslist", checkToken, getMembersList);
+router.get("/memberdetails", checkToken, getMemberDetails);
+router.get("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
+
+
+
+
+
 
 module.exports = router;

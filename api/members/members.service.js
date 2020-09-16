@@ -3,8 +3,8 @@ const pool = require("../../config/database");
 module.exports = {
   createMember: (data, callBack) => {
     pool.query(
-      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,password,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,created_on,member_type,membership_type,membership_enddate) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.member_id,
         data.registration_id,
@@ -27,7 +27,6 @@ module.exports = {
         data.introducer1,
         data.introducer2,
         data.comments,
-        data.member_verifycode,
         data.created_on,
         data.member_type,
         data.membership_type,
@@ -545,6 +544,79 @@ module.exports = {
       [
     data.login_otp,
     data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getAdminByMemberEmail: (email, callBack) => {
+    pool.query(
+      `select * from members_master where role_id!=0 and email = ?`,
+      [email],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getMembersList:(callBack) => {
+    pool.query(
+      `select * from members_master where status=0 and member_id=''`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getMemberDetails:(id, callBack) => {
+    pool.query(
+      `select * from members_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateMemberVerifyStatus: (data, callBack) => {
+    pool.query(
+      `update members_master set member_verifycode=?,status=? where id = ?`,
+      [
+    data.member_verifycode,
+    data.status,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateSpouseVerifyStatus: (data, callBack) => {
+    pool.query(
+      `update members_master set member_verifycode=?,status=? where member_id = ?`,
+      [
+    data.member_verifycode,
+    data.status,
+    data.id
       ],
       (error, results, fields) => {
         if (error) {

@@ -30,7 +30,12 @@ UpdateMemberShip_ChildrensInactive,
 UpdateMemberShipBySpouse,
 UpdateMemberShip_Member,
 createMemberShipHistory,
-UpdateLoginOtp
+UpdateLoginOtp,
+getAdminByMemberEmail,
+getMembersList,
+UpdateMemberVerifyStatus,
+UpdateSpouseVerifyStatus,
+getMemberDetails
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -79,6 +84,7 @@ module.exports = {
       body.membership_type = 1;
     }
     //Create MEmbership end date-end
+
         rand3=Math.floor((Math.random() * 30000000000000000) + 34);
         body.member_verifycode=rand3;
       createMember(body, (err, results) => {
@@ -94,7 +100,7 @@ module.exports = {
       // //mail Sending//
     
   // host=req.get('host');
-      host= process.env.WEB_URL;
+  host= process.env.WEB_URL;
   linkse="http://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
@@ -107,7 +113,7 @@ module.exports = {
       });
           let emailTemplatems;
     ejs
-    .renderFile(path.join(__dirname, "views/index.ejs"), {
+    .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
       user_firstname: req.body.full_name,
       confirm_link:"http://"+host+"/setpassword?token=" + rand3
     })
@@ -187,7 +193,7 @@ module.exports = {
      
         let emailTemplate;
     ejs
-    .renderFile(path.join(__dirname, "views/index.ejs"), {
+    .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
       user_firstname: req.body.full_name,
       confirm_link:"http://"+host+"/setpassword?token=" + rand
     })
@@ -1247,13 +1253,292 @@ UpdateSpouse(body, (err, results) => {
             });
             })
             }
-
-
       }
-
   },
 
 
+  AdminLogin: (req, res) => {
+    const body = req.body;
+    getAdminByMemberEmail(body.email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          data: "Invalid email or password"
+        });
+      }
+      const result = compareSync(body.password, results.password);
+      if (result) {
+        var digits = '0123456789'; 
+    let OTP = ''; 
+    for (let i = 0; i < 6; i++ ) { 
+        OTP += digits[Math.floor(Math.random() * 10)]; 
+    } 
+   body.login_otp = OTP;
+   body.id= results.id;
+    UpdateLoginOtp(body, (err, results) => {
+    let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatemswaw;
+    ejs
+    .renderFile(path.join(__dirname, "views/loginotp.ejs"), {
+      user_firstname: req.body.full_name,
+      user_otp:body.login_otp
+
+    })
+  .then(result => {
+    emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Otp Verification', // Subject line
+          text:'Please Verify Your Otp', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Otp sent to your email please verify it"
+  
+      });
+    });
+
+      } else {
+        return res.json({
+          success: 0,
+          data: "Invalid email or password"
+        });
+      }
+    });
+  },
+
+  VerifyAdminLoginOtp: (req, res) => {
+    const body = req.body;
+    getAdminByMemberEmail(body.email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if(results){
+      if (body.otp==results.login_otp) {
+        results.password = undefined;
+        const jsontoken = sign({ result: results }, "qwe1234", {
+          expiresIn: "1h"
+        });
+        return res.json({
+          success: 1,
+          message: "login successfully",
+          token: jsontoken
+        });
+
+      } else {
+        return res.json({
+          success: 0,
+          data: "Invalid OTP"
+        });
+      }
+    }else{
+      return res.json({
+          success: 0,
+          data: "Invalid OTP"
+        });
+    }
+
+    });
+  },
+
+getMembersList: (req, res) => {
+    getMembersList((err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+getMemberDetails: (req, res) => {
+    const body = req.body;
+    getMemberDetails(body.id,(err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      getSpouseBymemberId(body.id, (err, results1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      getChildrensBymemberId(body.id, (err, results2) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      
+      return res.status(200).json({
+        success: 1,
+        member_data: results,
+        spouse_data:results1,
+        child_data:results2
+      });
+
+      });
+      });  
+
+    });
+  },
+
+  UpdateMemberVerifyStatus: (req, res) => {
+    const body = req.body;
+    rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+    body.member_verifycode=rand3;
+
+     getMemberDetails(body.id,(err, resul1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+   UpdateMemberVerifyStatus(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+      //mail Sending//
+      host= process.env.WEB_URL;
+      linkse="http://"+host+"/setpassword?token="+rand3;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: resul1.full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+    })
+  .then(result => {
+    emailTemplatems=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: resul1.email,// list of receivers
+          subject: 'New Member Registration Confirmation', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+      // //mail Send//
+//=======================Spouse Update Start=====================================//
+getSpouseBymemberId(body.id, (err, results1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if(results1){
+      UpdateSpouseVerifyStatus(body, (err, resul) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+
+      rand=Math.floor((Math.random() * 10000000000000000) + 94);
+      body.member_verifycode=rand;
+      host= process.env.WEB_URL;
+      link="http://"+host+"/setpassword?token="+rand;
+      body.member_id = '';
+      var member_insertid = '';
+   
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+     
+        let emailTemplate;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: results1.full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand
+    })
+  .then(result => {
+      emailTemplate = result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: results1.email,// list of receivers
+          subject: 'New Member Registration Confirmation', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
+      html: emailTemplate
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          })});
+    });
+    }
+});
+
+//=======================Spouse Update End=====================================//
+
+      return res.status(200).json({
+        success: true,
+        data: results
+      });
+    });
+   });
+
+  },
 
    TestMail: (req, res) => {
     var d = new Date("2014-10-29");
