@@ -647,4 +647,37 @@ module.exports = {
     );
   },
 
+  
+  MemberShipRenewalByMember: (data, callBack) => {
+    pool.query(
+      `update members_master set membership_enddate=? where id = ?`,
+      [
+    data.membership_enddate,
+    data.member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  MemberShipRenewalBySpouse: (data, callBack) => {
+    pool.query(
+      `update members_master set membership_enddate=? where id = ?`,
+      [
+    data.membership_enddate,
+    data.spouse_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };

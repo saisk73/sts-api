@@ -36,7 +36,9 @@ getMembersList,
 UpdateMemberVerifyStatus,
 UpdateSpouseVerifyStatus,
 getMemberDetails,
-createMemberLoginHistory
+createMemberLoginHistory,
+MemberShipRenewalByMember,
+MemberShipRenewalBySpouse
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -1277,8 +1279,8 @@ UpdateSpouse(body, (err, results) => {
       }
       if (!results) {
         return res.json({
-          success: 0,
-          data: "Invalid email or password"
+          success: 2,
+          data: "Email id doesn't exist"
         });
       }
       const result = compareSync(body.password, results.password);
@@ -1560,6 +1562,193 @@ getSpouseBymemberId(body.id, (err, results1) => {
     });
    });
 
+  },
+
+  MemberShipRenewal:(req, res) => {
+    const body = req.body;
+    // console.log(req);
+    // const member_type = req.decoded.result.member_type;
+    const member_type = body.member_type;
+    console.log(member_type);
+    if(member_type==0){  //member_type=0 when member
+      const membership_enddate = req.decoded.result.membership_enddate;
+      console.log(membership_enddate);
+      body.member_id = req.decoded.result.id;
+      var d = new Date(membership_enddate);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+      body.membership_enddate = toDate;
+      console.log(toDate);
+      MemberShipRenewalByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            body.id = req.decoded.result.id;
+            body.membershiptype_id = req.decoded.result.membershiptype_id;
+            body.membership_amount = req.decoded.result.membership_amount;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+          getSpouseBymemberId(body.member_id, (err, results1) => {
+              if (err) {
+                console.log(err);
+                return;
+              }
+          if(results1){ 
+          body.spouse_id = results1.id;
+          MemberShipRenewalBySpouse(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+             });
+        }
+        });
+
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            });
+    }else{
+      const membership_enddate = req.decoded.result.membership_enddate;
+      body.id = req.decoded.result.id;
+      var d = new Date(membership_enddate);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+         body.membership_enddate = toDate;
+         body.spouse_id = req.decoded.result.id;
+      MemberShipRenewalBySpouse(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            //Create Membership History - Start
+            body.created_on=current_date;
+            body.id = req.decoded.result.member_id;
+            body.membershiptype_id = req.decoded.result.membershiptype_id;
+            body.membership_amount = req.decoded.result.membership_amount;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+          //Create Membership History - End
+          body.member_id = req.decoded.result.member_id;
+          MemberShipRenewalByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+             });
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            });
+    }   
+  },
+
+  UpdateVerifyEmail: (req, res) => {
+    const body = req.body;
+// console.log(body);
+  getUserByMemberEmail(body.email, (err, results) => {
+         if (err) {
+        console.log(err);
+      }
+      if (results) {
+var digits = '0123456789'; 
+    let OTP = ''; 
+    for (let i = 0; i < 6; i++ ) { 
+        OTP += digits[Math.floor(Math.random() * 10)]; 
+    } 
+   body.member_verifyotp = OTP;
+   body.created_on = current_date;
+    AddMemberOtp(body, (err, results) => {
+    let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatemswaw;
+    ejs
+    .renderFile(path.join(__dirname, "views/otp.ejs"), {
+      user_firstname: req.body.full_name,
+    user_otp:req.body.member_verifyotp
+
+    })
+  .then(result => {
+    emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Otp Verification', // Subject line
+          text:'Please Verify Your Otp', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Otp sent to your email please verify it"
+  
+      });
+    });
+  }
+   });
+  },
+
+  UpdateVerifyOtp: (req, res) => {
+  const body = req.body;
+  getMemberotpverification(body.member_verifyotp,body.member_email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Invalid  Otp Code"
+        });
+      }else{
+   body.member_verifyotpid = results.member_verifyotpid;
+    deleteOtp(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "otp verified successfully"
+      });
+    })}; });
   },
 
    TestMail: (req, res) => {

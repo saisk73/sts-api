@@ -21,6 +21,9 @@ const {
   getMembersList,
   UpdateMemberVerifyStatus,
   getMemberDetails,
+  MemberShipRenewal,
+  UpdateVerifyEmail,
+  UpdateVerifyOtp,
   TestMail
 } = require("./members.controller");
 
@@ -45,7 +48,13 @@ router.post("/adminlogin", AdminLogin);
 router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);
 router.get("/memberslist", checkToken, getMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
-router.get("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
+router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
+
+router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
+router.patch("/updateverifyemail",UpdateVerifyEmail);
+router.patch("/updateverifyotp",UpdateVerifyOtp);
+
+
 
 
 
