@@ -782,7 +782,6 @@ var digits = '0123456789';
 
   UpdateSpouse: (req, res) => {
   const body = req.body;
-  
   if(body.id){
 UpdateSpouse(body, (err, results) => {
       if (err) {
