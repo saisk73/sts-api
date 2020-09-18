@@ -407,7 +407,7 @@ module.exports = {
           expiresIn: "1h"
         });
 
-    createMemberLoginHistory(results.id, (err, results) => {
+    createMemberLoginHistory(results, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({

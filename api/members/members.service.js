@@ -627,4 +627,20 @@ module.exports = {
     );
   },
 
+  createMemberLoginHistory: (data, callBack) => {
+    pool.query(
+      `insert into memberslogins_master(member_id) 
+                values(?)`,
+      [
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };
