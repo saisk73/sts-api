@@ -782,9 +782,9 @@ var digits = '0123456789';
 
   UpdateSpouse: (req, res) => {
   const body = req.body;
-  const member_id = req.decoded.result.id;
-  if(member_id){
-UpdateSpouse(member_id, (err, results) => {
+  
+  if(body.id){
+UpdateSpouse(body, (err, results) => {
       if (err) {
         console.log(err);
         return;
