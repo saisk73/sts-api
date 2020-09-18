@@ -1416,12 +1416,20 @@ getMemberDetails: (req, res) => {
         return;
       }
       
-      return res.status(200).json({
+      if(results){
+        return res.status(200).json({
         success: 1,
         member_data: results,
         spouse_data:results1,
         child_data:results2
       });
+      }else{
+        return res.status(200).json({
+        success: 2,
+        message: 'No Data Found.',
+      });
+      }
+      
 
       });
       });  
