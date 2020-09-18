@@ -291,12 +291,16 @@ module.exports = {
 
   UpdateSpouse: (data, callBack) => {
     pool.query(
-      `update members_master set nric_no=?,full_name=?,dob=?,mobile=? where id = ?`,
+      `update members_master set nric_no=?,full_name=?,dob=?,mobile=?,nationality=?,residential_status=?,gender=?,email=? where id = ?`,
       [
     data.s_nric_no,
     data.s_full_name,
     data.s_dob,
     data.s_mobile,
+    data.s_nationality,
+    data.s_residential_status,
+    data.s_gender,
+    data.s_email,
     data.id  
       ],
       (error, results, fields) => {
