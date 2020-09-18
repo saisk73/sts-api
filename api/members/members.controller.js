@@ -35,7 +35,8 @@ getAdminByMemberEmail,
 getMembersList,
 UpdateMemberVerifyStatus,
 UpdateSpouseVerifyStatus,
-getMemberDetails
+getMemberDetails,
+createMemberLoginHistory
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -405,6 +406,18 @@ module.exports = {
         const jsontoken = sign({ result: results }, "qwe1234", {
           expiresIn: "1h"
         });
+
+    createMemberLoginHistory(results.id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+    });
+
+
         return res.json({
           success: 1,
           message: "login successfully",
@@ -1383,20 +1396,21 @@ getMembersList: (req, res) => {
   },
 
 getMemberDetails: (req, res) => {
-    const body = req.body;
-    getMemberDetails(body.id,(err, results) => {
+    // const body = req.body;
+    const id = req.params.id;
+    getMemberDetails(id,(err, results) => {
       if (err) {
         console.log(err);
         return;
       }
 
-      getSpouseBymemberId(body.id, (err, results1) => {
+      getSpouseBymemberId(id, (err, results1) => {
       if (err) {
         console.log(err);
         return;
       }
 
-      getChildrensBymemberId(body.id, (err, results2) => {
+      getChildrensBymemberId(id, (err, results2) => {
       if (err) {
         console.log(err);
         return;
