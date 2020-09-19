@@ -19,6 +19,7 @@ const {
   AdminLogin,
   VerifyAdminLoginOtp,
   getMembersList,
+  getVerifiedMembersList,
   UpdateMemberVerifyStatus,
   getMemberDetails,
   MemberShipRenewal,
@@ -47,6 +48,7 @@ router.patch("/updatemembership", checkToken, UpdateMemberShip);
 router.post("/adminlogin", AdminLogin);
 router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);
 router.get("/memberslist", checkToken, getMembersList);
+router.get("/verifiedmemberslist", checkToken, getVerifiedMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
 router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
 

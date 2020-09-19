@@ -33,6 +33,7 @@ createMemberShipHistory,
 UpdateLoginOtp,
 getAdminByMemberEmail,
 getMembersList,
+getVerifiedMembersList,
 UpdateMemberVerifyStatus,
 UpdateSpouseVerifyStatus,
 getMemberDetails,
@@ -1385,6 +1386,19 @@ UpdateSpouse(body, (err, results) => {
 
 getMembersList: (req, res) => {
     getMembersList((err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+  getVerifiedMembersList: (req, res) => {
+    getVerifiedMembersList((err, results) => {
       if (err) {
         console.log(err);
         return;
