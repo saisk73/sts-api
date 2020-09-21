@@ -74,7 +74,7 @@ module.exports = {
       body.member_id = '';
       body.member_type = 0;
       //Create MEmbership end date-start
-      body.membership_enddate = '';
+      body.membership_enddate = null;
     if(body.membershiptype_id==1){
     var d = new Date();
     var year = d.getFullYear();
@@ -155,7 +155,7 @@ module.exports = {
        body.member_verifycode=rand;
 
       //Create MEmbership end date-start
-      body.membership_enddate = '';
+      body.membership_enddate = null;
     if(body.membershiptype_id==3){
     var d = new Date();
     var year = d.getFullYear();
@@ -241,7 +241,7 @@ module.exports = {
     body.member_id = member_insertid;
     body.member_type = 1;
      //Create MEmbership end date-start
-      body.membership_enddate = '';
+      body.membership_enddate = null;
     if(body.membershiptype_id==3){
     var d = new Date();
     var year = d.getFullYear();
@@ -910,7 +910,7 @@ UpdateSpouse(body, (err, results) => {
     if(body.member_type==0){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -966,7 +966,7 @@ UpdateSpouse(body, (err, results) => {
 
       if(membershiptype_id==1 && body.membershiptype_id==4){
           body.membership_type = 1; // 0-> Annual
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1022,7 +1022,7 @@ UpdateSpouse(body, (err, results) => {
 
       if(membershiptype_id==2 && body.membershiptype_id==4){
           body.membership_type = 1; // 1-> Life
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1046,7 +1046,7 @@ UpdateSpouse(body, (err, results) => {
             }
       if(membershiptype_id==3 && body.membershiptype_id==4){
           body.membership_type = 1; // 1-> Life
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1079,7 +1079,7 @@ UpdateSpouse(body, (err, results) => {
 
       if(membershiptype_id==4 && body.membershiptype_id==2){
           body.membership_type = 1; // 1-> Life
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1165,7 +1165,7 @@ UpdateSpouse(body, (err, results) => {
 
           if(membershiptype_id==3 && body.membershiptype_id==2){
           body.membership_type = 1; // 1-> Life
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1221,7 +1221,7 @@ UpdateSpouse(body, (err, results) => {
 
           if(membershiptype_id==3 && body.membershiptype_id==4){
           body.membership_type = 1; // 1-> Life
-          body.membership_enddate = '';
+          body.membership_enddate = null;
           body.id = req.decoded.result.id;
             UpdateMemberShipBySpouse(body, (err, results) => {
             if(err){
