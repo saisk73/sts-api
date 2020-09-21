@@ -316,8 +316,8 @@ module.exports = {
       }
       if (!results) {
         return res.json({
-          success: 0,
-          data: "Invalid email or password"
+          success: 2,
+          data: "Email doesn't exist"
         });
       }
       const result = compareSync(body.password, results.password);
