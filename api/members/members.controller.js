@@ -40,7 +40,8 @@ getMemberDetails,
 createMemberLoginHistory,
 MemberShipRenewalByMember,
 MemberShipRenewalBySpouse,
-UploadProfileImage
+UploadProfileImage,
+ForgotUser
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -784,6 +785,67 @@ var digits = '0123456789';
       });
     })}; });
   },
+
+  ForgotUser: (req, res) => {
+    const body = req.body;
+  getUserByMemberEmail(body.email, (err, results) => {
+         if (err) {
+        console.log(err);
+          }
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "Email Not Found"
+        });
+      }else{
+  
+      rand4=Math.floor((Math.random() * 90000000000000000) + 34);
+  // host=req.get('host');
+      host= process.env.WEB_URL;
+  linksef="http://"+host+"/login";
+      body.member_verifycode=rand4;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/forgotuser.ejs"), {
+      user_firstname: results.full_name,
+      confirm_link:"http://"+host+"/api/members/login"
+    })
+  .then(result => {
+    emailTemplatems=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Username Confirmation', // Subject line
+          text:'Confirmation mail from STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+  })});
+
+  return res.json({
+    success: 1,
+    mesagee: "Email Found"
+  });
+
+  }; });
+  },
+
 
   UpdateSpouse: (req, res) => {
   const body = req.body;

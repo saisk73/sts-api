@@ -9,6 +9,7 @@ const {
   updateUsers,
   changepasswordBymemberId,
   Forgotpassword,
+  ForgotUser,
   Updatememberpassword,
   VerifyEmail,
   VerifyOtp,
@@ -38,6 +39,7 @@ router.get("/childrens", checkToken, getChildrensBymemberId);
 router.patch("/reset", updateUsers);
 router.post("/changepassword", checkToken, changepasswordBymemberId);
 router.patch("/forgotpassword", Forgotpassword);
+router.post("/forgotuser", ForgotUser);
 router.patch("/updatepassword", Updatememberpassword);
 router.get("/mail", TestMail);
 router.patch("/verifyemail",VerifyEmail);
