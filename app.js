@@ -2,10 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
 const nodeMailer = require('nodemailer');
+var path = require('path');
 const app = express();
 const userRouter = require("./api/users/user.router");
 const membershiptypesRouter = require("./api/membershiptypes/membershiptypes.router"); //
 const membersRouter = require("./api/members/members.router"); //
+app.use(('/uploads'), express.static(path.join(__dirname, 'uploads')));
 app.use(require('cors')({ origin: '*' }));
 app.use(express.json());
 
