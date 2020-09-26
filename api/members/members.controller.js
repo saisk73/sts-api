@@ -39,13 +39,15 @@ UpdateSpouseVerifyStatus,
 getMemberDetails,
 createMemberLoginHistory,
 MemberShipRenewalByMember,
-MemberShipRenewalBySpouse
+MemberShipRenewalBySpouse,
+UploadProfileImage
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
 const path=require("path");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
+var imageDataURI = require('image-data-uri');
 var moment = require('moment');
 var nodeMailer = require('nodemailer');
 var current_date =  moment().format('YYYY-MM-DD');
@@ -1764,6 +1766,33 @@ var digits = '0123456789';
       });
     })}; });
   },
+
+  UploadProfileImage: (req, res) => { 
+     const body = req.body.image_url; 
+     const id = req.decoded.result.id;
+    // Some image data uri
+    let dataURI = body;
+    // It will create the full path in case it doesn't exist
+    // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+    rand =Math.floor((Math.random() * 30000000000000000) + 34);
+    let filePath = './uploads/profile_images/'+rand+'.png';
+    var image_name = rand+'.png';
+    // Returns a Promise
+    imageDataURI.outputFile(dataURI, filePath)
+    UploadProfileImage(id,image_name, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Uploaded successfully"
+     });
+   });
+  
+     // RETURNS image path of the created file 'out/path/fileName.png'
+    //  .then(res => console.log(res))
+     console.log(image_name);
+   },
 
    TestMail: (req, res) => {
     var d = new Date("2014-10-29");

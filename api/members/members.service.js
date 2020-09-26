@@ -693,4 +693,21 @@ module.exports = {
     );
   },
 
+  
+  UploadProfileImage: (id,profile_image, callBack) => {
+    pool.query(
+      `update members_master set profile_image=? where id = ?`,
+      [
+    profile_image,
+    id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };

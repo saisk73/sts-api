@@ -25,6 +25,7 @@ const {
   MemberShipRenewal,
   UpdateVerifyEmail,
   UpdateVerifyOtp,
+  UploadProfileImage,
   TestMail
 } = require("./members.controller");
 
@@ -55,6 +56,8 @@ router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
 router.patch("/updateverifyemail",UpdateVerifyEmail);
 router.patch("/updateverifyotp",UpdateVerifyOtp);
+
+router.post("/uploadprofileimage",checkToken,UploadProfileImage);
 
 
 
