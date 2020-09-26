@@ -50,6 +50,7 @@ const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var imageDataURI = require('image-data-uri');
 var moment = require('moment');
+var preciseDiff = require('moment-precise-range-plugin');
 var nodeMailer = require('nodemailer');
 var current_date =  moment().format('YYYY-MM-DD');
 var rand,rand2,host,link,links,linkse,rand3;
@@ -400,6 +401,95 @@ module.exports = {
     });
   },
 
+      MemberLogin: (req, res) => {
+    const body = req.body;
+    getUserByMemberEmail(body.email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (!results) {
+        return res.json({
+          success: 2,
+          data: "Email doesn't exist"
+        });
+      }
+      const result = compareSync(body.password, results.password);
+      if (result) {
+        var digits = '0123456789'; 
+    let OTP = ''; 
+    for (let i = 0; i < 6; i++ ) { 
+        OTP += digits[Math.floor(Math.random() * 10)]; 
+    } 
+   body.login_otp = OTP;
+   body.id= results.id;
+    UpdateLoginOtp(body, (err, results) => {
+    let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatemswaw;
+    ejs
+    .renderFile(path.join(__dirname, "views/loginotp.ejs"), {
+      user_firstname: req.body.full_name,
+      user_otp:body.login_otp
+
+    })
+  .then(result => {
+    emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: req.body.email,// list of receivers
+          subject: 'Otp Verification', // Subject line
+          text:'Please Verify Your Otp', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+    
+      if (err) {
+        console.log(err);
+    
+        return;
+      }
+      return res.json({
+        success: 1,
+        message: "Otp sent to your email please verify it"
+  
+      });
+    });
+
+
+
+        // results.password = undefined;
+        // const jsontoken = sign({ result: results }, "qwe1234", {
+        //   expiresIn: "1h"
+        // });
+        // return res.json({
+        //   success: 1,
+        //   message: "login successfully",
+        //   token: jsontoken
+        // });
+
+      } else {
+        return res.json({
+          success: 0,
+          data: "Invalid email or password"
+        });
+      }
+    });
+  },
+
   VerifyLoginOtp: (req, res) => {
     const body = req.body;
     getUserByMemberEmail(body.email, (err, results) => {
@@ -507,6 +597,26 @@ getMemberById: (req, res) => {
         data: results
       });
     });
+  },
+
+  getArrearsDetails: (req, res) => {
+    const id = req.decoded.result.id;
+      var m1 = moment(req.decoded.result.membership_enddate);
+      var m2 = moment(current_date);
+      var diff = moment.preciseDiff(m1, m2,true);
+      var membership_amount = req.decoded.result.membership_amount;
+      var years = diff.years;
+      var months = diff.months;
+      var total = (years*membership_amount+(months*membership_amount/12)).toFixed(2);
+      return res.json({
+        success: 1,
+        membership_type : req.decoded.result.membershiptype_id,
+        last_date: req.decoded.result.membership_enddate,
+        pending_amount : total,
+        years : diff
+      });
+
+
   },
 
 updateUsers: (req, res) => {

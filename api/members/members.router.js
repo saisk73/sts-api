@@ -24,6 +24,7 @@ const {
   UpdateMemberVerifyStatus,
   getMemberDetails,
   MemberShipRenewal,
+  getArrearsDetails,
   UpdateVerifyEmail,
   UpdateVerifyOtp,
   UploadProfileImage,
@@ -58,6 +59,9 @@ router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
 router.patch("/updateverifyemail",UpdateVerifyEmail);
 router.patch("/updateverifyotp",UpdateVerifyOtp);
+
+router.get("/arrearsdetails", checkToken, getArrearsDetails);
+
 
 router.post("/uploadprofileimage",checkToken,UploadProfileImage);
 
