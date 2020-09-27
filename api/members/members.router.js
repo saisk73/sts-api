@@ -28,6 +28,7 @@ const {
   UpdateVerifyEmail,
   UpdateVerifyOtp,
   UploadProfileImage,
+  RenewalWithArrears,
   TestMail
 } = require("./members.controller");
 
@@ -61,6 +62,7 @@ router.patch("/updateverifyemail",UpdateVerifyEmail);
 router.patch("/updateverifyotp",UpdateVerifyOtp);
 
 router.get("/arrearsdetails", checkToken, getArrearsDetails);
+router.patch("/renewalwitharrears", checkToken, RenewalWithArrears);
 
 
 router.post("/uploadprofileimage",checkToken,UploadProfileImage);

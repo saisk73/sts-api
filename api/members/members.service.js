@@ -120,7 +120,7 @@ module.exports = {
 
   getUserByMemberEmail: (email, callBack) => {
     pool.query(
-      `select * from members_master where email = ?`,
+      `select * from members_master where member_status=0 and status=1 and email = ?`,
       [email],
       (error, results, fields) => {
         if (error) {
@@ -677,6 +677,58 @@ module.exports = {
     );
   },
 
+  UpdateMemberShipDetails: (data, callBack) => {
+    pool.query(
+      `update members_master set membershiptype_id=?,membership_amount=?,membership_enddate=? where id = ?`,
+      [
+    data.membershiptype_id,
+    data.membership_amount,
+    data.membership_enddate,
+    data.member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  InactiveSpouseMemberShip: (data, callBack) => {
+    pool.query(
+      `update members_master set membership_enddate=?,member_status=? where id = ?`,
+      [
+    data.membership_enddate,
+    data.member_status,
+    data.spouse_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  InactiveMemberShip: (data, callBack) => {
+    pool.query(
+      `update members_master set membership_enddate=?,member_status=? where id = ?`,
+      [
+    data.membership_enddate,
+    data.member_status,
+    data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+   
   MemberShipRenewalBySpouse: (data, callBack) => {
     pool.query(
       `update members_master set membership_enddate=? where id = ?`,

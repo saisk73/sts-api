@@ -41,7 +41,10 @@ createMemberLoginHistory,
 MemberShipRenewalByMember,
 MemberShipRenewalBySpouse,
 UploadProfileImage,
-ForgotUser
+UpdateMemberShipDetails,
+ForgotUser,
+InactiveSpouseMemberShip,
+InactiveMemberShip
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -904,7 +907,7 @@ var digits = '0123456789';
           }
       if (!results) {
         return res.json({
-          success: 1,
+          success: 0,
           mesagee: "Email Not Found"
         });
       }else{
@@ -1963,8 +1966,505 @@ var digits = '0123456789';
   
      // RETURNS image path of the created file 'out/path/fileName.png'
     //  .then(res => console.log(res))
-     console.log(image_name);
+    //  console.log(image_name);
    },
+
+   RenewalWithArrears: (req, res) => {
+    var member_id = req.decoded.result.id;
+    const body = req.body;
+    // console.log(body);
+    getMemberDetails(member_id,(err, results_mem) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if(body.arrears_paid=='Yes'){
+        if(body.membershiptype_id==results_mem.membershiptype_id){
+          var d = new Date(current_date);
+           var year = d.getFullYear();
+           var month = d.getMonth();
+           var day = d.getDate();
+           var fulldate = new Date(year + 1, month, day);
+           var toDate = fulldate.toISOString().slice(0, 10);
+           body.membership_enddate = toDate;
+           body.member_id = results_mem.id;
+           MemberShipRenewalByMember(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+           body.created_on=current_date;
+           body.id = results_mem.id;
+           body.membershiptype_id = results_mem.membershiptype_id;
+           body.membership_amount = body.total_amount;
+           createMemberShipHistory(body, (err, results) => {
+            if(err){
+               console.log(err);
+             }
+           });
+           
+           getSpouseBymemberId(results_mem.id, (err, results_spouse) => {
+            if (err) {
+              console.log(err);
+              // return;
+            }
+            if(results_spouse){
+              body.spouse_id = results_spouse.id;
+              MemberShipRenewalBySpouse(body, (err, results) => {
+                if(err){
+                  console.log(err);
+                  return;
+                   }
+                 });
+            }
+          });
+          });
+        }else{
+          if(results_mem.membershiptype_id==1 && body.membershiptype_id==3){
+            var d = new Date(current_date);
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var fulldate = new Date(year + 1, month, day);
+            var toDate = fulldate.toISOString().slice(0, 10);
+            body.membership_enddate = toDate;
+            body.member_id = results_mem.id;
+            UpdateMemberShipDetails(body, (err, results) => {
+             if(err){
+               console.log(err);
+               return;
+                }
+            body.created_on=current_date;
+            body.id = results_mem.id;
+            body.membershiptype_id = results_mem.membershiptype_id;
+            body.membership_amount = body.total_amount;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+           });
+          }
+
+          if(results_mem.membershiptype_id==3 && body.membershiptype_id==1){
+            var d = new Date(current_date);
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var fulldate = new Date(year + 1, month, day);
+            var toDate = fulldate.toISOString().slice(0, 10);
+            body.membership_enddate = toDate;
+            body.member_id = results_mem.id;
+            UpdateMemberShipDetails(body, (err, results) => {
+             if(err){
+               console.log(err);
+               return;
+                }
+            body.created_on=current_date;
+            body.id = results_mem.id;
+            body.membershiptype_id = results_mem.membershiptype_id;
+            body.membership_amount = body.total_amount;
+            createMemberShipHistory(body, (err, results) => {
+             if(err){
+                console.log(err);
+              }
+            });
+
+            getSpouseBymemberId(results_mem.id, (err, results_spouse) => {
+              if (err) {
+                console.log(err);
+                // return;
+              }
+              if(results_spouse){
+                body.spouse_id = results_spouse.id;
+                body.membership_enddate = current_date;
+                body.member_status=1;
+                InactiveSpouseMemberShip(body, (err, results) => {
+                  if(err){
+                    console.log(err);
+                    return;
+                     }
+                   });
+              }
+            });
+
+           });
+          }
+
+        }
+
+        return res.json({
+          success: 1,
+          message: "Updated successfully"
+        });
+
+
+      }else{
+        if(body.membershiptype_id==results_mem.membershiptype_id){
+          var d = new Date();
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          results_mem.membership_enddate = toDate;
+          results_mem.membershiptype_id = body.membershiptype_id;
+          results_mem.membership_amount = body.membership_amount;
+          var uniqueid = new Date().valueOf();
+          results_mem.registration_id = uniqueid;
+          rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+          results_mem.member_verifycode=rand3;
+          results_mem.created_on = current_date;
+          results_mem.member_id = '';
+        createMember(results_mem, (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: 0,
+            message: "Database connection errror"
+          });
+        }
+        // console.log(results.insertId);
+  
+        // //mail Sending//
+      
+    // host=req.get('host');
+    host= process.env.WEB_URL;
+    linkse="http://"+host+"/setpassword?token="+rand3;
+         let transporter = nodeMailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'svapps.websts@gmail.com',
+                pass: '2020#2020'
+            }
+        });
+            let emailTemplatems;
+      ejs
+      .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
+        user_firstname: results_mem.full_name,
+        confirm_link:"http://"+host+"/setpassword?token=" + rand3
+      })
+    .then(result => {
+      emailTemplatems=result;
+        let mailOptions = {
+            from: 'svapps.websts@gmail.com', // sender address
+            to: results_mem.email,// list of receivers
+            subject: 'New Member Registration', // Subject line
+            text:'Thankyou for registering with STS', // plain text body
+           //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+       html:emailTemplatems
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message %s sent: %s', info.messageId, info.response);
+                res.render('index');
+           })});
+
+           results_mem.member_status = 1;
+           results_mem.membership_enddate = current_date;
+           InactiveMemberShip(results_mem, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+             });
+
+          //  body.created_on=current_date;
+          //  body.id = results_mem.id;
+          //  body.membershiptype_id = results_mem.membershiptype_id;
+          //  body.membership_amount = results_mem.membership_amount;
+          body.membership_amount = body.total_amount;
+           createMemberShipHistory(results_mem, (err, results) => {
+            if(err){
+               console.log(err);
+             }
+           });
+
+           getSpouseBymemberId(results_mem.id, (err, results_spouse) => {
+            if (err) {
+              console.log(err);
+              // return;
+            }
+            if(results_spouse){
+              body.spouse_id = results_spouse.id;
+              body.membership_enddate = current_date;
+              body.member_status=1;
+              InactiveSpouseMemberShip(body, (err, results1) => {
+                if(err){
+                  console.log(err);
+                  return;
+                   }
+                 });
+
+     results_spouse.registration_id = uniqueid+'S';
+     rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+     results_spouse.member_verifycode=rand2;
+     results_spouse.membership_enddate = toDate;
+     results_spouse.membershiptype_id = body.membershiptype_id;
+     results_spouse.membership_amount = body.membership_amount;
+     results_spouse.created_on = current_date; 
+     results_spouse.member_id = results.insertId;
+
+     createSpouseMember(body, (err, results) => {
+       if (err) {
+         console.log(err);
+         return res.status(500).json({
+           success: false,
+           message: "Database connection error"
+         });
+       }
+ 
+   
+   // host=req.get('host');
+   host= process.env.WEB_URL;
+   links="http://"+host+"/setpassword?token="+rand2;
+   
+         let emailTemplates;
+     ejs
+     .renderFile(path.join(__dirname, "views/index.ejs"), {
+       user_firstname: results_spouse.full_name,
+       confirm_link:"http://"+host+"/setpassword?token=" + rand2
+     })  .then(result => {
+       emailTemplates = result;
+      let mailOptionse = {
+           from: 'svapps.websts@gmail.com', // sender address
+           to: results_spouse.email,// list of receivers
+           subject: 'New Member Registration', // Subject line
+           text:'Thankyou for registering with STS', // plain text body
+           //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+       html:emailTemplates
+       };
+       transporter.sendMail(mailOptionse, (error, info) => {
+           if (error) {
+               return console.log(error);
+           }
+           console.log('Message %s sent: %s', info.messageId, info.response);
+               res.render('index');
+           })});
+ 
+      //  return res.status(200).json({
+      //    success: true,
+      //    data: results
+      //  });
+     });
+    }
+      });
+        // //mail Send//
+        return res.status(200).json({
+          success: 1,
+          data: "Updated succesfully"
+        });
+      });
+
+        }else{
+          if(results_mem.membershiptype_id==1 && body.membershiptype_id==3){
+          var d = new Date();
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          results_mem.membership_enddate = toDate;
+          results_mem.membershiptype_id = body.membershiptype_id;
+          results_mem.membership_amount = body.membership_amount;
+          var uniqueid = new Date().valueOf();
+          results_mem.registration_id = uniqueid;
+          rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+          results_mem.member_verifycode=rand3;
+          results_mem.created_on = current_date;
+          results_mem.member_id = '';
+            createMember(results_mem, (err, results) => {
+              if (err) {
+                console.log(err);
+                return res.status(500).json({
+                  success: 0,
+                  message: "Database connection errror"
+                });
+              }
+              // console.log(results.insertId);
+        
+              // //mail Sending//
+            
+          // host=req.get('host');
+          host= process.env.WEB_URL;
+          linkse="http://"+host+"/setpassword?token="+rand3;
+               let transporter = nodeMailer.createTransport({
+                  host: 'smtp.gmail.com',
+                  port: 465,
+                  secure: true,
+                  auth: {
+                      user: 'svapps.websts@gmail.com',
+                      pass: '2020#2020'
+                  }
+              });
+                  let emailTemplatems;
+            ejs
+            .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
+              user_firstname: results_mem.full_name,
+              confirm_link:"http://"+host+"/setpassword?token=" + rand3
+            })
+          .then(result => {
+            emailTemplatems=result;
+              let mailOptions = {
+                  from: 'svapps.websts@gmail.com', // sender address
+                  to: results_mem.email,// list of receivers
+                  subject: 'New Member Registration', // Subject line
+                  text:'Thankyou for registering with STS', // plain text body
+                 //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+             html:emailTemplatems
+              };
+              transporter.sendMail(mailOptions, (error, info) => {
+                  if (error) {
+                      return console.log(error);
+                  }
+                  console.log('Message %s sent: %s', info.messageId, info.response);
+                      res.render('index');
+                 })});
+      
+                 results_mem.member_status = 1;
+                 results_mem.membership_enddate = current_date;
+                 InactiveMemberShip(results_mem, (err, results) => {
+                  if(err){
+                    console.log(err);
+                    return;
+                     }
+                   });
+      
+                //  body.created_on=current_date;
+                //  body.id = results_mem.id;
+                //  body.membershiptype_id = results_mem.membershiptype_id;
+                //  body.membership_amount = results_mem.membership_amount;
+                body.membership_amount = body.total_amount;
+                
+                 createMemberShipHistory(results_mem, (err, results) => {
+                  if(err){
+                     console.log(err);
+                   }
+                 });
+                });
+          }
+
+          if(results_mem.membershiptype_id==3 && body.membershiptype_id==1){
+            var d = new Date();
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var fulldate = new Date(year + 1, month, day);
+            var toDate = fulldate.toISOString().slice(0, 10);
+            results_mem.membership_enddate = toDate;
+            results_mem.membershiptype_id = body.membershiptype_id;
+            results_mem.membership_amount = body.membership_amount;
+            var uniqueid = new Date().valueOf();
+            results_mem.registration_id = uniqueid;
+            rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+            results_mem.member_verifycode=rand3;
+            results_mem.created_on = current_date;
+            results_mem.member_id = '';
+              createMember(results_mem, (err, results) => {
+                if (err) {
+                  console.log(err);
+                  return res.status(500).json({
+                    success: 0,
+                    message: "Database connection errror"
+                  });
+                }
+                // console.log(results.insertId);
+          
+                // //mail Sending//
+              
+            // host=req.get('host');
+            host= process.env.WEB_URL;
+            linkse="http://"+host+"/setpassword?token="+rand3;
+                 let transporter = nodeMailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: 'svapps.websts@gmail.com',
+                        pass: '2020#2020'
+                    }
+                });
+                    let emailTemplatems;
+              ejs
+              .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
+                user_firstname: results_mem.full_name,
+                confirm_link:"http://"+host+"/setpassword?token=" + rand3
+              })
+            .then(result => {
+              emailTemplatems=result;
+                let mailOptions = {
+                    from: 'svapps.websts@gmail.com', // sender address
+                    to: results_mem.email,// list of receivers
+                    subject: 'New Member Registration', // Subject line
+                    text:'Thankyou for registering with STS', // plain text body
+                   //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+               html:emailTemplatems
+                };
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                        res.render('index');
+                   })});
+        
+                   results_mem.member_status = 1;
+                   results_mem.membership_enddate = current_date;
+                   InactiveMemberShip(results_mem, (err, results) => {
+                    if(err){
+                      console.log(err);
+                      return;
+                       }
+                     });
+        
+                  //  body.created_on=current_date;
+                  //  body.id = results_mem.id;
+                  //  body.membershiptype_id = results_mem.membershiptype_id;
+                  //  body.membership_amount = results_mem.membership_amount;
+                  body.membership_amount = body.total_amount;
+                   createMemberShipHistory(results_mem, (err, results) => {
+                    if(err){
+                       console.log(err);
+                     }
+                   });
+
+                   getSpouseBymemberId(results_mem.id, (err, results_spouse) => {
+                    if (err) {
+                      console.log(err);
+                      // return;
+                    }
+                    if(results_spouse){
+                      body.spouse_id = results_spouse.id;
+                      body.membership_enddate = current_date;
+                      body.member_status=1;
+                      InactiveSpouseMemberShip(body, (err, results) => {
+                        if(err){
+                          console.log(err);
+                          return;
+                           }
+                         });
+                    }
+                  });
+
+                  });
+            }
+
+        }
+
+      }
+      
+        return res.status(200).json({
+          success: 1,
+          data: "Updated Successfully"
+        });
+      });
+
+  },
+
 
    TestMail: (req, res) => {
     var d = new Date("2014-10-29");
