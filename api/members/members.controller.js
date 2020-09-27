@@ -904,7 +904,7 @@ var digits = '0123456789';
           }
       if (!results) {
         return res.json({
-          success: 0,
+          success: 1,
           mesagee: "Email Not Found"
         });
       }else{
