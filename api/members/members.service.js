@@ -616,7 +616,7 @@ module.exports = {
       [
     data.member_verifycode,
     data.status,
-    data.id
+    data.member_id
       ],
       (error, results, fields) => {
         if (error) {
@@ -633,7 +633,7 @@ module.exports = {
       [
     data.member_verifycode,
     data.status,
-    data.id
+    data.member_id
       ],
       (error, results, fields) => {
         if (error) {

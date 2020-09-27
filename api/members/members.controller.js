@@ -1629,17 +1629,146 @@ getMemberDetails: (req, res) => {
     });
   },
 
-  UpdateMemberVerifyStatus: (req, res) => {
+  RejectMemberShip: (req, res) => {
     const body = req.body;
     rand3=Math.floor((Math.random() * 30000000000000000) + 34);
     body.member_verifycode=rand3;
-
-     getMemberDetails(body.id,(err, resul1) => {
+    const arr = body.id;
+    arr.forEach(element => { 
+     body.member_id= element;
+    getMemberDetails(element,(err, resul1) => {
       if (err) {
         console.log(err);
         return;
       }
+   UpdateMemberVerifyStatus(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+      //mail Sending//
+      host= process.env.WEB_URL;
+      linkse="http://"+host+"/setpassword?token="+rand3;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/rejectmember.ejs"), {
+      user_firstname: resul1.full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+    })
+  .then(result => {
+    emailTemplatems=result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: resul1.email,// list of receivers
+          subject: 'New Member Registration Confirmation', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+      // //mail Send//
+//=======================Spouse Update Start=====================================//
+getSpouseBymemberId(element, (err, results1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if(results1){
+      UpdateSpouseVerifyStatus(body, (err, resul) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
 
+      rand=Math.floor((Math.random() * 10000000000000000) + 94);
+      body.member_verifycode=rand;
+      host= process.env.WEB_URL;
+      link="http://"+host+"/setpassword?token="+rand;
+      body.member_id = '';
+      var member_insertid = '';
+   
+       let transporter = nodeMailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'svapps.websts@gmail.com',
+              pass: '2020#2020'
+          }
+      });
+     
+        let emailTemplate;
+    ejs
+    .renderFile(path.join(__dirname, "views/rejectmember.ejs"), {
+      user_firstname: results1.full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand
+    })
+  .then(result => {
+      emailTemplate = result;
+      let mailOptions = {
+          from: 'svapps.websts@gmail.com', // sender address
+          to: results1.email,// list of receivers
+          subject: 'New Member Registration Confirmation', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
+      html: emailTemplate
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          })});
+    });
+    }
+});
+
+//=======================Spouse Update End=====================================//
+    });
+  });
+   });
+
+   return res.status(200).json({
+    success: true,
+    data: "Rejected Successfully"
+  });
+
+  },
+
+  UpdateMemberVerifyStatus: (req, res) => {
+    const body = req.body;
+    rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+    body.member_verifycode=rand3;
+    const arr = body.id;
+    arr.forEach(element => { 
+     body.member_id= element;
+    getMemberDetails(element,(err, resul1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
    UpdateMemberVerifyStatus(body, (err, results) => {
       if (err) {
         console.log(err);
@@ -1685,7 +1814,7 @@ getMemberDetails: (req, res) => {
          })});
       // //mail Send//
 //=======================Spouse Update Start=====================================//
-getSpouseBymemberId(body.id, (err, results1) => {
+getSpouseBymemberId(element, (err, results1) => {
       if (err) {
         console.log(err);
         return;
@@ -1745,13 +1874,14 @@ getSpouseBymemberId(body.id, (err, results1) => {
 });
 
 //=======================Spouse Update End=====================================//
-
-      return res.status(200).json({
-        success: true,
-        data: results
-      });
     });
+  });
    });
+
+   return res.status(200).json({
+    success: true,
+    data: "Approved Successfully"
+  });
 
   },
 

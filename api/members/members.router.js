@@ -22,6 +22,7 @@ const {
   getMembersList,
   getVerifiedMembersList,
   UpdateMemberVerifyStatus,
+  RejectMemberShip,
   getMemberDetails,
   MemberShipRenewal,
   getArrearsDetails,
@@ -56,6 +57,7 @@ router.get("/memberslist", checkToken, getMembersList);
 router.get("/verifiedmemberslist", checkToken, getVerifiedMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
 router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
+router.post("/rejectmembership", checkToken, RejectMemberShip);
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
 router.patch("/updateverifyemail",UpdateVerifyEmail);
