@@ -845,4 +845,63 @@ module.exports = {
     );
   },
 
+  CreateMedia: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into media_master(image) 
+                values(?)`,
+      [
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getMedia:(callBack) => {
+    pool.query(
+      `select * from media_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteMedia: (id, callBack) => {
+    pool.query(
+      `delete from media_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  CreateAboutus: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into aboutus_master(about) 
+                values(?)`,
+      [
+        data.aboutus
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 };

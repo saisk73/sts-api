@@ -36,6 +36,10 @@ const {
   AddSponsor,
   getSponsor,
   DeleteSponsor,
+  AddMedia,
+  getMedia,
+  DeleteMedia,
+  AboutUs,
   TestMail
 } = require("./members.controller");
 
@@ -72,6 +76,12 @@ router.get("/deletesliders/:id", DeleteSlider);
 router.post("/addsponsors", AddSponsor);
 router.get("/sponsors", getSponsor);
 router.get("/deletesponsor/:id", DeleteSponsor);
+
+router.post("/addmedia", AddMedia);
+router.get("/media", getMedia);
+router.get("/deletemedia/:id", DeleteMedia);
+
+router.post("/aboutus", AboutUs);
 
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);

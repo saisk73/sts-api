@@ -50,7 +50,11 @@ getSliders,
 DeleteSlider,
 CreateSponsor,
 getSponsor,
-DeleteSponsor
+DeleteSponsor,
+CreateMedia,
+getMedia,
+DeleteMedia,
+CreateAboutus
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -2737,6 +2741,81 @@ DeleteSponsor(id,(err, results) => {
 
 });
 },
+
+
+AddMedia: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/media/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreateMedia(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getMedia: (req, res) => {
+  getMedia( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteMedia: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteMedia(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
+},
+
+AboutUs: (req, res) => { 
+  const body = req.body;
+ CreateAboutus(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
 
    TestMail: (req, res) => {
     var d = new Date("2014-10-29");
