@@ -41,6 +41,12 @@ const {
   DeleteMedia,
   AboutUs,
   getAboutUs,
+  AddNewsLetter,
+  getNewsLetter,
+  DeleteNewsLetter,
+  AddForums,
+  getForums,
+  DeleteForums,
   TestMail
 } = require("./members.controller");
 
@@ -81,6 +87,14 @@ router.get("/deletesponsor/:id", DeleteSponsor);
 router.post("/addmedia", AddMedia);
 router.get("/media", getMedia);
 router.get("/deletemedia/:id", DeleteMedia);
+
+router.post("/addnewsletter", AddNewsLetter);
+router.get("/newsletter", getNewsLetter);
+router.get("/deletenewsletter/:id", DeleteNewsLetter);
+
+router.post("/addforums", AddForums);
+router.get("/forums", getForums);
+router.get("/deleteforums/:id", DeleteForums);
 
 router.post("/aboutus", AboutUs);
 router.get("/aboutus", getAboutUs);

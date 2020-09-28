@@ -936,4 +936,92 @@ module.exports = {
     );
   },
 
+  CreateNewsLetter: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into newsletters_master(title,image,description) 
+                values(?,?,?)`,
+      [
+        data.title,
+        data.image_name,
+        data.description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getNewsLetter:(callBack) => {
+    pool.query(
+      `select * from newsletters_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteNewsLetter: (id, callBack) => {
+    pool.query(
+      `delete from newsletters_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  CreateForum: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into forums_master(title,image,description) 
+                values(?,?,?)`,
+      [
+        data.title,
+        data.image_name,
+        data.description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getForums:(callBack) => {
+    pool.query(
+      `select * from forums_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteForums: (id, callBack) => {
+    pool.query(
+      `delete from forums_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 };

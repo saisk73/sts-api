@@ -56,7 +56,13 @@ getMedia,
 DeleteMedia,
 CreateAboutus,
 UpdateAboutus,
-getAboutUs
+getAboutUs,
+CreateNewsLetter,
+getNewsLetter,
+DeleteNewsLetter,
+CreateForum,
+getForums,
+DeleteForums
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -2856,6 +2862,127 @@ getAboutUs: (req, res) => {
     success: 1,
     data: results
   });
+});
+},
+
+AddNewsLetter: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/newsletters/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreateNewsLetter(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getNewsLetter: (req, res) => {
+  getNewsLetter( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteNewsLetter: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteNewsLetter(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
+},
+
+
+AddForums: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/forums/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreateForum(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getForums: (req, res) => {
+  getForums( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteForums: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteForums(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
 });
 },
 
