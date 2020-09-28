@@ -47,7 +47,10 @@ InactiveSpouseMemberShip,
 InactiveMemberShip,
 Createsliders,
 getSliders,
-DeleteSlider
+DeleteSlider,
+CreateSponsor,
+getSponsor,
+DeleteSponsor
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -1650,13 +1653,15 @@ getMemberDetails: (req, res) => {
     body.member_verifycode=rand3;
     const arr = body.id;
     arr.forEach(element => { 
+     body.member_id= '';
      body.member_id= element;
+    //  console.log(element);
     getMemberDetails(element,(err, resul1) => {
       if (err) {
         console.log(err);
         return;
       }
-   UpdateMemberVerifyStatus(body, (err, results) => {
+   UpdateMemberVerifyStatus(element,body.status, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -1664,6 +1669,7 @@ getMemberDetails: (req, res) => {
           message: "Database connection errror"
         });
       }
+      // console.log(element);
       //mail Sending//
       host= process.env.WEB_URL;
       linkse="http://"+host+"/setpassword?token="+rand3;
@@ -1707,7 +1713,7 @@ getSpouseBymemberId(element, (err, results1) => {
         return;
       }
       if(results1){
-      UpdateSpouseVerifyStatus(body, (err, resul) => {
+      UpdateSpouseVerifyStatus(element,body.status, (err, resul) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -1784,7 +1790,7 @@ getSpouseBymemberId(element, (err, results1) => {
         console.log(err);
         return;
       }
-   UpdateMemberVerifyStatus(body, (err, results) => {
+   UpdateMemberVerifyStatus(element,body.status, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -1835,7 +1841,7 @@ getSpouseBymemberId(element, (err, results1) => {
         return;
       }
       if(results1){
-      UpdateSpouseVerifyStatus(body, (err, resul) => {
+      UpdateSpouseVerifyStatus(element,body.status, (err, resul) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -2669,6 +2675,67 @@ DeleteSlider: (req, res) => {
     });
 
   });
+},
+
+
+AddSponsor: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/sponsors/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreateSponsor(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getSponsor: (req, res) => {
+  getSponsor( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteSponsor: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteSponsor(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
 },
 
    TestMail: (req, res) => {

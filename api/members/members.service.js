@@ -610,13 +610,12 @@ module.exports = {
     );
   },
 
-  UpdateMemberVerifyStatus: (data, callBack) => {
+  UpdateMemberVerifyStatus: (member_id,status, callBack) => {
     pool.query(
-      `update members_master set member_verifycode=?,status=? where id = ?`,
+      `update members_master set status=? where id = ?`,
       [
-    data.member_verifycode,
-    data.status,
-    data.member_id
+    status,
+    member_id
       ],
       (error, results, fields) => {
         if (error) {
@@ -627,13 +626,12 @@ module.exports = {
     );
   },
 
-  UpdateSpouseVerifyStatus: (data, callBack) => {
+  UpdateSpouseVerifyStatus: (member_id,status, callBack) => {
     pool.query(
-      `update members_master set member_verifycode=?,status=? where member_id = ?`,
+      `update members_master set status=? where member_id = ?`,
       [
-    data.member_verifycode,
-    data.status,
-    data.member_id
+    status,
+    member_id
       ],
       (error, results, fields) => {
         if (error) {
@@ -794,6 +792,49 @@ module.exports = {
   DeleteSlider: (id, callBack) => {
     pool.query(
       `delete from sliders_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+
+  CreateSponsor: (data, callBack) => {
+    console.log(data);
+    pool.query(
+      `insert into sponsors_master(image) 
+                values(?)`,
+      [
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getSponsor:(callBack) => {
+    pool.query(
+      `select * from sponsors_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteSponsor: (id, callBack) => {
+    pool.query(
+      `delete from sponsors_master where id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {

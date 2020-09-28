@@ -33,6 +33,9 @@ const {
   AddSliders,
   getSliders,
   DeleteSlider,
+  AddSponsor,
+  getSponsor,
+  DeleteSponsor,
   TestMail
 } = require("./members.controller");
 
@@ -59,11 +62,16 @@ router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);
 router.get("/memberslist", checkToken, getMembersList);
 router.get("/verifiedmemberslist", checkToken, getVerifiedMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
-router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
-router.post("/rejectmembership", checkToken, RejectMemberShip);
+router.post("/updatememberverifystatus", UpdateMemberVerifyStatus);
+router.post("/rejectmembership", RejectMemberShip);
+
 router.post("/addsliders", AddSliders);
 router.get("/sliders", getSliders);
 router.get("/deletesliders/:id", DeleteSlider);
+
+router.post("/addsponsors", AddSponsor);
+router.get("/sponsors", getSponsor);
+router.get("/deletesponsor/:id", DeleteSponsor);
 
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
