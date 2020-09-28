@@ -30,6 +30,9 @@ const {
   UpdateVerifyOtp,
   UploadProfileImage,
   RenewalWithArrears,
+  AddSliders,
+  getSliders,
+  DeleteSlider,
   TestMail
 } = require("./members.controller");
 
@@ -58,6 +61,10 @@ router.get("/verifiedmemberslist", checkToken, getVerifiedMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
 router.post("/updatememberverifystatus", checkToken, UpdateMemberVerifyStatus);
 router.post("/rejectmembership", checkToken, RejectMemberShip);
+router.post("/addsliders", AddSliders);
+router.get("/sliders", getSliders);
+router.get("/deletesliders/:id", DeleteSlider);
+
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
 router.patch("/updateverifyemail",UpdateVerifyEmail);

@@ -44,7 +44,10 @@ UploadProfileImage,
 UpdateMemberShipDetails,
 ForgotUser,
 InactiveSpouseMemberShip,
-InactiveMemberShip
+InactiveMemberShip,
+Createsliders,
+getSliders,
+DeleteSlider
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -604,22 +607,34 @@ getMemberById: (req, res) => {
 
   getArrearsDetails: (req, res) => {
     const id = req.decoded.result.id;
-      var m1 = moment(req.decoded.result.membership_enddate);
+    getMemberById(id, (err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var date1 = new Date(results.membership_enddate);
+      var date2 = new Date(current_date);
+      if(date2>date1){
+      var m1 = moment(results.membership_enddate);
       var m2 = moment(current_date);
       var diff = moment.preciseDiff(m1, m2,true);
-      var membership_amount = req.decoded.result.membership_amount;
+      var membership_amount = results.membership_amount;
       var years = diff.years;
       var months = diff.months;
       var total = (years*membership_amount+(months*membership_amount/12)).toFixed(2);
       return res.json({
         success: 1,
-        membership_type : req.decoded.result.membershiptype_id,
-        last_date: req.decoded.result.membership_enddate,
+        membership_type : results.membershiptype_id,
+        last_date: results.membership_enddate,
         pending_amount : total,
         years : diff
       });
-
-
+    }else{
+      return res.json({
+        success: 0
+      });
+    }
+    });
   },
 
 updateUsers: (req, res) => {
@@ -2595,6 +2610,66 @@ var digits = '0123456789';
 
   },
 
+  
+  AddSliders: (req, res) => { 
+    // const body = req.body.image_url; 
+    const body = req.body;
+   // Some image data uri
+   let dataURI = body.image_url;
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/sliders/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath)
+  //  console.log(image_name);
+   body.image_name = image_name;
+   Createsliders(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+},
+
+getSliders: (req, res) => {
+  getSliders( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+},
+
+DeleteSlider: (req, res) => {
+  // const body = req.body;
+  const id = req.params.id;
+  DeleteSlider(id,(err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.json({
+      success: 1,
+      data: "Deleted successfully"
+    });
+
+  });
+},
 
    TestMail: (req, res) => {
     var d = new Date("2014-10-29");

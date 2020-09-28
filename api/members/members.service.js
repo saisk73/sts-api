@@ -762,4 +762,46 @@ module.exports = {
     );
   },
 
+  Createsliders: (data, callBack) => {
+    console.log(data);
+    pool.query(
+      `insert into sliders_master(image) 
+                values(?)`,
+      [
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getSliders:(callBack) => {
+    pool.query(
+      `select * from sliders_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteSlider: (id, callBack) => {
+    pool.query(
+      `delete from sliders_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 };
