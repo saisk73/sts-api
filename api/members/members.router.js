@@ -40,6 +40,7 @@ const {
   getMedia,
   DeleteMedia,
   AboutUs,
+  getAboutUs,
   TestMail
 } = require("./members.controller");
 
@@ -82,6 +83,7 @@ router.get("/media", getMedia);
 router.get("/deletemedia/:id", DeleteMedia);
 
 router.post("/aboutus", AboutUs);
+router.get("/aboutus", getAboutUs);
 
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);

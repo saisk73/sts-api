@@ -54,7 +54,9 @@ DeleteSponsor,
 CreateMedia,
 getMedia,
 DeleteMedia,
-CreateAboutus
+CreateAboutus,
+UpdateAboutus,
+getAboutUs
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -2804,14 +2806,55 @@ DeleteMedia(id,(err, results) => {
 },
 
 AboutUs: (req, res) => { 
-  const body = req.body;
- CreateAboutus(body, (err, results) => {
+  var body = req.body;
+  getAboutUs( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    // console.log(results);
+    body.id = results.id;
+    UpdateAboutus(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateAboutus(body, (err, results1) => {
    if(err){
       console.log(err);
      }
   return res.json({
     success: 1,
     message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getAboutUs: (req, res) => {
+  getAboutUs( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
   });
 });
 },

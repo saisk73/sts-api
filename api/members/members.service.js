@@ -890,10 +890,42 @@ module.exports = {
   CreateAboutus: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into aboutus_master(about) 
-                values(?)`,
+      `insert into aboutus_master(welcome_descriptionabout) 
+                values(?,?)`,
       [
+        data.welcome_description,
         data.aboutus
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getAboutUs:(callBack) => {
+    pool.query(
+      `select * from aboutus_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateAboutus: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update aboutus_master set welcome_description=?,about=? where id = ?`,
+      [
+        data.welcome_description,
+        data.aboutus,
+        data.id
       ],
       (error, results, fields) => {
         if (error) {
