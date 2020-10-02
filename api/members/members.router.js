@@ -47,6 +47,17 @@ const {
   AddForums,
   getForums,
   DeleteForums,
+  AddVolunteer,
+  getVolunteer,
+  AddNewsGallery,
+  getNewsGallery,
+  DeleteNewsGallery,
+  AddPhotoGallery,
+  getPhotoGallery,
+  DeletePhotoGallery,
+  AddVideoGallery,
+  getVideoGallery,
+  DeleteVideoGallery,
   TestMail
 } = require("./members.controller");
 
@@ -96,8 +107,26 @@ router.post("/addforums", AddForums);
 router.get("/forums", getForums);
 router.get("/deleteforums/:id", DeleteForums);
 
+router.post("/volunteer", AddVolunteer);
+router.get("/volunteer", getVolunteer);
+
+
 router.post("/aboutus", AboutUs);
 router.get("/aboutus", getAboutUs);
+
+router.post("/addnewsgallery", AddNewsGallery);
+router.get("/newsgallery", getNewsGallery);
+router.get("/deletenewsgallery/:id", DeleteNewsGallery);
+
+router.post("/addphotogallery", AddPhotoGallery);
+router.get("/photogallery", getPhotoGallery);
+router.get("/deletephotogallery/:id", DeletePhotoGallery);
+
+router.post("/addvideogallery", AddVideoGallery);
+router.get("/videogallery", getVideoGallery);
+router.get("/deletevideogallery/:id", DeleteVideoGallery);
+
+
 
 
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);

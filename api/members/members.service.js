@@ -558,9 +558,25 @@ module.exports = {
     );
   },
 
+  UpdateAdminLoginOtp: (data, callBack) => {
+    pool.query(
+      `update admins_master set login_otp=? where id = ?`,
+      [
+    data.login_otp,
+    data.id  
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getAdminByMemberEmail: (email, callBack) => {
     pool.query(
-      `select * from members_master where role_id!=0 and email = ?`,
+      `select * from admins_master where role_id!=0 and username = ?`,
       [email],
       (error, results, fields) => {
         if (error) {
@@ -890,7 +906,7 @@ module.exports = {
   CreateAboutus: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into aboutus_master(welcome_descriptionabout) 
+      `insert into aboutus_master(welcome_description,about) 
                 values(?,?)`,
       [
         data.welcome_description,
@@ -1023,5 +1039,181 @@ module.exports = {
       }
     );
   },
+
+  CreateVolunteer: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into volunteercontent_master(description,image) 
+                values(?,?)`,
+      [
+        data.description,
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getVolunteer:(callBack) => {
+    pool.query(
+      `select * from volunteercontent_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateVolunteer: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update volunteercontent_master set description=?,image=? where id = ?`,
+      [
+        data.description,
+        data.image_name,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  CreateNewsGallery: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into newsgallery_master(image) 
+                values(?)`,
+      [
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getNewsGallery:(callBack) => {
+    pool.query(
+      `select * from newsgallery_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteNewsGallery: (id, callBack) => {
+    pool.query(
+      `delete from newsgallery_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  CreatePhotoGallery: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into photogallery_master(image) 
+                values(?)`,
+      [
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getPhotoGallery:(callBack) => {
+    pool.query(
+      `select * from photogallery_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeletePhotoGallery: (id, callBack) => {
+    pool.query(
+      `delete from photogallery_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  CreateVideoGallery: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into videogallery_master(video_url) 
+                values(?)`,
+      [
+        data.video_url
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getVideoGallery:(callBack) => {
+    pool.query(
+      `select * from videogallery_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+  DeleteVideoGallery: (id, callBack) => {
+    pool.query(
+      `delete from videogallery_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 
 };

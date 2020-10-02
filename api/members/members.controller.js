@@ -32,6 +32,7 @@ UpdateMemberShip_Member,
 createMemberShipHistory,
 UpdateLoginOtp,
 getAdminByMemberEmail,
+UpdateAdminLoginOtp,
 getMembersList,
 getVerifiedMembersList,
 UpdateMemberVerifyStatus,
@@ -62,7 +63,19 @@ getNewsLetter,
 DeleteNewsLetter,
 CreateForum,
 getForums,
-DeleteForums
+DeleteForums,
+CreateVolunteer,
+UpdateVolunteer,
+getVolunteer,
+CreateNewsGallery,
+getNewsGallery,
+DeleteNewsGallery,
+CreatePhotoGallery,
+getPhotoGallery,
+DeletePhotoGallery,
+CreateVideoGallery,
+getVideoGallery,
+DeleteVideoGallery
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -1500,7 +1513,7 @@ UpdateSpouse(body, (err, results) => {
     } 
    body.login_otp = OTP;
    body.id= results.id;
-    UpdateLoginOtp(body, (err, results) => {
+    UpdateAdminLoginOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -1521,7 +1534,7 @@ UpdateSpouse(body, (err, results) => {
     emailTemplatemswaw=result;
       let mailOptions = {
           from: 'svapps.websts@gmail.com', // sender address
-          to: req.body.email,// list of receivers
+          to: req.body.username,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
          //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
@@ -2974,6 +2987,239 @@ DeleteForums: (req, res) => {
 // const body = req.body;
 const id = req.params.id;
 DeleteForums(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
+},
+
+AddVolunteer: (req, res) => { 
+  var body = req.body;
+   // const body = req.body.image_url; 
+   let dataURI = body.image_url;
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/forums/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath);
+  //  console.log(image_name);
+   body.image_name = image_name;
+  getVolunteer( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    // console.log(results);
+    body.id = results.id;
+    UpdateVolunteer(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateVolunteer(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getVolunteer: (req, res) => {
+  getVolunteer( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+AddNewsGallery: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/newsgallery/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreateNewsGallery(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getNewsGallery: (req, res) => {
+  getNewsGallery( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteNewsGallery: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteNewsGallery(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
+},
+
+AddPhotoGallery: (req, res) => { 
+  // const body = req.body.image_url; 
+  const body = req.body;
+ // Some image data uri
+ let dataURI = body.image_url;
+ // It will create the full path in case it doesn't exist
+ // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ rand =Math.floor((Math.random() * 30000000000000000) + 34);
+ let filePath = './uploads/photogallery/'+rand+'.png';
+ var image_name = rand+'.png';
+ // Returns a Promise
+ imageDataURI.outputFile(dataURI, filePath)
+//  console.log(image_name);
+ body.image_name = image_name;
+ CreatePhotoGallery(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getPhotoGallery: (req, res) => {
+  getPhotoGallery( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeletePhotoGallery: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeletePhotoGallery(id,(err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  return res.json({
+    success: 1,
+    data: "Deleted successfully"
+  });
+
+});
+},
+
+AddVideoGallery: (req, res) => { 
+  const body = req.body;
+ CreateVideoGallery(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+getVideoGallery: (req, res) => {
+  getVideoGallery( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+DeleteVideoGallery: (req, res) => {
+// const body = req.body;
+const id = req.params.id;
+DeleteVideoGallery(id,(err, results) => {
   if (err) {
     console.log(err);
     return;
