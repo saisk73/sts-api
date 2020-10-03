@@ -1815,7 +1815,7 @@ getSpouseBymemberId(element, (err, results1) => {
         console.log(err);
         return;
       }
-   UpdateMemberVerifyStatus(element,body.status, (err, results) => {
+   UpdateMemberVerifyStatus(element,body.status,rand3, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
