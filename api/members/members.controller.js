@@ -1513,7 +1513,7 @@ UpdateSpouse(body, (err, results) => {
     } 
    body.login_otp = OTP;
    body.id= results.id;
-    UpdateAdminLoginOtp(body, (err, results) => {
+    UpdateAdminLoginOtp(body, (err, results1) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtp.gmail.com',
           port: 465,
@@ -1526,7 +1526,7 @@ UpdateSpouse(body, (err, results) => {
           let emailTemplatemswaw;
     ejs
     .renderFile(path.join(__dirname, "views/loginotp.ejs"), {
-      user_firstname: req.body.full_name,
+      user_firstname: results.admin_type,
       user_otp:body.login_otp
 
     })
@@ -1534,7 +1534,7 @@ UpdateSpouse(body, (err, results) => {
     emailTemplatemswaw=result;
       let mailOptions = {
           from: 'svapps.websts@gmail.com', // sender address
-          to: req.body.username,// list of receivers
+          to: results.username,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
          //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body

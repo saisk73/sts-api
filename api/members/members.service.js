@@ -626,11 +626,12 @@ module.exports = {
     );
   },
 
-  UpdateMemberVerifyStatus: (member_id,status, callBack) => {
+  UpdateMemberVerifyStatus: (member_id,status,member_verifycode, callBack) => {
     pool.query(
-      `update members_master set status=? where id = ?`,
+      `update members_master set status=?,member_verifycode=? where id = ?`,
       [
     status,
+    member_verifycode,
     member_id
       ],
       (error, results, fields) => {
@@ -661,6 +662,22 @@ module.exports = {
   createMemberLoginHistory: (data, callBack) => {
     pool.query(
       `insert into memberslogins_master(member_id) 
+                values(?)`,
+      [
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  createAdminLoginHistory: (data, callBack) => {
+    pool.query(
+      `insert into adminlogins_master(admin_id) 
                 values(?)`,
       [
         data.id
