@@ -75,7 +75,17 @@ getPhotoGallery,
 DeletePhotoGallery,
 CreateVideoGallery,
 getVideoGallery,
-DeleteVideoGallery
+DeleteVideoGallery,
+TerminateMember,
+TerminateSpouse,
+UpdateMemberShipByTreasurer,
+UpdateSpouseMemberShipByTreasurer,
+getMemberShipHistoryByMemberId,
+MemberShipPaymentsHistory,
+EventsPaymentsHistory,
+AddDownloadRequest,
+UpdateDownloadRequestByPresident,
+UpdateDownloadRequestBySecretery
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -1491,6 +1501,33 @@ UpdateSpouse(body, (err, results) => {
       }
   },
 
+  UpdateMemberShipByTreasurer: (req, res) => {
+    const body = req.body;
+    UpdateMemberShipByTreasurer(body, (err, results) => {
+      if(err){
+        console.log(err);
+           }
+
+           body.created_on=current_date;
+           body.id=body.member_id;
+           createMemberShipHistory(body, (err, results) => {
+            if(err){
+               console.log(err);
+             }
+           });
+           UpdateSpouseMemberShipByTreasurer(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+              })
+         //Create Membership History - End
+           return res.json({
+             success: 1,
+             message: "updated successfully"
+           });
+    });
+  },
 
   AdminLogin: (req, res) => {
     const body = req.body;
@@ -1581,6 +1618,17 @@ UpdateSpouse(body, (err, results) => {
         const jsontoken = sign({ result: results }, "qwe1234", {
           expiresIn: "1h"
         });
+
+        createAdminLoginHistory(results, (err, results1) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              success: 0,
+              message: "Database connection errror"
+            });
+          }
+        });
+
         return res.json({
           success: 1,
           message: "login successfully",
@@ -1650,13 +1698,27 @@ getMemberDetails: (req, res) => {
         console.log(err);
         return;
       }
+
+      getMemberShipHistoryByMemberId(id, (err, results3) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        getEventsHistoryByMemberId(id, (err, results4) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
       
       if(results){
         return res.status(200).json({
         success: 1,
         member_data: results,
         spouse_data:results1,
-        child_data:results2
+        child_data:results2,
+        membership_history:results3,
+        events_history:results4
       });
       }else{
         return res.status(200).json({
@@ -1664,8 +1726,9 @@ getMemberDetails: (req, res) => {
         message: 'No Data Found.',
       });
       }
-      
 
+    }); 
+    });
       });
       });  
 
@@ -3231,6 +3294,143 @@ DeleteVideoGallery(id,(err, results) => {
 
 });
 },
+
+ChangeMemberPasswordByTreasurer: (req, res) => {
+  const body = req.body;
+        body.id = body.member_id;
+  const salt = genSaltSync(10);
+  body.new_password = hashSync(body.new_password, salt);
+     changepasswordBymemberId(body, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.json({
+      success: 1,
+      message: "updated successfully"
+    });  
+  });
+},
+
+TerminateMember: (req, res) => {
+  const body = req.body;
+        body.member_status = 2;
+  TerminateMember(body, (err, result) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    TerminateSpouse(body, (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+    return res.json({
+      success: 1,
+      message: "updated successfully"
+    });  
+  });
+},
+
+MemberShipPaymentsHistory: (req, res) => {
+  MemberShipPaymentsHistory( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+EventsPaymentsHistory: (req, res) => {
+  EventsPaymentsHistory( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+AddDownloadRequest: (req, res) => { 
+  const body = req.body;
+  AddDownloadRequest(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
+
+UpdateDownloadRequest: (req, res) => { 
+  const body = req.body;
+  var admin_id = body.admin_id;
+  if(admin_id==1){
+    UpdateDownloadRequestByPresident(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Added successfully"
+     });
+   });
+  }
+
+  if(admin_id==2){
+    UpdateDownloadRequestBySecretery(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Added successfully"
+     });
+   });
+  }
+
+  if(admin_id==3){
+    UpdateDownloadRequestByTreasurer(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Added successfully"
+     });
+   });
+  }
+  
+},
+
+
+
+
+
+
 
 
    TestMail: (req, res) => {

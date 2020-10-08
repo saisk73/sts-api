@@ -58,6 +58,13 @@ const {
   AddVideoGallery,
   getVideoGallery,
   DeleteVideoGallery,
+  UpdateMemberShipByTreasurer,
+  ChangeMemberPasswordByTreasurer,
+  TerminateMember,
+  MemberShipPaymentsHistory,
+  EventsPaymentsHistory,
+  AddDownloadRequest,
+  UpdateDownloadRequest,
   TestMail
 } = require("./members.controller");
 
@@ -138,6 +145,16 @@ router.patch("/renewalwitharrears", checkToken, RenewalWithArrears);
 
 
 router.post("/uploadprofileimage",checkToken,UploadProfileImage);
+
+router.post("/updatemembershipbytreasurer",checkToken,UpdateMemberShipByTreasurer);
+router.post("/changememberpasswordbytreasurer",checkToken,ChangeMemberPasswordByTreasurer);
+router.post("/terminatemember",checkToken,TerminateMember);
+router.get("/membershippaymentshistory",checkToken,MemberShipPaymentsHistory);
+router.get("/eventspaymentshistory",checkToken,EventsPaymentsHistory);
+router.post("/adddownloadrequest",checkToken,AddDownloadRequest);
+router.post("/updatedownloadrequest",checkToken,UpdateDownloadRequest);
+
+
 
 
 
