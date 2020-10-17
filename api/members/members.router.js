@@ -65,6 +65,8 @@ const {
   EventsPaymentsHistory,
   AddDownloadRequest,
   UpdateDownloadRequest,
+  StartTransaction,
+  CheckTransaction,
   TestMail
 } = require("./members.controller");
 
@@ -85,6 +87,11 @@ router.patch("/verifyotp",VerifyOtp);
 router.patch("/updatespouse", checkToken, UpdateSpouse);
 router.patch("/updatechildrens", checkToken, UpdateChildrens);
 router.patch("/updatemembership", checkToken, UpdateMemberShip);
+
+router.post("/starttransaction", StartTransaction);
+router.post("/checktransaction", CheckTransaction);
+
+
 
 router.post("/adminlogin", AdminLogin);
 router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);

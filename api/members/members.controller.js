@@ -85,7 +85,9 @@ MemberShipPaymentsHistory,
 EventsPaymentsHistory,
 AddDownloadRequest,
 UpdateDownloadRequestByPresident,
-UpdateDownloadRequestBySecretery
+UpdateDownloadRequestBySecretery,
+StartTransaction,
+CheckTransaction
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3426,10 +3428,33 @@ UpdateDownloadRequest: (req, res) => {
   
 },
 
+StartTransaction: (req, res) => { 
+  const body = req.body;
+  body.transaction_id = Math.floor((Math.random() * 30000000000000000) + 34);
+  StartTransaction(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+},
 
-
-
-
+CheckTransaction: (req, res) => {
+      const body = req.body;
+      CheckTransaction(body.transaction_id,(err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        transaction_status: results.status,
+        transaction_id: results.transaction_id
+      });
+    });
+  },
 
 
 

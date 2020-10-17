@@ -101,8 +101,8 @@ cron.schedule('0 0 0 * * *', () => {
               }
               console.log('Message %s sent: %s', info.messageId, info.response);
                   res.render('index');
-             })});
-
+             })
+            });
           })
         })
       })

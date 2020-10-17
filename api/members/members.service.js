@@ -1419,6 +1419,38 @@ module.exports = {
     );
   },
 
+  StartTransaction: (data, callBack) => {
+    pool.query(
+      `insert into payment_transactions(transaction_id,amount) 
+                values(?,?)`,
+      [
+        data.transaction_id,
+        data.amount
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  CheckTransaction: (transaction_id, callBack) => {
+    pool.query(
+      `select * from payment_transactions where transaction_id = ?`,
+      [transaction_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  
+
   
 
   
