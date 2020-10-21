@@ -1152,7 +1152,6 @@ UpdateSpouse(body, (err, results) => {
                }
             //Create Membership History - Start
             body.created_on=current_date;
-
             createMemberShipHistory(body, (err, results) => {
              if(err){
                 console.log(err);
@@ -2221,6 +2220,7 @@ var digits = '0123456789';
         console.log(err);
         return;
       }
+      results_mem.transaction_id = body.transaction_id;
       if(body.arrears_paid=='Yes'){
         if(body.membershiptype_id==results_mem.membershiptype_id){
           var d = new Date(current_date);
@@ -3454,7 +3454,7 @@ CheckTransaction: (req, res) => {
       }
       return res.json({
         transaction_status: results.status,
-        transaction_id: results.transaction_id
+        transaction_id: results.netstxnref
       });
     });
   },
