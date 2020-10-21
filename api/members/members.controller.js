@@ -3438,6 +3438,7 @@ StartTransaction: (req, res) => {
      }
   return res.json({
     success: 1,
+    transaction_id:body.transaction_id
     message: "Added successfully"
   });
 });
