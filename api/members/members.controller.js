@@ -3452,10 +3452,20 @@ CheckTransaction: (req, res) => {
         console.log(err);
         return;
       }
+
+      if(results){
       return res.json({
         transaction_status: results.status,
         transaction_id: results.netstxnref
       });
+      }
+
+      if(!results){
+      return res.json({
+        status: 1
+      });
+      }
+
     });
   },
 
