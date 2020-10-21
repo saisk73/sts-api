@@ -1152,6 +1152,7 @@ UpdateSpouse(body, (err, results) => {
                }
             //Create Membership History - Start
             body.created_on=current_date;
+
             createMemberShipHistory(body, (err, results) => {
              if(err){
                 console.log(err);
@@ -3438,7 +3439,7 @@ StartTransaction: (req, res) => {
      }
   return res.json({
     success: 1,
-    transaction_id:body.transaction_id
+    transaction_id:body.transaction_id,
     message: "Added successfully"
   });
 });
