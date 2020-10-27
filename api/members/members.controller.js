@@ -64,8 +64,10 @@ DeleteNewsLetter,
 CreateForum,
 getForums,
 DeleteForums,
-CreateVolunteer,
-UpdateVolunteer,
+CreateVolunteerImage,
+CreateVolunteerDescription,
+UpdateVolunteerImage,
+UpdateVolunteerDescription,
 getVolunteer,
 CreateNewsGallery,
 getNewsGallery,
@@ -3071,6 +3073,7 @@ AddVolunteer: (req, res) => {
   var body = req.body;
    // const body = req.body.image_url; 
    let dataURI = body.image_url;
+    if(dataURI){
    // It will create the full path in case it doesn't exist
    // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
    rand =Math.floor((Math.random() * 30000000000000000) + 34);
@@ -3088,7 +3091,7 @@ AddVolunteer: (req, res) => {
   if(results){
     // console.log(results);
     body.id = results.id;
-    UpdateVolunteer(body, (err, results1) => {
+    UpdateVolunteerImage(body, (err, results1) => {
       if(err){
          console.log(err);
         }
@@ -3099,7 +3102,7 @@ AddVolunteer: (req, res) => {
    });
 
   }else{
- CreateVolunteer(body, (err, results1) => {
+ CreateVolunteerImage(body, (err, results1) => {
    if(err){
       console.log(err);
      }
@@ -3111,6 +3114,40 @@ AddVolunteer: (req, res) => {
   }
 
   });
+}else{
+  getVolunteer( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    // console.log(results);
+    body.id = results.id;
+    UpdateVolunteerDescription(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateVolunteerDescription(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+
+}
 },
 
 getVolunteer: (req, res) => {

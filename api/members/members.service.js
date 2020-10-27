@@ -1093,13 +1093,29 @@ module.exports = {
     );
   },
 
-  CreateVolunteer: (data, callBack) => {
+  CreateVolunteerDescription: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into volunteercontent_master(description,image) 
-                values(?,?)`,
+      `insert into volunteercontent_master(description) 
+                values(?)`,
       [
-        data.description,
+        data.description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  CreateVolunteerImage: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into volunteercontent_master(image) 
+                values(?)`,
+      [
         data.image_name
       ],
       (error, results, fields) => {
@@ -1124,13 +1140,29 @@ module.exports = {
     );
   },
 
-  UpdateVolunteer: (data, callBack) => {
+  UpdateVolunteerImage: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update volunteercontent_master set description=?,image=? where id = ?`,
+      `update volunteercontent_master set image=? where id = ?`,
+      [
+        data.image_name,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateVolunteerDescription: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update volunteercontent_master set description=? where id = ?`,
       [
         data.description,
-        data.image_name,
         data.id
       ],
       (error, results, fields) => {
