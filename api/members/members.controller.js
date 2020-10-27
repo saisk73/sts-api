@@ -3074,7 +3074,7 @@ AddVolunteer: (req, res) => {
    // It will create the full path in case it doesn't exist
    // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
    rand =Math.floor((Math.random() * 30000000000000000) + 34);
-   let filePath = './uploads/forums/'+rand+'.png';
+   let filePath = './uploads/volunteers/'+rand+'.png';
    var image_name = rand+'.png';
    // Returns a Promise
    imageDataURI.outputFile(dataURI, filePath);
