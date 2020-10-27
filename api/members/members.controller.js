@@ -91,7 +91,9 @@ UpdateDownloadRequestBySecretery,
 StartTransaction,
 CheckTransaction,
 createAdminLoginHistory,
-getEventsHistoryByMemberId
+getEventsHistoryByMemberId,
+getDownloadRequests,
+getMyDownloadRequests
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3466,6 +3468,34 @@ UpdateDownloadRequest: (req, res) => {
    });
   }
   
+},
+
+getDownloadRequests: (req, res) => { 
+  // const body = req.body;
+  // const id = req.decoded.result.id;
+  getDownloadRequests( (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    download_requests: results
+  });
+});
+},
+
+getMyDownloadRequests: (req, res) => { 
+  // const body = req.body;
+  const id = req.decoded.result.id;
+  getMyDownloadRequests(id, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    download_requests: results
+  });
+});
 },
 
 StartTransaction: (req, res) => { 

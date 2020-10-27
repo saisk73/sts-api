@@ -1482,6 +1482,33 @@ module.exports = {
     );
   },
 
+  getDownloadRequests: (callBack) => {
+    pool.query(
+      `select m.*,(select admin_type from admins_master where id=m.admin_id) as admin_type from download_requests_master m`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getMyDownloadRequests: (admin_id,callBack) => {
+    pool.query(
+      `select m.*,(select admin_type from admins_master where id=m.admin_id) as admin_type from download_requests_master m where admin_id=?`,
+      [admin_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+
   
 
   

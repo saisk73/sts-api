@@ -67,6 +67,8 @@ const {
   UpdateDownloadRequest,
   StartTransaction,
   CheckTransaction,
+  getDownloadRequests,
+  getMyDownloadRequests,
   TestMail
 } = require("./members.controller");
 
@@ -160,6 +162,8 @@ router.get("/membershippaymentshistory",checkToken,MemberShipPaymentsHistory);
 router.get("/eventspaymentshistory",checkToken,EventsPaymentsHistory);
 router.post("/adddownloadrequest",checkToken,AddDownloadRequest);
 router.post("/updatedownloadrequest",checkToken,UpdateDownloadRequest);
+router.get("/alldownloadrequests",checkToken,getDownloadRequests);
+router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
 
 
 
