@@ -88,7 +88,8 @@ UpdateDownloadRequestByPresident,
 UpdateDownloadRequestBySecretery,
 StartTransaction,
 CheckTransaction,
-createAdminLoginHistory
+createAdminLoginHistory,
+getEventsHistoryByMemberId
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
