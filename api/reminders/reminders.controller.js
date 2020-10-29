@@ -32,8 +32,8 @@ cron.schedule('0 0 0 * * *', () => {
             port: 465,
             secure: true,
             auth: {
-                user: 'svapps.websts@gmail.com',
-                pass: '2020#2020'
+                user: 'waytoskillwts@gmail.com',
+                pass: 'Getmein@1221'
             }
         });
       let emailTemplatems;
@@ -44,7 +44,7 @@ cron.schedule('0 0 0 * * *', () => {
     .then(result => {
       emailTemplatems=result;
         let mailOptions = {
-            from: 'svapps.websts@gmail.com', // sender address
+            from: 'waytoskillwts@gmail.com', // sender address
             to: element.email,// list of receivers
             subject: 'Birthday Wishes From STS', // Subject line
             text:'Wish you many more returns of the day.', // plain text body
@@ -75,8 +75,8 @@ cron.schedule('0 0 0 * * *', () => {
               port: 465,
               secure: true,
               auth: {
-                  user: 'svapps.websts@gmail.com',
-                  pass: '2020#2020'
+                  user: 'waytoskillwts@gmail.com',
+                  pass: 'Getmein@1221'
               }
           });
         let emailTemplatems;
@@ -88,7 +88,7 @@ cron.schedule('0 0 0 * * *', () => {
       .then(result => {
         emailTemplatems=result;
           let mailOptions = {
-              from: 'svapps.websts@gmail.com', // sender address
+              from: 'waytoskillwts@gmail.com', // sender address
               to: element.email,// list of receivers
               subject: 'Membership Renewal Reminder From STS', // Subject line
               text:'Your Membership expiry date is '+element.membership_enddate, // plain text body
@@ -120,8 +120,8 @@ cron.schedule('0 0 0 * * *', () => {
               port: 465,
               secure: true,
               auth: {
-                  user: 'svapps.websts@gmail.com',
-                  pass: '2020#2020'
+                  user: 'waytoskillwts@gmail.com',
+                  pass: 'Getmein@1221'
               }
           });
         let emailTemplatems;
@@ -133,7 +133,7 @@ cron.schedule('0 0 0 * * *', () => {
       .then(result => {
         emailTemplatems=result;
           let mailOptions = {
-              from: 'svapps.websts@gmail.com', // sender address
+              from: 'waytoskillwts@gmail.com', // sender address
               to: element.email,// list of receivers
               subject: 'Reminder From STS', // Subject line
               text:'Your child '+element.child_name+' age is going to complete 18 years.', // plain text body

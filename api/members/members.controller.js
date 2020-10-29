@@ -167,8 +167,8 @@ module.exports = {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatems;
@@ -180,7 +180,7 @@ module.exports = {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -246,8 +246,8 @@ module.exports = {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
      
@@ -260,7 +260,7 @@ module.exports = {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -336,7 +336,7 @@ module.exports = {
     })  .then(result => {
       emailTemplates = result;
      let mailOptionse = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.s_email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -391,8 +391,8 @@ module.exports = {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatemswaw;
@@ -405,7 +405,7 @@ module.exports = {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -480,8 +480,8 @@ module.exports = {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatemswaw;
@@ -494,7 +494,7 @@ module.exports = {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -774,8 +774,8 @@ var digits = '0123456789';
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatemswaw;
@@ -788,7 +788,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -913,8 +913,8 @@ var digits = '0123456789';
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatems;
@@ -926,7 +926,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Forgot Password', // Subject line
           text:'Password Reset', // plain text body
@@ -983,8 +983,8 @@ var digits = '0123456789';
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatems;
@@ -996,7 +996,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Username Confirmation', // Subject line
           text:'Confirmation mail from STS', // plain text body
@@ -1075,7 +1075,7 @@ UpdateSpouse(body, (err, results) => {
     })  .then(result => {
       emailTemplates = result;
      let mailOptionse = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.s_email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -1564,8 +1564,8 @@ UpdateSpouse(body, (err, results) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatemswaw;
@@ -1578,7 +1578,7 @@ UpdateSpouse(body, (err, results) => {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: results.username,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -1774,8 +1774,8 @@ getMemberDetails: (req, res) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatems;
@@ -1787,7 +1787,7 @@ getMemberDetails: (req, res) => {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: resul1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -1830,8 +1830,8 @@ getSpouseBymemberId(element, (err, results1) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
      
@@ -1844,7 +1844,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: results1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -1902,8 +1902,8 @@ getSpouseBymemberId(element, (err, results1) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatems;
@@ -1915,7 +1915,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: resul1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -1958,8 +1958,8 @@ getSpouseBymemberId(element, (err, results1) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
      
@@ -1972,7 +1972,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: results1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2120,8 +2120,8 @@ var digits = '0123456789';
           port: 465,
           secure: true,
           auth: {
-              user: 'svapps.websts@gmail.com',
-              pass: '2020#2020'
+              user: 'waytoskillwts@gmail.com',
+              pass: 'Getmein@1221'
           }
       });
           let emailTemplatemswaw;
@@ -2134,7 +2134,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'svapps.websts@gmail.com', // sender address
+          from: 'waytoskillwts@gmail.com', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -2384,8 +2384,8 @@ var digits = '0123456789';
             port: 465,
             secure: true,
             auth: {
-                user: 'svapps.websts@gmail.com',
-                pass: '2020#2020'
+                user: 'waytoskillwts@gmail.com',
+                pass: 'Getmein@1221'
             }
         });
             let emailTemplatems;
@@ -2397,7 +2397,7 @@ var digits = '0123456789';
     .then(result => {
       emailTemplatems=result;
         let mailOptions = {
-            from: 'svapps.websts@gmail.com', // sender address
+            from: 'waytoskillwts@gmail.com', // sender address
             to: results_mem.email,// list of receivers
             subject: 'New Member Registration', // Subject line
             text:'Thankyou for registering with STS', // plain text body
@@ -2479,7 +2479,7 @@ var digits = '0123456789';
      })  .then(result => {
        emailTemplates = result;
       let mailOptionse = {
-           from: 'svapps.websts@gmail.com', // sender address
+           from: 'waytoskillwts@gmail.com', // sender address
            to: results_spouse.email,// list of receivers
            subject: 'New Member Registration', // Subject line
            text:'Thankyou for registering with STS', // plain text body
@@ -2545,8 +2545,8 @@ var digits = '0123456789';
                   port: 465,
                   secure: true,
                   auth: {
-                      user: 'svapps.websts@gmail.com',
-                      pass: '2020#2020'
+                      user: 'waytoskillwts@gmail.com',
+                      pass: 'Getmein@1221'
                   }
               });
                   let emailTemplatems;
@@ -2558,7 +2558,7 @@ var digits = '0123456789';
           .then(result => {
             emailTemplatems=result;
               let mailOptions = {
-                  from: 'svapps.websts@gmail.com', // sender address
+                  from: 'waytoskillwts@gmail.com', // sender address
                   to: results_mem.email,// list of receivers
                   subject: 'New Member Registration', // Subject line
                   text:'Thankyou for registering with STS', // plain text body
@@ -2632,8 +2632,8 @@ var digits = '0123456789';
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'svapps.websts@gmail.com',
-                        pass: '2020#2020'
+                        user: 'waytoskillwts@gmail.com',
+                        pass: 'Getmein@1221'
                     }
                 });
                     let emailTemplatems;
@@ -2645,7 +2645,7 @@ var digits = '0123456789';
             .then(result => {
               emailTemplatems=result;
                 let mailOptions = {
-                    from: 'svapps.websts@gmail.com', // sender address
+                    from: 'waytoskillwts@gmail.com', // sender address
                     to: results_mem.email,// list of receivers
                     subject: 'New Member Registration', // Subject line
                     text:'Thankyou for registering with STS', // plain text body
