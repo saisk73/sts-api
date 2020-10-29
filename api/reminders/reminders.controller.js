@@ -28,12 +28,12 @@ cron.schedule('0 0 0 * * *', () => {
     if(results){
       results.forEach(element => { 
          let transporter = nodeMailer.createTransport({
-            host: 'smtp.gmail.com',
+            host: 'smtpout.secureserver.net',
             port: 465,
             secure: true,
             auth: {
-                user: 'waytoskillwts@gmail.com',
-                pass: 'Getmein@1221'
+                user: 'contact@waytoskill.com',
+                pass: 'ude82!@8ed!e13q)d1e2d!djdn'
             }
         });
       let emailTemplatems;
@@ -44,7 +44,7 @@ cron.schedule('0 0 0 * * *', () => {
     .then(result => {
       emailTemplatems=result;
         let mailOptions = {
-            from: 'waytoskillwts@gmail.com', // sender address
+            from: 'contact@waytoskill.com', // sender address
             to: element.email,// list of receivers
             subject: 'Birthday Wishes From STS', // Subject line
             text:'Wish you many more returns of the day.', // plain text body
@@ -71,12 +71,12 @@ cron.schedule('0 0 0 * * *', () => {
         getMembershipEndDays(element.days,(err, results2) => {
           results2.forEach(element => {
             let transporter = nodeMailer.createTransport({
-              host: 'smtp.gmail.com',
+              host: 'smtpout.secureserver.net',
               port: 465,
               secure: true,
               auth: {
-                  user: 'waytoskillwts@gmail.com',
-                  pass: 'Getmein@1221'
+                  user: 'contact@waytoskill.com',
+                  pass: 'ude82!@8ed!e13q)d1e2d!djdn'
               }
           });
         let emailTemplatems;
@@ -88,7 +88,7 @@ cron.schedule('0 0 0 * * *', () => {
       .then(result => {
         emailTemplatems=result;
           let mailOptions = {
-              from: 'waytoskillwts@gmail.com', // sender address
+              from: 'contact@waytoskill.com', // sender address
               to: element.email,// list of receivers
               subject: 'Membership Renewal Reminder From STS', // Subject line
               text:'Your Membership expiry date is '+element.membership_enddate, // plain text body
@@ -116,12 +116,12 @@ cron.schedule('0 0 0 * * *', () => {
         getChildEndDays(ttl_days,(err, results4) => {
           results4.forEach(element => {
             let transporter = nodeMailer.createTransport({
-              host: 'smtp.gmail.com',
+              host: 'smtpout.secureserver.net',
               port: 465,
               secure: true,
               auth: {
-                  user: 'waytoskillwts@gmail.com',
-                  pass: 'Getmein@1221'
+                  user: 'contact@waytoskill.com',
+                  pass: 'ude82!@8ed!e13q)d1e2d!djdn'
               }
           });
         let emailTemplatems;
@@ -133,7 +133,7 @@ cron.schedule('0 0 0 * * *', () => {
       .then(result => {
         emailTemplatems=result;
           let mailOptions = {
-              from: 'waytoskillwts@gmail.com', // sender address
+              from: 'contact@waytoskill.com', // sender address
               to: element.email,// list of receivers
               subject: 'Reminder From STS', // Subject line
               text:'Your child '+element.child_name+' age is going to complete 18 years.', // plain text body
@@ -176,7 +176,7 @@ module.exports = {
     // console.log(todate);
 // const nodemailer = require('nodemailer');
 // let transporter = nodemailer.createTransport({
-//     host: 'smtp.gmail.com',
+//     host: 'smtpout.secureserver.net',
 //     port: 587,
 //     secure: false,
 //     requireTLS: true,
