@@ -1022,7 +1022,7 @@ var digits = '0123456789';
   },
 
 
-  UpdateSpouse: (req, res) => {
+UpdateSpouse: (req, res) => {
   const body = req.body;
   if(body.id){
 UpdateSpouse(body, (err, results) => {
@@ -1067,6 +1067,15 @@ UpdateSpouse(body, (err, results) => {
   // host=req.get('host');
   host= process.env.WEB_URL;
   links="http://"+host+"/setpassword?token="+rand2;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtpout.secureserver.net',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'contact@waytoskill.com',
+              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+          }
+      });
   
         let emailTemplates;
     ejs
