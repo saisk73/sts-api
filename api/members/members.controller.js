@@ -1176,8 +1176,8 @@ MemberShipUpdate: (req, res) => {
     const body = req.body;
     body.membership_type = '';
     var membershiptype_id = req.decoded.result.membershiptype_id;
-    body.member_type = req.decoded.result.member_type;
-    if(body.member_type==''){
+    var member_type = req.decoded.result.member_type;
+    if(member_type==null){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
           body.membership_enddate = null;
@@ -1488,7 +1488,6 @@ MemberShipUpdate: (req, res) => {
             }
 
       }else{
-
           if(membershiptype_id==3 && body.membershiptype_id==4){
           body.membership_type = 1; // 1-> Life
           body.membership_enddate = null;
