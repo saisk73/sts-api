@@ -30,6 +30,7 @@ UpdateMemberShip_ChildrensInactive,
 UpdateMemberShipBySpouse,
 UpdateMemberShip_Member,
 createMemberShipHistory,
+MemberShipHistory,
 UpdateLoginOtp,
 getAdminByMemberEmail,
 UpdateAdminLoginOtp,
@@ -1537,6 +1538,20 @@ UpdateSpouse(body, (err, results) => {
             })
             }
       }
+  },
+
+  MemberShipHistory: (req, res) => {
+    member_id = req.decoded.result.id;
+    MemberShipHistory(member_id,(err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results
+      });
+    });
   },
 
   UpdateMemberShipByTreasurer: (req, res) => {
