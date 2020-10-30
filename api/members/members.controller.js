@@ -1143,6 +1143,36 @@ UpdateSpouse(body, (err, results) => {
 
   UpdateMemberShip: (req, res) => {
     const body = req.body;
+    var membershiptype_id = body.membershiptype_id;
+    if(body.member_type==0){          
+            body.id = req.decoded.result.id;
+            UpdateMemberByMemberId(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+      }else{
+            body.id = req.decoded.result.id;
+            UpdateSpouseBySpouseId(body, (err, results) => {
+            if(err){
+              console.log(err);
+              return;
+               }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+            })
+      }
+  },
+
+  MemberShipUpdate: (req, res) => {
+    const body = req.body;
     body.membership_type = '';
     var membershiptype_id = req.decoded.result.membershiptype_id;
     if(body.member_type==0){

@@ -331,21 +331,10 @@ module.exports = {
 
   UpdateMemberShipByMember: (data, callBack) => {
     pool.query(
-      `update members_master set membershiptype_id=?, membership_amount=?, nric_no=?, full_name=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=? where id = ?`,
+      `update members_master set membershiptype_id=?, membership_amount=?,membership_type=?,membership_enddate=? where id = ?`,
       [
     data.membershiptype_id,
     data.membership_amount,
-    data.nric_no,
-    data.full_name,
-    data.dob,
-    data.nationality,
-    data.mobile,
-    data.residential_status,
-    data.street1,
-    data.street2,
-    data.unit_no,
-    data.postal_code,
-    data.habbies,
     data.membership_type,
     data.membership_enddate,
     data.id
@@ -413,15 +402,10 @@ module.exports = {
 
   UpdateMemberShip_spouse: (data, callBack) => {
     pool.query(
-      `update members_master set membershiptype_id=?, membership_amount=?, street1=?,street2=?,unit_no=?,postal_code=?,habbies=?,membership_type=?,membership_enddate=?,member_status=? where member_id = ?`,
+      `update members_master set membershiptype_id=?, membership_amount=?, membership_type=?,membership_enddate=?,member_status=? where member_id = ?`,
       [
     data.membershiptype_id,
     data.membership_amount,
-    data.street1,
-    data.street2,
-    data.unit_no,
-    data.postal_code,
-    data.habbies,
     data.membership_type,
     data.membership_enddate,
     data.member_status,
