@@ -350,10 +350,11 @@ module.exports = {
 
   UpdateMemberByMemberId: (data, callBack) => {
     pool.query(
-      `update members_master set nric_no=?, full_name=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=? where id = ?`,
+      `update members_master set nric_no=?, full_name=?,gender=?,dob=?,nationality=?,mobile=?,residential_status=?,street1=?,street2=?,unit_no=?,postal_code=?,habbies=? where id = ?`,
       [
     data.nric_no,
     data.full_name,
+    data.gender,
     data.dob,
     data.nationality,
     data.mobile,
