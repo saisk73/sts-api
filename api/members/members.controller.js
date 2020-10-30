@@ -1186,7 +1186,8 @@ MemberShipUpdate: (req, res) => {
     body.membership_type = '';
     var membershiptype_id = req.decoded.result.membershiptype_id;
     var member_type = req.decoded.result.member_type;
-    if(member_type==null){
+    console.log(member_type);
+    if(member_type==0){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
           body.membership_enddate = null;
