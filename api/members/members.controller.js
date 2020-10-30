@@ -1172,10 +1172,11 @@ UpdateSpouse(body, (err, results) => {
       }
   },
 
-  MemberShipUpdate: (req, res) => {
+MemberShipUpdate: (req, res) => {
     const body = req.body;
     body.membership_type = '';
     var membershiptype_id = req.decoded.result.membershiptype_id;
+    body.member_type = req.decoded.result.member_type;
     if(body.member_type==0){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
