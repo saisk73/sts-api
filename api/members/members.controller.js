@@ -1193,6 +1193,7 @@ MemberShipUpdate: (req, res) => {
         return;
       }
     var membershiptype_id = memberresult.membershiptype_id;
+    var membership_enddate = memberresult.membership_enddate;
     if(member_type==0){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
@@ -1219,7 +1220,6 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==1 && body.membershiptype_id==3){
-          var membership_enddate = req.decoded.result.membership_enddate;
           var d = new Date(membership_enddate);
           var year = d.getFullYear();
           var month = d.getMonth();
@@ -1404,7 +1404,6 @@ MemberShipUpdate: (req, res) => {
             }
 
         if(membershiptype_id==3 && body.membershiptype_id==1){
-         var membership_enddate = req.decoded.result.membership_enddate;
           var d = new Date(membership_enddate);
           var year = d.getFullYear();
           var month = d.getMonth();
