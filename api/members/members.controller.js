@@ -1184,9 +1184,15 @@ UpdateSpouse(body, (err, results) => {
 MemberShipUpdate: (req, res) => {
     const body = req.body;
     body.membership_type = '';
-    var membershiptype_id = req.decoded.result.membershiptype_id;
     var member_type = req.decoded.result.member_type;
+    var id = req.decoded.result.id;
     console.log(member_type);
+  getMemberDetails(id,(err, memberresult) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    var membershiptype_id = memberresult.membershiptype_id;
     if(member_type==0){
         if(membershiptype_id==1 && body.membershiptype_id==2){
           body.membership_type = 1; // 0-> Annual
@@ -1442,7 +1448,6 @@ MemberShipUpdate: (req, res) => {
             });
             })
             }
-
           if(membershiptype_id==3 && body.membershiptype_id==2){
           body.membership_type = 1; // 1-> Life
           body.membership_enddate = null;
@@ -1548,6 +1553,7 @@ MemberShipUpdate: (req, res) => {
             })
             }
       }
+    })
   },
 
   MemberShipHistory: (req, res) => {
