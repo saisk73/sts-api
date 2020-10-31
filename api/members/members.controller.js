@@ -21,6 +21,7 @@ getMemberotpverification,
 deleteOtp,
 UpdateSpouse,
 UpdateChildrens,
+DeleteChild,
 UpdateMemberShipByMember,
 UpdateMemberByMemberId,
 UpdateSpouseBySpouseId,
@@ -2822,6 +2823,22 @@ DeleteSlider: (req, res) => {
   // const body = req.body;
   const id = req.params.id;
   DeleteSlider(id,(err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.json({
+      success: 1,
+      data: "Deleted successfully"
+    });
+
+  });
+},
+
+DeleteChild: (req, res) => {
+  // const body = req.body;
+  const id = req.params.id;
+  DeleteChild(id,(err, results) => {
     if (err) {
       console.log(err);
       return;

@@ -15,6 +15,7 @@ const {
   VerifyOtp,
   UpdateSpouse,
   UpdateChildrens,
+  DeleteChild,
   UpdateMemberShip,
   MemberShipUpdate,
   MemberShipHistory,
@@ -93,6 +94,7 @@ router.patch("/updatechildrens", checkToken, UpdateChildrens);
 router.patch("/updatemembership", checkToken, UpdateMemberShip);
 router.patch("/membershipupdate", checkToken, MemberShipUpdate);
 router.get("/membershiphistory", checkToken, MemberShipHistory);
+router.get("/deletechild/:id", DeleteChild);
 
 router.post("/starttransaction", StartTransaction);
 router.post("/checktransaction", CheckTransaction);
