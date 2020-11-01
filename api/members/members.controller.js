@@ -169,6 +169,15 @@ module.exports = {
         });
       }
       // console.log(results.insertId);
+      //Create Membership History - Start
+      body.id = results.insertId;
+      body.created_on=current_date;
+      createMemberShipHistory(body, (err, results) => {
+       if(err){
+          console.log(err);
+        }
+      });
+    //Create Membership History - End
 
       // //mail Sending//
     
@@ -255,6 +264,16 @@ module.exports = {
           message: "Database connection errror"
         });
       }
+
+          //Create Membership History - Start
+          body.id = results.insertId;
+          body.created_on=current_date;
+          createMemberShipHistory(body, (err, results) => {
+           if(err){
+              console.log(err);
+            }
+          });
+        //Create Membership History - End
 
       
   // host=req.get('host');

@@ -139,7 +139,7 @@ module.exports = {
 
   getLastLerialNumber: (year, callBack) => {
     pool.query(
-      `select serial_no from members_master where year(created_on) = ? order by id desc limit 1`,
+      `select serial_no from members_master where year(created_on) = ? order by serial_no desc limit 1`,
       [year],
       (error, results, fields) => {
         if (error) {
