@@ -89,11 +89,12 @@ module.exports = {
   },
      AddMemberOtp: (data, callBack) => {
     pool.query(
-      `insert into  membersverify_otp(member_email,member_verifyotp,created_on) 
-                values(?,?,?)`,
+      `insert into  membersverify_otp(member_email,member_verifyotp,otp_expiry_time,created_on) 
+                values(?,?,?,?)`,
       [
         data.email,
         data.member_verifyotp,
+        data.otpexpiry_datetime,
         data.created_on
       ],
       (error, results, fields) => {
@@ -598,9 +599,10 @@ module.exports = {
 
   UpdateLoginOtp: (data, callBack) => {
     pool.query(
-      `update members_master set login_otp=? where id = ?`,
+      `update members_master set login_otp=?,otp_expiry_time=? where id = ?`,
       [
     data.login_otp,
+    data.otpexpiry_datetime,
     data.id  
       ],
       (error, results, fields) => {
@@ -614,9 +616,10 @@ module.exports = {
 
   UpdateAdminLoginOtp: (data, callBack) => {
     pool.query(
-      `update admins_master set login_otp=? where id = ?`,
+      `update admins_master set login_otp=?,otp_expiry_time=? where id = ?`,
       [
     data.login_otp,
+    data.otpexpiry_datetime,
     data.id  
       ],
       (error, results, fields) => {

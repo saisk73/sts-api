@@ -110,6 +110,9 @@ var preciseDiff = require('moment-precise-range-plugin');
 var nodeMailer = require('nodemailer');
 var current_date =  moment().format('YYYY-MM-DD');
 var current_year =  moment().format('YYYY');
+var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+
 var rand,rand2,host,link,links,linkse,rand3;
 module.exports = {
   createMember: (req, res) => {
@@ -437,6 +440,9 @@ module.exports = {
     } 
    body.login_otp = OTP;
    body.id= results.id;
+   var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+   var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+   body.otpexpiry_datetime = otpexpiry_datetime;
     UpdateLoginOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtpout.secureserver.net',
@@ -821,6 +827,9 @@ var digits = '0123456789';
     } 
    body.member_verifyotp = OTP;
    body.created_on = current_date;
+   var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+   var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+   body.otpexpiry_datetime = otpexpiry_datetime;
   deleteOldMemberOtp(body.email, (err, results1) => {
   AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
@@ -1689,6 +1698,9 @@ MemberShipUpdate: (req, res) => {
     } 
    body.login_otp = OTP;
    body.id= results.id;
+   var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+   var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+   body.otpexpiry_datetime = otpexpiry_datetime;
     UpdateAdminLoginOtp(body, (err, results1) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtpout.secureserver.net',
