@@ -1288,14 +1288,15 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==1 && body.membershiptype_id==3){
-          var d = new Date(membership_enddate);
-          var year = d.getFullYear();
-          var month = d.getMonth();
-          var day = d.getDate();
-          var fulldate = new Date(year + 1, month, day);
-          var toDate = fulldate.toISOString().slice(0, 10);
+          // var d = new Date(membership_enddate);
+          // var year = d.getFullYear();
+          // var month = d.getMonth();
+          // var day = d.getDate();
+          // var fulldate = new Date(year + 1, month, day);
+          // var toDate = fulldate.toISOString().slice(0, 10);
+          // body.membership_enddate = toDate;
           body.membership_type = 0; // 0-> Annual
-          body.membership_enddate = toDate;
+          body.membership_enddate = membership_enddate;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1472,14 +1473,16 @@ MemberShipUpdate: (req, res) => {
             }
 
         if(membershiptype_id==3 && body.membershiptype_id==1){
-          var d = new Date(membership_enddate);
-          var year = d.getFullYear();
-          var month = d.getMonth();
-          var day = d.getDate();
-          var fulldate = new Date(year + 1, month, day);
-          var toDate = fulldate.toISOString().slice(0, 10);
+          // var d = new Date(membership_enddate);
+          // var year = d.getFullYear();
+          // var month = d.getMonth();
+          // var day = d.getDate();
+          // var fulldate = new Date(year + 1, month, day);
+          // var toDate = fulldate.toISOString().slice(0, 10);
+          // body.membership_type = 0; // 0-> Annual
+          // body.membership_enddate = toDate;
           body.membership_type = 0; // 0-> Annual
-          body.membership_enddate = toDate;
+          body.membership_enddate = membership_enddate;
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
