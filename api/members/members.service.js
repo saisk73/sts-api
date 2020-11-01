@@ -656,7 +656,7 @@ module.exports = {
 
   MemberShipHistory:(member_id,callBack) => {
     pool.query(
-      `select * from memberships_history_master where member_id=''`,
+      `select * from memberships_history_master where member_id=?`,
       [member_id],
       (error, results, fields) => {
         if (error) {
