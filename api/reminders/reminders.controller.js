@@ -3,7 +3,9 @@ const {
   getMemberReminderdays,
   getMembershipEndDays,
   getchildReminderdays,
-  getChildEndDays
+  getChildEndDays,
+  membershipautoapproval,
+  UpdateMemberVerifyStatus
 } = require("./reminders.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -18,8 +20,8 @@ var current_date =  moment().format('YYYY-MM-DD');
 var rand,rand2,host,link,links,linkse,rand3;
 var cron = require('node-cron');
 
-cron.schedule('0 0 0 * * *', () => {
-// cron.schedule('* * * * * *', () => {
+cron.schedule('0 0 0 * * *', () => {  // every day midnight 12:00am
+// cron.schedule('* * * * * *', () => {  // every second
   getTodayBirthdayMembers(current_date, (err, results) => {
     if (err) {
       console.log(err);
@@ -150,6 +152,61 @@ cron.schedule('0 0 0 * * *', () => {
 
           })
         })
+      })
+    }
+  })
+
+  
+  membershipautoapproval((err, results4) => {
+    if(results4){
+    results4.forEach(element => {
+      rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+      status = 1;
+   UpdateMemberVerifyStatus(element.id,status,rand3, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection errror"
+        });
+      }
+      //mail Sending//
+      host= process.env.WEB_URL;
+      linkse="http://"+host+"/setpassword?token="+rand3;
+       let transporter = nodeMailer.createTransport({
+          host: 'smtpout.secureserver.net',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'contact@waytoskill.com',
+              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+          }
+      });
+          let emailTemplatems;
+    ejs
+    .renderFile(path.join(__dirname, "views/index.ejs"), {
+      user_firstname: element.full_name,
+      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+    })
+  .then(result => {
+    emailTemplatems=result;
+      let mailOptions = {
+          from: 'contact@waytoskill.com', // sender address
+          to: element.email,// list of receivers
+          subject: 'New Member Registration Confirmation', // Subject line
+          text:'Thankyou for registering with STS', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+     html:emailTemplatems
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })});
+        });
+//=======================Spouse Update End=====================================//
       })
     }
   })

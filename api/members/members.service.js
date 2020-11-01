@@ -3,9 +3,10 @@ const pool = require("../../config/database");
 module.exports = {
   createMember: (data, callBack) => {
     pool.query(
-      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,created_on,member_type,membership_type,membership_enddate) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,created_on,member_type,membership_type,membership_enddate) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
+        data.serial_no,
         data.member_id,
         data.registration_id,
         data.membershiptype_id,
@@ -23,8 +24,11 @@ module.exports = {
         data.unit_no,
         data.postal_code,
         data.habbies,
+        data.reference,
         data.introducer1,
+        data.introducerNumber1,
         data.introducer2,
+        data.introducerNumber2,
         data.comments,
         data.created_on,
         data.member_type,
@@ -42,9 +46,10 @@ module.exports = {
 
     createSpouseMember: (data, callBack) => {
     pool.query(
-      `insert into members_master(member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,introducer1,introducer2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
+        data.serial_no,
         data.member_id,
         data.registration_id,
         data.membershiptype_id,
@@ -62,8 +67,11 @@ module.exports = {
         data.unit_no,
         data.postal_code,
         data.habbies,
+        data.reference,
         data.introducer1,
+        data.introducerNumber1,
         data.introducer2,
+        data.introducerNumber2,
         data.comments,
         data.member_verifycode,
         data.created_on,
@@ -120,6 +128,19 @@ module.exports = {
     pool.query(
       `select * from members_master where member_status=0 and status=1 and email = ?`,
       [email],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getLastLerialNumber: (year, callBack) => {
+    pool.query(
+      `select serial_no from members_master where year(created_on) = ? order by id desc limit 1`,
+      [year],
       (error, results, fields) => {
         if (error) {
           callBack(error);
@@ -259,6 +280,19 @@ module.exports = {
       }
     );
   },
+
+  deleteOldMemberOtp: (email, callBack) => {
+   pool.query(
+     `delete from  membersverify_otp  where member_email = ?`,
+     [email],
+     (error, results, fields) => {
+       if (error) {
+         callBack(error);
+       }
+       return callBack(null, results);
+     }
+   );
+ },
 
   getUserBymembermerificationid: (member_verifycode, callBack) => {
     pool.query(
@@ -676,11 +710,12 @@ module.exports = {
     );
   },
 
-  UpdateSpouseVerifyStatus: (member_id,status, callBack) => {
+  UpdateSpouseVerifyStatus: (member_id,status,member_verifycode, callBack) => {
     pool.query(
-      `update members_master set status=? where member_id = ?`,
+      `update members_master set status=?,member_verifycode=? where member_id = ?`,
       [
     status,
+    member_verifycode,
     member_id
       ],
       (error, results, fields) => {

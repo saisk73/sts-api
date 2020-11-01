@@ -67,6 +67,53 @@ module.exports = {
     );
   },
 
+  membershipautoapproval: (callBack) => {
+    pool.query(
+      `SELECT * from members_master where status=0 and date(created_on) < CURDATE() - interval 7 day`, 
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberVerifyStatus: (member_id,status,member_verifycode, callBack) => {
+    pool.query(
+      `update members_master set status=?,member_verifycode=? where id = ?`,
+      [
+    status,
+    member_verifycode,
+    member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateSpouseVerifyStatus: (member_id,status,member_verifycode, callBack) => {
+    pool.query(
+      `update members_master set status=?,member_verifycode=? where member_id = ?`,
+      [
+    status,
+    member_verifycode,
+    member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   
 
 };

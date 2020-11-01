@@ -95,7 +95,9 @@ CheckTransaction,
 createAdminLoginHistory,
 getEventsHistoryByMemberId,
 getDownloadRequests,
-getMyDownloadRequests
+getMyDownloadRequests,
+getLastLerialNumber,
+deleteOldMemberOtp
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -107,6 +109,7 @@ var moment = require('moment');
 var preciseDiff = require('moment-precise-range-plugin');
 var nodeMailer = require('nodemailer');
 var current_date =  moment().format('YYYY-MM-DD');
+var current_year =  moment().format('YYYY');
 var rand,rand2,host,link,links,linkse,rand3;
 module.exports = {
   createMember: (req, res) => {
@@ -125,10 +128,18 @@ module.exports = {
           data: "Email already exist."
         });
       }
-
+ 
     if(body.membershiptype_id==1 || body.membershiptype_id==2){
-      var uniqueid = new Date().valueOf();
-      body.registration_id = uniqueid;
+      getLastLerialNumber(current_year,(err, sresult) => {  
+        if (sresult) {
+          var serial_no = sresult.serial_no+1;
+        }else{
+          var serial_no = 10001;
+        }
+      // var uniqueid = new Date().valueOf();
+      // body.registration_id = uniqueid;
+      body.serial_no = serial_no;
+      body.registration_id = 'STS-'+current_year+'-'+serial_no;
       body.member_id = '';
       body.member_type = 0;
       //Create MEmbership end date-start
@@ -202,10 +213,19 @@ module.exports = {
         data: results
       });
     });
-
+  })
     }else{
-      var uniqueid = new Date().valueOf();
-      body.registration_id = uniqueid;
+      getLastLerialNumber(current_year,(err, sresult) => {  
+        if (sresult) {
+          var serial_no = sresult.serial_no+1;
+        }else{
+          var serial_no = 10001;
+        }
+        // console.log(sresult);
+      // var uniqueid = new Date().valueOf();
+      // body.registration_id = uniqueid;
+      body.serial_no = serial_no;
+      body.registration_id = 'STS-'+current_year+'-'+serial_no;
       body.member_id = '';
       body.member_type = 0;
       var member_insertid = '';
@@ -312,8 +332,18 @@ module.exports = {
     }else{
       body.membership_type = 1;
     }
+
+    getLastLerialNumber(current_year,(err, spresult) => {  
+      if (spresult) {
+        var serial_no = spresult.serial_no+1;
+      }else{
+        var serial_no = 10001;
+      }
+
     //Create MEmbership end date-end
-    body.registration_id = uniqueid+'S';
+    body.serial_no = serial_no;
+    body.registration_id = 'STS-'+current_year+'-'+serial_no;
+    // body.registration_id = uniqueid+'S';
     rand2=Math.floor((Math.random() * 20000000000000000) + 54);
     body.member_verifycode=rand2;
     createSpouseMember(body, (err, results) => {
@@ -358,9 +388,10 @@ module.exports = {
         data: results
       });
     });
+  })
 
     });
-
+  })
     }
   });
 
@@ -750,7 +781,8 @@ updateUsers: (req, res) => {
       });
     })}; });
   },
-  VerifyEmail: (req, res) => {
+
+VerifyEmail: (req, res) => {
     const body = req.body;
 // console.log(body);
   getUserByMemberEmail(body.email, (err, results) => {
@@ -770,7 +802,8 @@ var digits = '0123456789';
     } 
    body.member_verifyotp = OTP;
    body.created_on = current_date;
-    AddMemberOtp(body, (err, results) => {
+  deleteOldMemberOtp(body.email, (err, results1) => {
+  AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'smtpout.secureserver.net',
           port: 465,
@@ -816,6 +849,7 @@ var digits = '0123456789';
   
       });
     });
+  })
   }
    });
   },
@@ -1037,8 +1071,18 @@ UpdateSpouse(body, (err, results) => {
       });
     })
   }else{
+    getLastLerialNumber(current_year,(err, sresult) => {  
+      if (sresult) {
+        var serial_no = sresult.serial_no+1;
+      }else{
+        var serial_no = 10001;
+      }
+    // var uniqueid = new Date().valueOf();
+    // body.registration_id = uniqueid;
+    body.serial_no = serial_no;
+    body.registration_id = 'STS-'+current_year+'-'+serial_no;
     body.member_id = req.decoded.result.id;
-    body.registration_id = req.decoded.result.registration_id+'S';
+    // body.registration_id = req.decoded.result.registration_id+'S';
     body.membershiptype_id = req.decoded.result.membershiptype_id;
     body.membership_amount = req.decoded.result.membership_amount;
     body.street1 = req.decoded.result.street1;
@@ -1046,8 +1090,11 @@ UpdateSpouse(body, (err, results) => {
     body.unit_no = req.decoded.result.unit_no;
     body.postal_code = req.decoded.result.postal_code;
     body.habbies = req.decoded.result.habbies;
+    body.reference = req.decoded.result.reference_by;
     body.introducer1 = req.decoded.result.introducer1;
+    body.introducerNumber1 = req.decoded.result.introducer1_mobile;
     body.introducer2 = req.decoded.result.introducer2;
+    body.introducerNumber2 = req.decoded.result.introducer2_mobile;
     body.comments = req.decoded.result.comments;
     body.membership_type = req.decoded.result.membership_type;
     body.membership_enddate = req.decoded.result.membership_enddate;
@@ -1106,6 +1153,7 @@ UpdateSpouse(body, (err, results) => {
         data: results
       });
     });
+  });
   }
   },
 
@@ -1998,7 +2046,7 @@ getSpouseBymemberId(element, (err, results1) => {
         return;
       }
       if(results1){
-      UpdateSpouseVerifyStatus(element,body.status, (err, resul) => {
+      UpdateSpouseVerifyStatus(element,body.status,rand, (err, resul) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
