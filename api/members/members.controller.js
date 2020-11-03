@@ -1883,11 +1883,13 @@ getMemberDetails: (req, res) => {
         return;
       }
 
+      if(results.member_type==0){
       getSpouseBymemberId(id, (err, results1) => {
       if (err) {
         console.log(err);
         return;
       }
+      
 
       getChildrensBymemberId(id, (err, results2) => {
       if (err) {
@@ -1927,6 +1929,56 @@ getMemberDetails: (req, res) => {
     });
       });
       });  
+    }else{
+      var member_id = results.member_id;
+      getMemberDetails(member_id, (err, results1) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        
+        getChildrensBymemberId(member_id, (err, results2) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+  
+        getMemberShipHistoryByMemberId(id, (err, results3) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+  
+          getEventsHistoryByMemberId(id, (err, results4) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+        
+        if(results){
+          return res.status(200).json({
+          success: 1,
+          member_data: results,
+          spouse_data:results1,
+          child_data:results2,
+          membership_history:results3,
+          events_history:results4
+        });
+        }else{
+          return res.status(200).json({
+          success: 2,
+          message: 'No Data Found.',
+        });
+        }
+  
+      }); 
+      });
+        });
+        });
+
+
+    }
+
 
     });
   },
