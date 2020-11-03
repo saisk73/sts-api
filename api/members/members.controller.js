@@ -1087,18 +1087,31 @@ var digits = '0123456789';
 
 UpdateSpouse: (req, res) => {
   const body = req.body;
-  getUserByMemberEmail(body.s_email, (err, results) => {
-    if (err) {
-      console.log(err);
-    }
-    if (results) {
-      return res.json({
-        success: 0,
-        mesagee: "Email already registered with us"
-      });
-    }else{
   if(body.id){
-UpdateSpouse(body, (err, results) => {
+    getUserByMemberEmail(body.s_email, (err, results) => {
+      if (err) {
+        console.log(err);
+      }
+      if (results) {
+        if(results.email==body.s_email){
+          UpdateSpouse(body, (err, results) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            return res.json({
+              success: 1,
+              message: "updated successfully"
+            });
+          })
+          }else{
+        return res.json({
+          success: 0,
+          mesagee: "Email already registered with us"
+        });
+        }
+      }else{
+  UpdateSpouse(body, (err, results) => {
       if (err) {
         console.log(err);
         return;
@@ -1108,7 +1121,20 @@ UpdateSpouse(body, (err, results) => {
         message: "updated successfully"
       });
     })
+  }
+})
   }else{
+    getUserByMemberEmail(body.s_email, (err, results) => {
+      if (err) {
+        console.log(err);
+        }
+        if(results){
+          return res.json({
+            success: 0,
+            mesagee: "Email already registered with us"
+          });
+        }
+
     getLastLerialNumber(current_year,(err, sresult) => {  
       if (sresult) {
         var serial_no = sresult.serial_no+1;
@@ -1192,9 +1218,8 @@ UpdateSpouse(body, (err, results) => {
       });
     });
   });
+})
   }
-  }
-  })
 
   },
 
