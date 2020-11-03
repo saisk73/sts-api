@@ -811,7 +811,7 @@ VerifyEmail: (req, res) => {
     const body = req.body;
 // console.log(body);
   getUserByMemberEmail(body.email, (err, results) => {
-         if (err) {
+      if (err) {
         console.log(err);
       }
       if (results) {
@@ -1087,6 +1087,16 @@ var digits = '0123456789';
 
 UpdateSpouse: (req, res) => {
   const body = req.body;
+  getUserByMemberEmail(body.s_email, (err, results) => {
+    if (err) {
+      console.log(err);
+    }
+    if (results) {
+      return res.json({
+        success: 0,
+        mesagee: "Email already registered with us"
+      });
+    }else{
   if(body.id){
 UpdateSpouse(body, (err, results) => {
       if (err) {
@@ -1141,40 +1151,40 @@ UpdateSpouse(body, (err, results) => {
       }
   
   // host=req.get('host');
-  host= process.env.WEB_URL;
-  links="http://"+host+"/setpassword?token="+rand2;
-       let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
-          port: 465,
-          secure: true,
-          auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
-          }
-      });
+  // host= process.env.WEB_URL;
+  // links="http://"+host+"/setpassword?token="+rand2;
+  //      let transporter = nodeMailer.createTransport({
+  //         host: 'smtpout.secureserver.net',
+  //         port: 465,
+  //         secure: true,
+  //         auth: {
+  //             user: 'contact@waytoskill.com',
+  //             pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+  //         }
+  //     });
   
-        let emailTemplates;
-    ejs
-    .renderFile(path.join(__dirname, "views/index.ejs"), {
-      user_firstname: req.body.s_full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand2
-    })  .then(result => {
-      emailTemplates = result;
-     let mailOptionse = {
-          from: 'contact@waytoskill.com', // sender address
-          to: req.body.s_email,// list of receivers
-          subject: 'New Member Registration', // Subject line
-          text:'Thankyou for registering with STS', // plain text body
-          //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
-      html:emailTemplates
-      };
-      transporter.sendMail(mailOptionse, (error, info) => {
-          if (error) {
-              return console.log(error);
-          }
-          console.log('Message %s sent: %s', info.messageId, info.response);
-              res.render('index');
-          })});
+  //       let emailTemplates;
+  //   ejs
+  //   .renderFile(path.join(__dirname, "views/index.ejs"), {
+  //     user_firstname: req.body.s_full_name,
+  //     confirm_link:"http://"+host+"/setpassword?token=" + rand2
+  //   })  .then(result => {
+  //     emailTemplates = result;
+  //    let mailOptionse = {
+  //         from: 'contact@waytoskill.com', // sender address
+  //         to: req.body.s_email,// list of receivers
+  //         subject: 'New Member Registration', // Subject line
+  //         text:'Thankyou for registering with STS', // plain text body
+  //         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+  //     html:emailTemplates
+  //     };
+  //     transporter.sendMail(mailOptionse, (error, info) => {
+  //         if (error) {
+  //             return console.log(error);
+  //         }
+  //         console.log('Message %s sent: %s', info.messageId, info.response);
+  //             res.render('index');
+  //         })});
 
       return res.status(200).json({
         success: true,
@@ -1183,6 +1193,9 @@ UpdateSpouse(body, (err, results) => {
     });
   });
   }
+  }
+  })
+
   },
 
   UpdateChildrens: (req, res) => {
@@ -1321,6 +1334,14 @@ MemberShipUpdate: (req, res) => {
             });
           //Create Membership History - End
 
+          body.member_status=0;
+          UpdateMemberShip_spouse(body, (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+             }
+            })
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -1345,6 +1366,14 @@ MemberShipUpdate: (req, res) => {
               }
             });
           //Create Membership History - End
+
+          body.member_status=0;
+          UpdateMemberShip_spouse(body, (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+             }
+            })
 
             return res.json({
               success: 1,
@@ -1377,6 +1406,14 @@ MemberShipUpdate: (req, res) => {
             });
           //Create Membership History - End
 
+          body.member_status=0;
+          UpdateMemberShip_spouse(body, (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+             }
+            })
+
             return res.json({
               success: 1,
               message: "updated successfully"
@@ -1401,6 +1438,14 @@ MemberShipUpdate: (req, res) => {
               }
             });
           //Create Membership History - End
+
+          body.member_status=0;
+          UpdateMemberShip_spouse(body, (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+             }
+            })
 
             return res.json({
               success: 1,
@@ -1586,15 +1631,15 @@ MemberShipUpdate: (req, res) => {
           body.membership_type = 1; // 1-> Life
           body.membership_enddate = null;
           body.id = req.decoded.result.id;
-            UpdateMemberShipBySpouse(body, (err, results) => {
+           UpdateMemberShipByMember(body, (err, results) => {
             if(err){
               console.log(err);
               return;
                }
 
-              body.member_status=0;
-              body.member_id = req.decoded.result.member_id;
-            UpdateMemberShip_Member(body, (err, results) => {
+              // body.member_status=0;
+              body.id = req.decoded.result.member_id;
+              UpdateMemberShipByMember(body, (err, results) => {
             if(err){
               console.log(err);
               return;
@@ -2080,6 +2125,7 @@ getSpouseBymemberId(element, (err, results1) => {
         return;
       }
       if(results1){
+      rand=Math.floor((Math.random() * 10000000000000000) + 94);
       UpdateSpouseVerifyStatus(element,body.status,rand, (err, resul) => {
       if (err) {
         console.log(err);
@@ -2089,7 +2135,6 @@ getSpouseBymemberId(element, (err, results1) => {
         });
       }
 
-      rand=Math.floor((Math.random() * 10000000000000000) + 94);
       body.member_verifycode=rand;
       host= process.env.WEB_URL;
       link="http://"+host+"/setpassword?token="+rand;

@@ -646,7 +646,7 @@ module.exports = {
 
   getMembersList:(callBack) => {
     pool.query(
-      `select * from members_master where status=0 and member_id=''`,
+      `select * from members_master where status=0`,
       [],
       (error, results, fields) => {
         if (error) {
