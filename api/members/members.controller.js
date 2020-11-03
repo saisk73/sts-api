@@ -675,16 +675,38 @@ getMemberById: (req, res) => {
         return;
       }
       if (!results) {
+        getMemberById(id, (err, results1) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          getMemberById(results1.member_id, (err, results2) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+        if(!results2){
         return res.json({
           success: 0,
           message: "Record not Found"
         });
       }
-      results.password = undefined;
+
+      results2.password = undefined;
+      return res.json({
+        success: 1,
+        data: results2
+      });
+      })
+      })
+      }else{
+      // results.password = undefined;
+      // console.log('hi');
       return res.json({
         success: 1,
         data: results
       });
+    }
     });
   },
 
