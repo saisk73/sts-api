@@ -718,16 +718,26 @@ getMemberById: (req, res) => {
         return;
       }
       if (!results) {
+        getMemberById(id, (err, results1) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+
+
         return res.json({
           success: 0,
           message: "Record not Found"
         });
-      }
-      results.password = undefined;
+      })
+      }else{
+      // results.password = undefined;
       return res.json({
         success: 1,
         data: results
       });
+    }
     });
   },
 
@@ -765,7 +775,6 @@ getMemberById: (req, res) => {
 
 updateUsers: (req, res) => {
     const body = req.body;
-
   getUserBymembermerificationid(body.member_verifycode, (err, results) => {
          if (err) {
         console.log(err);
@@ -775,15 +784,10 @@ updateUsers: (req, res) => {
           success: 0,
           mesagee: "Invalid Verification Code"
         });
-      }
-    else
-    {
-  
+      }else{
     const salt = genSaltSync(10);
    body.password = hashSync(body.password, salt);
-   
     updateUsers(body, (err, results) => {
-    
       if (err) {
         console.log(err);
     
@@ -793,7 +797,8 @@ updateUsers: (req, res) => {
         success: 1,
         message: "updated successfully"
       });
-    })}; });
+    })}; 
+  });
   },
  VerifyOtp: (req, res) => {
     const body = req.body;
@@ -1660,17 +1665,42 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==body.membershiptype_id){
-            body.id = req.decoded.result.id;
-            UpdateMemberByMemberId(body, (err, results) => {
-            if(err){
+        var d = new Date(membership_enddate);
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var day = d.getDate();
+        var fulldate = new Date(year + 1, month, day);
+        var toDate = fulldate.toISOString().slice(0, 10);
+        body.membership_type = 0; // 0-> Annual
+        body.membership_enddate = toDate;
+        body.id = req.decoded.result.id;
+          UpdateMemberShipByMember(body, (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+             }
+          //Create Membership History - Start
+          body.created_on=current_date;
+          createMemberShipHistory(body, (err, results) => {
+           if(err){
               console.log(err);
-              return;
-               }
-            return res.json({
-              success: 1,
-              message: "updated successfully"
-            });
-            })
+            }
+          });
+        //Create Membership History - End
+
+        body.member_status=0;
+        UpdateMemberShip_spouse(body, (err, results) => {
+        if(err){
+          console.log(err);
+          return;
+           }
+          })
+
+          return res.json({
+            success: 1,
+            message: "updated successfully"
+          });
+          })
             }
 
       }else{
