@@ -97,7 +97,8 @@ getEventsHistoryByMemberId,
 getDownloadRequests,
 getMyDownloadRequests,
 getLastLerialNumber,
-deleteOldMemberOtp
+deleteOldMemberOtp,
+VerifyMemberShip
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -832,6 +833,27 @@ updateUsers: (req, res) => {
         message: "otp verified successfully"
       });
     })}; });
+  },
+
+VerifyMemberShip: (req, res) => {
+    const body = req.body;
+    VerifyMemberShip(body.email,body.nric, (err, results) => {
+         if (err) {
+        console.log(err);
+          }
+    
+      if (!results) {
+        return res.json({
+          success: 0,
+          mesagee: "No data found"
+        });
+      }else{
+      return res.json({
+        success: 1,
+        message: "Data found"
+      });
+    }
+  });
   },
 
 VerifyEmail: (req, res) => {
