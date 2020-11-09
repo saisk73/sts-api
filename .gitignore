@@ -1,2 +1,6 @@
+<<<<<<< HEAD
+node_modules
+=======
 node_modules
 .env
+>>>>>>> parent of 8b5acb6... added node_modules
