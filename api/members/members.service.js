@@ -322,6 +322,19 @@ module.exports = {
     );
   },
 
+  VerifyMemberShip: (email,nric,callBack) => {
+    pool.query(
+      `select * from  members_master where email=? and nric=?`,
+      [email,nric],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
   UpdateSpouse: (data, callBack) => {
     pool.query(
       `update members_master set nric_no=?,full_name=?,dob=?,mobile=?,nationality=?,residential_status=?,gender=?,email=? where id = ?`,

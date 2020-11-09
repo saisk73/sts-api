@@ -72,6 +72,7 @@ const {
   CheckTransaction,
   getDownloadRequests,
   getMyDownloadRequests,
+  VerifyMemberShip,
   TestMail
 } = require("./members.controller");
 
@@ -95,6 +96,8 @@ router.patch("/updatemembership", checkToken, UpdateMemberShip);
 router.patch("/membershipupdate", checkToken, MemberShipUpdate);
 router.get("/membershiphistory", checkToken, MemberShipHistory);
 router.get("/deletechild/:id", DeleteChild);
+
+router.post("/verifymembership",VerifyMemberShip);
 
 router.post("/starttransaction", StartTransaction);
 router.post("/checktransaction", CheckTransaction);
