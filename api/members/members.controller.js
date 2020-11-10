@@ -2367,8 +2367,6 @@ getSpouseBymemberId(element, (err, results1) => {
             //Create Membership History - Start
             body.created_on=current_date;
             body.id = req.decoded.result.id;
-            body.membershiptype_id = req.decoded.result.membershiptype_id;
-            body.membership_amount = req.decoded.result.membership_amount;
             createMemberShipHistory(body, (err, results) => {
              if(err){
                 console.log(err);
@@ -2415,8 +2413,6 @@ getSpouseBymemberId(element, (err, results1) => {
             //Create Membership History - Start
             body.created_on=current_date;
             body.id = req.decoded.result.member_id;
-            body.membershiptype_id = req.decoded.result.membershiptype_id;
-            body.membership_amount = req.decoded.result.membership_amount;
             createMemberShipHistory(body, (err, results) => {
              if(err){
                 console.log(err);
