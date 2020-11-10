@@ -324,7 +324,7 @@ module.exports = {
 
   VerifyMemberShip: (email,nric,callBack) => {
     pool.query(
-      `select * from  members_master where email=? and nric=?`,
+      `select * from  members_master where email=? and nric_no=?`,
       [email,nric],
       (error, results, fields) => {
         if (error) {
