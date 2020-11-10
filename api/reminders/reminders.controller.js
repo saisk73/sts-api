@@ -10,7 +10,6 @@ const {
 require("dotenv").config();
 const ejs = require("ejs");
 const path=require("path");
-const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 var imageDataURI = require('image-data-uri');
 var moment = require('moment');

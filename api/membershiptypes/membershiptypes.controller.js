@@ -2,7 +2,6 @@ const {
   getMembershipTypes
 
 } = require("./membershiptypes.service");
-const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 module.exports = {
