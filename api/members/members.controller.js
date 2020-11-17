@@ -1384,15 +1384,20 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==1 && body.membershiptype_id==3){
-          // var d = new Date(membership_enddate);
-          // var year = d.getFullYear();
-          // var month = d.getMonth();
-          // var day = d.getDate();
-          // var fulldate = new Date(year + 1, month, day);
-          // var toDate = fulldate.toISOString().slice(0, 10);
-          // body.membership_enddate = toDate;
+        var enddate = req.decoded.result.membership_enddate;
+        var remaining_months = moment(enddate).diff(current_date, "months");
+
           body.membership_type = 0; // 0-> Annual
           body.membership_enddate = membership_enddate;
+          if(remaining_months<=4){
+          var d = new Date(membership_enddate);
+          var year = d.getFullYear();
+          var month = d.getMonth();
+          var day = d.getDate();
+          var fulldate = new Date(year + 1, month, day);
+          var toDate = fulldate.toISOString().slice(0, 10);
+          body.membership_enddate = toDate;
+          }
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1601,16 +1606,19 @@ MemberShipUpdate: (req, res) => {
             }
 
         if(membershiptype_id==3 && body.membershiptype_id==1){
-          // var d = new Date(membership_enddate);
-          // var year = d.getFullYear();
-          // var month = d.getMonth();
-          // var day = d.getDate();
-          // var fulldate = new Date(year + 1, month, day);
-          // var toDate = fulldate.toISOString().slice(0, 10);
-          // body.membership_type = 0; // 0-> Annual
-          // body.membership_enddate = toDate;
+          var enddate = req.decoded.result.membership_enddate;
+          var remaining_months = moment(enddate).diff(current_date, "months");
           body.membership_type = 0; // 0-> Annual
           body.membership_enddate = membership_enddate;
+          if(remaining_months<=4){
+            var d = new Date(membership_enddate);
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var fulldate = new Date(year + 1, month, day);
+            var toDate = fulldate.toISOString().slice(0, 10);
+            body.membership_enddate = toDate;
+            }
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -3891,13 +3899,14 @@ CheckTransaction: (req, res) => {
 
 
    TestMail: (req, res) => {
-    var d = new Date("2014-10-29");
-    var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getDate();
-    var fulldate = new Date(year + 1, month, day);
-    var toDate = fulldate.toISOString().slice(0, 10);
-    console.log(toDate);
+    // var d = new Date("2014-10-29");
+    // var year = d.getFullYear();
+    // var month = d.getMonth();
+    // var day = d.getDate();
+    // var fulldate = new Date(year + 1, month, day);
+    // var toDate = fulldate.toISOString().slice(0, 10);
+    var months = moment("2020-12-25").diff(current_date, "months");
+    console.log(months);
     // var date = new Date("2014-10-29"); 
     //  var todate = date.setFullYear(date.getFullYear() + 1);
     // console.log(todate);
