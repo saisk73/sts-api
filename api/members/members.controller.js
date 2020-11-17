@@ -1384,7 +1384,8 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==1 && body.membershiptype_id==3){
-        var enddate = req.decoded.result.membership_enddate;
+
+        var enddate = membership_enddate;
         var remaining_months = moment(enddate).diff(current_date, "months");
 
           body.membership_type = 0; // 0-> Annual
@@ -1606,7 +1607,7 @@ MemberShipUpdate: (req, res) => {
             }
 
         if(membershiptype_id==3 && body.membershiptype_id==1){
-          var enddate = req.decoded.result.membership_enddate;
+          var enddate = membership_enddate;
           var remaining_months = moment(enddate).diff(current_date, "months");
           body.membership_type = 0; // 0-> Annual
           body.membership_enddate = membership_enddate;
