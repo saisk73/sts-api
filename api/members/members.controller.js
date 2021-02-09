@@ -1390,15 +1390,16 @@ MemberShipUpdate: (req, res) => {
 
           body.membership_type = 0; // 0-> Annual
           body.membership_enddate = membership_enddate;
-          if(remaining_months<=4){
-          var d = new Date(membership_enddate);
+          // if(remaining_months<=4){
+          // var d = new Date(membership_enddate);
+          var d = new Date(current_date);
           var year = d.getFullYear();
           var month = d.getMonth();
           var day = d.getDate();
           var fulldate = new Date(year + 1, month, day);
           var toDate = fulldate.toISOString().slice(0, 10);
           body.membership_enddate = toDate;
-          }
+          // }
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1611,15 +1612,16 @@ MemberShipUpdate: (req, res) => {
           var remaining_months = moment(enddate).diff(current_date, "months");
           body.membership_type = 0; // 0-> Annual
           body.membership_enddate = membership_enddate;
-          if(remaining_months<=4){
-            var d = new Date(membership_enddate);
+          // if(remaining_months<=4){
+            // var d = new Date(membership_enddate);
+            var d = new Date(current_date);
             var year = d.getFullYear();
             var month = d.getMonth();
             var day = d.getDate();
             var fulldate = new Date(year + 1, month, day);
             var toDate = fulldate.toISOString().slice(0, 10);
             body.membership_enddate = toDate;
-            }
+            // }
           body.id = req.decoded.result.id;
             UpdateMemberShipByMember(body, (err, results) => {
             if(err){
@@ -1696,7 +1698,7 @@ MemberShipUpdate: (req, res) => {
             }
 
       if(membershiptype_id==body.membershiptype_id){
-        var d = new Date(membership_enddate);
+        var d = new Date(current_date);
         var year = d.getFullYear();
         var month = d.getMonth();
         var day = d.getDate();
