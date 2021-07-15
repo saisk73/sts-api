@@ -189,12 +189,12 @@ module.exports = {
   host= process.env.WEB_URL;
   linkse="http://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
           let emailTemplatems;
@@ -206,7 +206,7 @@ module.exports = {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -220,6 +220,7 @@ module.exports = {
           console.log('Message %s sent: %s', info.messageId, info.response);
               res.render('index');
          })});
+  
       // //mail Send//
       return res.status(200).json({
         success: 1,
@@ -287,12 +288,12 @@ module.exports = {
       var member_insertid = '';
    
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
      
@@ -305,7 +306,7 @@ module.exports = {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -391,7 +392,7 @@ module.exports = {
     })  .then(result => {
       emailTemplates = result;
      let mailOptionse = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: req.body.s_email,// list of receivers
           subject: 'New Member Registration', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -446,12 +447,12 @@ module.exports = {
    body.otpexpiry_datetime = otpexpiry_datetime;
     UpdateLoginOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatemswaw;
@@ -464,7 +465,7 @@ module.exports = {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -535,12 +536,12 @@ module.exports = {
    body.id= results.id;
     UpdateLoginOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatemswaw;
@@ -553,7 +554,7 @@ module.exports = {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -882,12 +883,12 @@ var digits = '0123456789';
   deleteOldMemberOtp(body.email, (err, results1) => {
   AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatemswaw;
@@ -900,7 +901,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -1004,8 +1005,7 @@ var digits = '0123456789';
 
   Forgotpassword: (req, res) => {
     const body = req.body;
-
-  getUserByMemberEmail(body.email, (err, results) => {
+    getUserByMemberEmail(body.email, (err, results) => {
          if (err) {
         console.log(err);
       }
@@ -1022,12 +1022,12 @@ var digits = '0123456789';
   linksef="http://"+host+"/setpassword?token="+rand4;
       body.member_verifycode=rand4;
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
           let emailTemplatems;
@@ -1039,7 +1039,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Forgot Password', // Subject line
           text:'Password Reset', // plain text body
@@ -1092,12 +1092,12 @@ var digits = '0123456789';
   linksef="http://"+host+"/login";
       body.member_verifycode=rand4;
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
           let emailTemplatems;
@@ -1109,7 +1109,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Username Confirmation', // Subject line
           text:'Confirmation mail from STS', // plain text body
@@ -1229,12 +1229,12 @@ UpdateSpouse: (req, res) => {
   // host= process.env.WEB_URL;
   // links="http://"+host+"/setpassword?token="+rand2;
   //      let transporter = nodeMailer.createTransport({
-  //         host: 'smtpout.secureserver.net',
+  //         host: 'mail.sts.org.sg',
   //         port: 465,
   //         secure: true,
   //         auth: {
-  //             user: 'contact@waytoskill.com',
-  //             pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+  //             user: 'newinfo@sts.org.sg',
+  //             pass: '@STSnewinfo1'
   //         }
   //     });
   
@@ -1246,7 +1246,7 @@ UpdateSpouse: (req, res) => {
   //   })  .then(result => {
   //     emailTemplates = result;
   //    let mailOptionse = {
-  //         from: 'contact@waytoskill.com', // sender address
+  //         from: 'newinfo@sts.org.sg', // sender address
   //         to: req.body.s_email,// list of receivers
   //         subject: 'New Member Registration', // Subject line
   //         text:'Thankyou for registering with STS', // plain text body
@@ -1858,12 +1858,12 @@ MemberShipUpdate: (req, res) => {
    body.otpexpiry_datetime = otpexpiry_datetime;
     UpdateAdminLoginOtp(body, (err, results1) => {
     let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatemswaw;
@@ -1876,7 +1876,7 @@ MemberShipUpdate: (req, res) => {
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: results.username,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -2120,12 +2120,12 @@ getMemberDetails: (req, res) => {
       host= process.env.WEB_URL;
       linkse="http://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
           let emailTemplatems;
@@ -2137,7 +2137,7 @@ getMemberDetails: (req, res) => {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: resul1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2176,12 +2176,12 @@ getSpouseBymemberId(element, (err, results1) => {
       var member_insertid = '';
    
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
      
@@ -2194,7 +2194,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: results1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2248,12 +2248,12 @@ getSpouseBymemberId(element, (err, results1) => {
       host= process.env.WEB_URL;
       linkse="http://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
           let emailTemplatems;
@@ -2265,7 +2265,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: resul1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2304,12 +2304,12 @@ getSpouseBymemberId(element, (err, results1) => {
       var member_insertid = '';
    
        let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'newinfo@sts.org.sg',
+              pass: '@STSnewinfo1'
           }
       });
      
@@ -2322,7 +2322,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'newinfo@sts.org.sg', // sender address
           to: results1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2462,12 +2462,12 @@ var digits = '0123456789';
    body.created_on = current_date;
     AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
-          host: 'smtpout.secureserver.net',
+          host: 'mail.sts.org.sg',
           port: 465,
           secure: true,
           auth: {
-              user: 'contact@waytoskill.com',
-              pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatemswaw;
@@ -2480,7 +2480,7 @@ var digits = '0123456789';
   .then(result => {
     emailTemplatemswaw=result;
       let mailOptions = {
-          from: 'contact@waytoskill.com', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: req.body.email,// list of receivers
           subject: 'Otp Verification', // Subject line
           text:'Please Verify Your Otp', // plain text body
@@ -2726,12 +2726,12 @@ var digits = '0123456789';
     host= process.env.WEB_URL;
     linkse="http://"+host+"/setpassword?token="+rand3;
          let transporter = nodeMailer.createTransport({
-            host: 'smtpout.secureserver.net',
+            host: 'mail.sts.org.sg',
             port: 465,
             secure: true,
             auth: {
-                user: 'contact@waytoskill.com',
-                pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+                user: 'newinfo@sts.org.sg',
+                pass: '@STSnewinfo1'
             }
         });
             let emailTemplatems;
@@ -2743,7 +2743,7 @@ var digits = '0123456789';
     .then(result => {
       emailTemplatems=result;
         let mailOptions = {
-            from: 'contact@waytoskill.com', // sender address
+            from: 'newinfo@sts.org.sg', // sender address
             to: results_mem.email,// list of receivers
             subject: 'New Member Registration', // Subject line
             text:'Thankyou for registering with STS', // plain text body
@@ -2825,7 +2825,7 @@ var digits = '0123456789';
      })  .then(result => {
        emailTemplates = result;
       let mailOptionse = {
-           from: 'contact@waytoskill.com', // sender address
+           from: 'newinfo@sts.org.sg', // sender address
            to: results_spouse.email,// list of receivers
            subject: 'New Member Registration', // Subject line
            text:'Thankyou for registering with STS', // plain text body
@@ -2887,12 +2887,12 @@ var digits = '0123456789';
           host= process.env.WEB_URL;
           linkse="http://"+host+"/setpassword?token="+rand3;
                let transporter = nodeMailer.createTransport({
-                  host: 'smtpout.secureserver.net',
+                  host: 'mail.sts.org.sg',
                   port: 465,
                   secure: true,
                   auth: {
-                      user: 'contact@waytoskill.com',
-                      pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+                      user: 'newinfo@sts.org.sg',
+                      pass: '@STSnewinfo1'
                   }
               });
                   let emailTemplatems;
@@ -2904,7 +2904,7 @@ var digits = '0123456789';
           .then(result => {
             emailTemplatems=result;
               let mailOptions = {
-                  from: 'contact@waytoskill.com', // sender address
+                  from: 'newinfo@sts.org.sg', // sender address
                   to: results_mem.email,// list of receivers
                   subject: 'New Member Registration', // Subject line
                   text:'Thankyou for registering with STS', // plain text body
@@ -2974,12 +2974,12 @@ var digits = '0123456789';
             host= process.env.WEB_URL;
             linkse="http://"+host+"/setpassword?token="+rand3;
                  let transporter = nodeMailer.createTransport({
-                    host: 'smtpout.secureserver.net',
+                    host: 'mail.sts.org.sg',
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'contact@waytoskill.com',
-                        pass: 'ude82!@8ed!e13q)d1e2d!djdn'
+                        user: 'newinfo@sts.org.sg',
+                        pass: '@STSnewinfo1'
                     }
                 });
                     let emailTemplatems;
@@ -2991,7 +2991,7 @@ var digits = '0123456789';
             .then(result => {
               emailTemplatems=result;
                 let mailOptions = {
-                    from: 'contact@waytoskill.com', // sender address
+                    from: 'newinfo@sts.org.sg', // sender address
                     to: results_mem.email,// list of receivers
                     subject: 'New Member Registration', // Subject line
                     text:'Thankyou for registering with STS', // plain text body
@@ -3915,7 +3915,7 @@ CheckTransaction: (req, res) => {
     // console.log(todate);
 // const nodemailer = require('nodemailer');
 // let transporter = nodemailer.createTransport({
-//     host: 'smtpout.secureserver.net',
+//     host: 'mail.sts.org.sg',
 //     port: 587,
 //     secure: false,
 //     requireTLS: true,
