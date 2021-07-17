@@ -1569,6 +1569,19 @@ module.exports = {
     );
   },
 
+  getPaymentsDetails: (id, callBack) => {
+    pool.query(
+      `select * from payment_transactions where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
 
   
 

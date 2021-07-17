@@ -73,6 +73,7 @@ const {
   getDownloadRequests,
   getMyDownloadRequests,
   VerifyMemberShip,
+  getPaymentsDetails,
   TestMail
 } = require("./members.controller");
 
@@ -173,6 +174,8 @@ router.post("/adddownloadrequest",checkToken,AddDownloadRequest);
 router.post("/updatedownloadrequest",checkToken,UpdateDownloadRequest);
 router.get("/alldownloadrequests",checkToken,getDownloadRequests);
 router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
+
+router.get("/paymentdetails/:id",checkToken,getPaymentsDetails);
 
 
 

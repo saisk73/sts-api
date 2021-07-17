@@ -98,7 +98,8 @@ getDownloadRequests,
 getMyDownloadRequests,
 getLastLerialNumber,
 deleteOldMemberOtp,
-VerifyMemberShip
+VerifyMemberShip,
+PaymentsDetails
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3742,6 +3743,26 @@ TerminateMember: (req, res) => {
 
 MemberShipPaymentsHistory: (req, res) => {
   MemberShipPaymentsHistory( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+getPaymentsDetails: (req, res) => {
+  const id = req.params.id;
+  getPaymentsDetails(id, (err, results) => {
   if (err) {
     console.log(err);
     return;
