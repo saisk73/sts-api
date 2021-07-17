@@ -1035,6 +1035,23 @@ module.exports = {
     );
   },
 
+  CreateIntroduction: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into aboutus_master(welcome_description) 
+                values(?)`,
+      [
+        data.welcome_description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getAboutUs:(callBack) => {
     pool.query(
       `select * from aboutus_master`,
@@ -1051,10 +1068,26 @@ module.exports = {
   UpdateAboutus: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update aboutus_master set welcome_description=?,about=? where id = ?`,
+      `update aboutus_master set about=? where id = ?`,
+      [
+        data.aboutus,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateIntroduction: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update aboutus_master set welcome_description=? where id = ?`,
       [
         data.welcome_description,
-        data.aboutus,
         data.id
       ],
       (error, results, fields) => {

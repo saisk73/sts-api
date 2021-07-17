@@ -99,7 +99,9 @@ getMyDownloadRequests,
 getLastLerialNumber,
 deleteOldMemberOtp,
 VerifyMemberShip,
-getPaymentsDetails
+getPaymentsDetails,
+CreateIntroduction,
+UpdateIntroduction
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3295,6 +3297,59 @@ AboutUs: (req, res) => {
 },
 
 getAboutUs: (req, res) => {
+  getAboutUs( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+AddIntroduction: (req, res) => { 
+  var body = req.body;
+  getAboutUs( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    // console.log(results);
+    body.id = results.id;
+    UpdateIntroduction(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+  }else{
+ CreateIntroduction(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getIntroduction: (req, res) => {
   getAboutUs( (err, results) => {
   if (err) {
     console.log(err);

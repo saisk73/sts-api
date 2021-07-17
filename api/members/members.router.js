@@ -74,6 +74,8 @@ const {
   getMyDownloadRequests,
   VerifyMemberShip,
   getPaymentsDetails,
+  AddIntroduction,
+  getIntroduction,
   TestMail
 } = require("./members.controller");
 
@@ -102,8 +104,6 @@ router.post("/verifymembership",VerifyMemberShip);
 
 router.post("/starttransaction", StartTransaction);
 router.post("/checktransaction", CheckTransaction);
-
-
 
 router.post("/adminlogin", AdminLogin);
 router.post("/verifyAdminLoginotp", VerifyAdminLoginOtp);
@@ -139,6 +139,9 @@ router.get("/volunteer", getVolunteer);
 
 router.post("/aboutus", AboutUs);
 router.get("/aboutus", getAboutUs);
+
+router.post("/introduction", AddIntroduction);
+router.get("/introduction", getIntroduction);
 
 router.post("/addnewsgallery", AddNewsGallery);
 router.get("/newsgallery", getNewsGallery);
