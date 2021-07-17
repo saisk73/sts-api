@@ -1571,7 +1571,7 @@ module.exports = {
 
   getPaymentsDetails: (id, callBack) => {
     pool.query(
-      `select m.*,(select membership_name from membershiptypes_master where id=m.membershiptype_id) as membership_name from memberships_history_master m where id = ?`,
+      `select m.*,(select membership_name from membershiptypes_master where id=m.membershiptype_id) as membership_name,(select full_name from members_master where id=m.member_id) as member_name,(select mobile from members_master where id=m.member_id) as member_mobile from memberships_history_master m where id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
