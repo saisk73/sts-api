@@ -1272,7 +1272,7 @@ module.exports = {
     // console.log(data);
     pool.query(
       `insert into newsgallery_master(image,title,description) 
-                values(?)`,
+                values(?,?,?)`,
       [
         data.image_name,
         data.title,
