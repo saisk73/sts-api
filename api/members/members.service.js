@@ -1271,10 +1271,12 @@ module.exports = {
   CreateNewsGallery: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into newsgallery_master(image) 
+      `insert into newsgallery_master(image,title,description) 
                 values(?)`,
       [
-        data.image_name
+        data.image_name,
+        data.title,
+        data.description
       ],
       (error, results, fields) => {
         if (error) {
