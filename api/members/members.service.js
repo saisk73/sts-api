@@ -1287,6 +1287,43 @@ module.exports = {
     );
   },
 
+  UpdateNewsGallerywithimage: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      'update newsgallery_master set image=?,title=?,description=? where id = ?',
+      [
+        data.image_name,
+        data.title,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateNewsGallery: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      'update newsgallery_master set title=?,description=? where id = ?',
+      [
+        data.title,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getNewsGallery:(callBack) => {
     pool.query(
       `select * from newsgallery_master`,

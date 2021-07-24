@@ -101,7 +101,9 @@ deleteOldMemberOtp,
 VerifyMemberShip,
 getPaymentsDetails,
 CreateIntroduction,
-UpdateIntroduction
+UpdateIntroduction,
+UpdateNewsGallery,
+UpdateNewsGallerywithimage
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3594,8 +3596,10 @@ AddNewsGallery: (req, res) => {
   const body = req.body;
  // Some image data uri
  let dataURI = body.image_url;
+ let id = body.id;
  // It will create the full path in case it doesn't exist
  // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+ if(dataURI){
  rand =Math.floor((Math.random() * 30000000000000000) + 34);
  let filePath = './uploads/newsgallery/'+rand+'.png';
  var image_name = rand+'.png';
@@ -3603,6 +3607,30 @@ AddNewsGallery: (req, res) => {
  imageDataURI.outputFile(dataURI, filePath)
 //  console.log(image_name);
  body.image_name = image_name;
+ }
+ if(id){
+  if(dataURI){
+  UpdateNewsGallerywithimage(body, (err, results) => {
+    if(err){
+       console.log(err);
+      }
+   return res.json({
+     success: 1,
+     message: "Updated successfully"
+   });
+ });
+}else{
+  UpdateNewsGallery(body, (err, results) => {
+    if(err){
+       console.log(err);
+      }
+   return res.json({
+     success: 1,
+     message: "Updated successfully"
+   });
+ });
+}
+ }else{
  CreateNewsGallery(body, (err, results) => {
    if(err){
       console.log(err);
@@ -3612,6 +3640,7 @@ AddNewsGallery: (req, res) => {
     message: "Added successfully"
   });
 });
+ }
 },
 
 getNewsGallery: (req, res) => {
