@@ -103,7 +103,11 @@ getPaymentsDetails,
 CreateIntroduction,
 UpdateIntroduction,
 UpdateNewsGallery,
-UpdateNewsGallerywithimage
+UpdateNewsGallerywithimage,
+UpdateNewsLetterwithimage,
+UpdateNewsLetter,
+UpdateForumwithimg,
+UpdateForum
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3375,6 +3379,8 @@ AddNewsLetter: (req, res) => {
   const body = req.body;
  // Some image data uri
  let dataURI = body.image_url;
+ let id = body.id;
+ if(dataURI){
  // It will create the full path in case it doesn't exist
  // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
  rand =Math.floor((Math.random() * 30000000000000000) + 34);
@@ -3384,6 +3390,31 @@ AddNewsLetter: (req, res) => {
  imageDataURI.outputFile(dataURI, filePath)
 //  console.log(image_name);
  body.image_name = image_name;
+ }
+if(id){
+  if(dataURI){
+    UpdateNewsLetterwithimage(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+  UpdateNewsLetter(body, (err, results) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Updated successfully"
+  });
+});
+  }
+}else{
  CreateNewsLetter(body, (err, results) => {
    if(err){
       console.log(err);
@@ -3392,7 +3423,10 @@ AddNewsLetter: (req, res) => {
     success: 1,
     message: "Added successfully"
   });
-});
+}); 
+
+}
+
 },
 
 getNewsLetter: (req, res) => {
@@ -3436,6 +3470,8 @@ AddForums: (req, res) => {
   const body = req.body;
  // Some image data uri
  let dataURI = body.image_url;
+ let id = body.id;
+if(dataURI){
  // It will create the full path in case it doesn't exist
  // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
  rand =Math.floor((Math.random() * 30000000000000000) + 34);
@@ -3445,6 +3481,32 @@ AddForums: (req, res) => {
  imageDataURI.outputFile(dataURI, filePath)
 //  console.log(image_name);
  body.image_name = image_name;
+}
+ if(id){
+   if(dataURI){
+  UpdateForumwithimg(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Update successfully"
+     });
+   }); 
+
+   }else{
+    UpdateForum(body, (err, results) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Update successfully"
+     });
+   });
+   }
+
+ }else{
  CreateForum(body, (err, results) => {
    if(err){
       console.log(err);
@@ -3454,6 +3516,7 @@ AddForums: (req, res) => {
     message: "Added successfully"
   });
 });
+ }
 },
 
 getForums: (req, res) => {

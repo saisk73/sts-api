@@ -155,16 +155,12 @@ router.post("/addvideogallery", AddVideoGallery);
 router.get("/videogallery", getVideoGallery);
 router.get("/deletevideogallery/:id", DeleteVideoGallery);
 
-
-
-
 router.patch("/membershiprenewal", checkToken, MemberShipRenewal);
 router.patch("/updateverifyemail",UpdateVerifyEmail);
 router.patch("/updateverifyotp",UpdateVerifyOtp);
 
 router.get("/arrearsdetails", checkToken, getArrearsDetails);
 router.patch("/renewalwitharrears", checkToken, RenewalWithArrears);
-
 
 router.post("/uploadprofileimage",checkToken,UploadProfileImage);
 
@@ -179,14 +175,6 @@ router.get("/alldownloadrequests",checkToken,getDownloadRequests);
 router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
 
 router.get("/paymentdetails/:id",checkToken,getPaymentsDetails);
-
-
-
-
-
-
-
-
 
 
 module.exports = router;

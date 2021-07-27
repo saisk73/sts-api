@@ -1118,6 +1118,43 @@ module.exports = {
     );
   },
 
+  UpdateNewsLetterwithimage: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update newsletters_master set title=?,image=?,description=? where id=?`,
+      [
+        data.title,
+        data.image_name,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateNewsLetter: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update newsletters_master set title=?,description=? where id=?`,
+      [
+        data.title,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getNewsLetter:(callBack) => {
     pool.query(
       `select * from newsletters_master`,
@@ -1152,6 +1189,43 @@ module.exports = {
         data.title,
         data.image_name,
         data.description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateForumwithimg: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update forums_master set title=?,image=?,description=? where id=?`,
+      [
+        data.title,
+        data.image_name,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateForum: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update forums_master set title=?,description=? where id=?`,
+      [
+        data.title,
+        data.description,
+        data.id
       ],
       (error, results, fields) => {
         if (error) {
