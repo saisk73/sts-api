@@ -1167,6 +1167,20 @@ module.exports = {
       }
     );
   },
+
+  getNewsLetterById:(id, callBack) => {
+    pool.query(
+      `select * from newsletters_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   DeleteNewsLetter: (id, callBack) => {
     pool.query(
       `delete from newsletters_master where id = ?`,
