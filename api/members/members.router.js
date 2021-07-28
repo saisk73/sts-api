@@ -76,6 +76,7 @@ const {
   getPaymentsDetails,
   AddIntroduction,
   getIntroduction,
+  getNewsLetterById,
   TestMail
 } = require("./members.controller");
 
@@ -128,6 +129,7 @@ router.get("/deletemedia/:id", DeleteMedia);
 router.post("/addnewsletter", AddNewsLetter);
 router.get("/newsletter", getNewsLetter);
 router.get("/deletenewsletter/:id", DeleteNewsLetter);
+router.get("/newsletter/:id", getNewsLetterById);
 
 router.post("/addforums", AddForums);
 router.get("/forums", getForums);

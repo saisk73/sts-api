@@ -107,7 +107,8 @@ UpdateNewsGallerywithimage,
 UpdateNewsLetterwithimage,
 UpdateNewsLetter,
 UpdateForumwithimg,
-UpdateForum
+UpdateForum,
+getNewsLetterById
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3431,6 +3432,26 @@ if(id){
 
 getNewsLetter: (req, res) => {
   getNewsLetter( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+getNewsLetterById: (req, res) => {
+  const id = req.params.id;
+  getNewsLetterById(id, (err, results) => {
   if (err) {
     console.log(err);
     return;
