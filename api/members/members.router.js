@@ -77,6 +77,7 @@ const {
   AddIntroduction,
   getIntroduction,
   getNewsLetterById,
+  getForumsById,
   TestMail
 } = require("./members.controller");
 
@@ -134,6 +135,7 @@ router.get("/newsletter/:id", getNewsLetterById);
 router.post("/addforums", AddForums);
 router.get("/forums", getForums);
 router.get("/deleteforums/:id", DeleteForums);
+router.get("/forums/:id", getForumsById);
 
 router.post("/volunteer", AddVolunteer);
 router.get("/volunteer", getVolunteer);

@@ -1262,6 +1262,20 @@ module.exports = {
       }
     );
   },
+
+  getForumsById:(callBack) => {
+    pool.query(
+      `select * from forums_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   DeleteForums: (id, callBack) => {
     pool.query(
       `delete from forums_master where id = ?`,
