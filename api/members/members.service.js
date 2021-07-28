@@ -1263,7 +1263,7 @@ module.exports = {
     );
   },
 
-  getForumsById:(callBack) => {
+  getForumsById:(id,callBack) => {
     pool.query(
       `select * from forums_master where id=?`,
       [id],
