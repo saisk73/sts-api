@@ -81,6 +81,7 @@ const {
   getRejectedMembersList,
   UploadMembersData,
   getTerminatedMembersList,
+  UpdateMemberStatus,
   TestMail
 } = require("./members.controller");
 
@@ -119,6 +120,8 @@ router.post("/updatememberverifystatus", UpdateMemberVerifyStatus);
 router.post("/rejectmembership", RejectMemberShip);
 router.get("/rejectedmemberslist", checkToken, getRejectedMembersList);
 router.get("/terminatedmemberslist", checkToken, getTerminatedMembersList);
+router.post("/updatememberstatus", UpdateMemberStatus);
+
 
 router.post("/addsliders", AddSliders);
 router.get("/sliders", getSliders);

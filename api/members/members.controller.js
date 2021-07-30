@@ -2135,6 +2135,31 @@ getMemberDetails: (req, res) => {
     });
   },
 
+  UpdateMemberStatus: (req, res) => {
+    const body = req.body;
+    const member_id = body.member_id;
+    const status = body.status;
+    getMemberDetails(member_id,(err, resul1) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      UpdateMemberVerify_Status(member_id,status, (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: 0,
+            message: "Database connection errror"
+          });
+        }
+        return res.status(200).json({
+          success: 1,
+          message: "Updated"
+        });
+      });
+    });
+  },
+
   RejectMemberShip: (req, res) => {
     const body = req.body;
     rand3=Math.floor((Math.random() * 30000000000000000) + 34);
