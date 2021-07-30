@@ -696,6 +696,19 @@ module.exports = {
     );
   },
 
+  getRejectedMembersList:(callBack) => {
+    pool.query(
+      `select * from members_master where status=2 and member_id=''`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getMemberDetails:(id, callBack) => {
     pool.query(
       `select * from members_master where id=?`,
@@ -715,6 +728,22 @@ module.exports = {
       [
     status,
     member_verifycode,
+    member_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateMemberVerify_Status: (member_id,status, callBack) => {
+    pool.query(
+      `update members_master set status=? where id = ?`,
+      [
+    status,
     member_id
       ],
       (error, results, fields) => {

@@ -109,7 +109,9 @@ UpdateNewsLetter,
 UpdateForumwithimg,
 UpdateForum,
 getNewsLetterById,
-getForumsById
+getForumsById,
+getRejectedMembersList,
+UpdateMemberVerify_Status
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -124,6 +126,8 @@ var current_date =  moment().format('YYYY-MM-DD');
 var current_year =  moment().format('YYYY');
 var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+const multer = require('multer');
+const readXlsxFile = require('read-excel-file/node');
 
 var rand,rand2,host,link,links,linkse,rand3;
 module.exports = {
@@ -1995,6 +1999,19 @@ getMembersList: (req, res) => {
     });
   },
 
+  getRejectedMembersList: (req, res) => {
+    getRejectedMembersList((err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
 getMemberDetails: (req, res) => {
     // const body = req.body;
     const id = req.params.id;
@@ -2118,7 +2135,7 @@ getMemberDetails: (req, res) => {
         console.log(err);
         return;
       }
-   UpdateMemberVerifyStatus(element,body.status, (err, results) => {
+   UpdateMemberVerify_Status(element,body.status, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -4107,6 +4124,36 @@ CheckTransaction: (req, res) => {
       }
 
     });
+  },
+
+  UploadMembersData: (req, res) => {
+    global.__basedir = __dirname;
+ 
+// -> Multer Upload Storage
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+	   cb(null, __basedir + '/uploads/membersdata/')
+	},
+	filename: (req, file, cb) => {
+	   cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
+	}
+});
+
+const upload = multer({storage: storage});
+
+// -> Express Upload RestAPIs
+app.post('/api/uploadfile', upload.single("uploadfile"), (req, res) =>{
+	importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
+
+  readXlsxFile(filePath).then((rows) => {
+
+
+  });
+	res.json({
+				'msg': 'File uploaded/import successfully!', 'file': req.file
+			});
+});
+
   },
 
 

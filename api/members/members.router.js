@@ -78,6 +78,8 @@ const {
   getIntroduction,
   getNewsLetterById,
   getForumsById,
+  getRejectedMembersList,
+  UploadMembersData,
   TestMail
 } = require("./members.controller");
 
@@ -114,6 +116,7 @@ router.get("/verifiedmemberslist", checkToken, getVerifiedMembersList);
 router.get("/memberdetails/:id", checkToken, getMemberDetails);
 router.post("/updatememberverifystatus", UpdateMemberVerifyStatus);
 router.post("/rejectmembership", RejectMemberShip);
+router.get("/rejectedmemberslist", checkToken, getRejectedMembersList);
 
 router.post("/addsliders", AddSliders);
 router.get("/sliders", getSliders);
@@ -179,6 +182,8 @@ router.get("/alldownloadrequests",checkToken,getDownloadRequests);
 router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
 
 router.get("/paymentdetails/:id",checkToken,getPaymentsDetails);
+router.get("/uploadfile",UploadMembersData);
+
 
 
 module.exports = router;
