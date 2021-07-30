@@ -709,6 +709,19 @@ module.exports = {
     );
   },
 
+  getTerminatedMembersList:(callBack) => {
+    pool.query(
+      `select * from members_master where status=3 and member_id=''`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getMemberDetails:(id, callBack) => {
     pool.query(
       `select * from members_master where id=?`,

@@ -111,6 +111,7 @@ UpdateForum,
 getNewsLetterById,
 getForumsById,
 getRejectedMembersList,
+getTerminatedMembersList,
 UpdateMemberVerify_Status
 } = require("./members.service");
 require("dotenv").config();
@@ -2001,6 +2002,19 @@ getMembersList: (req, res) => {
 
   getRejectedMembersList: (req, res) => {
     getRejectedMembersList((err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results
+      });
+    });
+  },
+
+  getTerminatedMembersList: (req, res) => {
+    getTerminatedMembersList((err, results) => {
       if (err) {
         console.log(err);
         return;
@@ -4128,6 +4142,8 @@ CheckTransaction: (req, res) => {
 
   UploadMembersData: (req, res) => {
     global.__basedir = __dirname;
+    const express = require('express');
+    const app = express();
  
 // -> Multer Upload Storage
 const storage = multer.diskStorage({
@@ -4140,19 +4156,22 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({storage: storage});
-
+console.log('sdfghjk : ',req.file);
 // -> Express Upload RestAPIs
-app.post('/api/uploadfile', upload.single("uploadfile"), (req, res) =>{
-	importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
+  var filePath = __basedir + '/uploads/' + req.file.filename;
+	// importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
 
   readXlsxFile(filePath).then((rows) => {
-
+    rows.shift();
+    rows.forEach(row => {
+      console.log(row);
+    });
 
   });
 	res.json({
 				'msg': 'File uploaded/import successfully!', 'file': req.file
 			});
-});
+
 
   },
 
