@@ -112,7 +112,13 @@ getNewsLetterById,
 getForumsById,
 getRejectedMembersList,
 getTerminatedMembersList,
-UpdateMemberVerify_Status
+UpdateMemberVerify_Status,
+getInvoiceConfig,
+UpdateInvoiceConfig,
+CreateInvoiceConfig,
+getEmailSmtp,
+UpdateEmailSmtp,
+CreateEmailSmtp
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -203,7 +209,7 @@ module.exports = {
     
   // host=req.get('host');
   host= process.env.WEB_URL;
-  linkse="http://"+host+"/setpassword?token="+rand3;
+  linkse="https://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
           port: 465,
@@ -217,7 +223,7 @@ module.exports = {
     ejs
     .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
       user_firstname: req.body.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+      confirm_link:"https://"+host+"/setpassword?token=" + rand3
     })
   .then(result => {
     emailTemplatems=result;
@@ -299,7 +305,7 @@ module.exports = {
       
   // host=req.get('host');
   host= process.env.WEB_URL;
-  link="http://"+host+"/setpassword?token="+rand;
+  link="https://"+host+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
    
@@ -317,7 +323,7 @@ module.exports = {
     ejs
     .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
       user_firstname: req.body.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand
+      confirm_link:"https://"+host+"/setpassword?token=" + rand
     })
   .then(result => {
       emailTemplate = result;
@@ -398,13 +404,13 @@ module.exports = {
   
   // host=req.get('host');
   host= process.env.WEB_URL;
-  links="http://"+host+"/setpassword?token="+rand2;
+  links="https://"+host+"/setpassword?token="+rand2;
   
         let emailTemplates;
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: req.body.s_full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand2
+      confirm_link:"https://"+host+"/setpassword?token=" + rand2
     })  .then(result => {
       emailTemplates = result;
      let mailOptionse = {
@@ -1035,7 +1041,7 @@ var digits = '0123456789';
       rand4=Math.floor((Math.random() * 90000000000000000) + 34);
   // host=req.get('host');
       host= process.env.WEB_URL;
-  linksef="http://"+host+"/setpassword?token="+rand4;
+  linksef="https://"+host+"/setpassword?token="+rand4;
       body.member_verifycode=rand4;
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
@@ -1050,7 +1056,7 @@ var digits = '0123456789';
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: results.full_name,
-      confirm_link:"http://"+host+"/resetpassword?token=" + rand4
+      confirm_link:"https://"+host+"/resetpassword?token=" + rand4
     })
   .then(result => {
     emailTemplatems=result;
@@ -1105,7 +1111,7 @@ var digits = '0123456789';
       rand4=Math.floor((Math.random() * 90000000000000000) + 34);
   // host=req.get('host');
       host= process.env.WEB_URL;
-  linksef="http://"+host+"/login";
+  linksef="https://"+host+"/login";
       body.member_verifycode=rand4;
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
@@ -1120,7 +1126,7 @@ var digits = '0123456789';
     ejs
     .renderFile(path.join(__dirname, "views/forgotuser.ejs"), {
       user_firstname: results.full_name,
-      confirm_link:"http://"+host+"/api/members/login"
+      confirm_link:"https://"+host+"/api/members/login"
     })
   .then(result => {
     emailTemplatems=result;
@@ -1243,7 +1249,7 @@ UpdateSpouse: (req, res) => {
   
   // host=req.get('host');
   // host= process.env.WEB_URL;
-  // links="http://"+host+"/setpassword?token="+rand2;
+  // links="https://"+host+"/setpassword?token="+rand2;
   //      let transporter = nodeMailer.createTransport({
   //         host: 'mail.sts.org.sg',
   //         port: 465,
@@ -1258,7 +1264,7 @@ UpdateSpouse: (req, res) => {
   //   ejs
   //   .renderFile(path.join(__dirname, "views/index.ejs"), {
   //     user_firstname: req.body.s_full_name,
-  //     confirm_link:"http://"+host+"/setpassword?token=" + rand2
+  //     confirm_link:"https://"+host+"/setpassword?token=" + rand2
   //   })  .then(result => {
   //     emailTemplates = result;
   //    let mailOptionse = {
@@ -2185,7 +2191,7 @@ getMemberDetails: (req, res) => {
       // console.log(element);
       //mail Sending//
       host= process.env.WEB_URL;
-      linkse="http://"+host+"/setpassword?token="+rand3;
+      linkse="https://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
           port: 465,
@@ -2199,7 +2205,7 @@ getMemberDetails: (req, res) => {
     ejs
     .renderFile(path.join(__dirname, "views/rejectmember.ejs"), {
       user_firstname: resul1.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+      confirm_link:"https://"+host+"/setpassword?token=" + rand3
     })
   .then(result => {
     emailTemplatems=result;
@@ -2238,7 +2244,7 @@ getSpouseBymemberId(element, (err, results1) => {
       rand=Math.floor((Math.random() * 10000000000000000) + 94);
       body.member_verifycode=rand;
       host= process.env.WEB_URL;
-      link="http://"+host+"/setpassword?token="+rand;
+      link="https://"+host+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
    
@@ -2256,7 +2262,7 @@ getSpouseBymemberId(element, (err, results1) => {
     ejs
     .renderFile(path.join(__dirname, "views/rejectmember.ejs"), {
       user_firstname: results1.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand
+      confirm_link:"https://"+host+"/setpassword?token=" + rand
     })
   .then(result => {
       emailTemplate = result;
@@ -2313,7 +2319,7 @@ getSpouseBymemberId(element, (err, results1) => {
       }
       //mail Sending//
       host= process.env.WEB_URL;
-      linkse="http://"+host+"/setpassword?token="+rand3;
+      linkse="https://"+host+"/setpassword?token="+rand3;
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
           port: 465,
@@ -2327,7 +2333,7 @@ getSpouseBymemberId(element, (err, results1) => {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: resul1.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand3
+      confirm_link:"https://"+host+"/setpassword?token=" + rand3
     })
   .then(result => {
     emailTemplatems=result;
@@ -2366,7 +2372,7 @@ getSpouseBymemberId(element, (err, results1) => {
 
       body.member_verifycode=rand;
       host= process.env.WEB_URL;
-      link="http://"+host+"/setpassword?token="+rand;
+      link="https://"+host+"/setpassword?token="+rand;
       body.member_id = '';
       var member_insertid = '';
    
@@ -2384,7 +2390,7 @@ getSpouseBymemberId(element, (err, results1) => {
     ejs
     .renderFile(path.join(__dirname, "views/index.ejs"), {
       user_firstname: results1.full_name,
-      confirm_link:"http://"+host+"/setpassword?token=" + rand
+      confirm_link:"https://"+host+"/setpassword?token=" + rand
     })
   .then(result => {
       emailTemplate = result;
@@ -2791,7 +2797,7 @@ var digits = '0123456789';
       
     // host=req.get('host');
     host= process.env.WEB_URL;
-    linkse="http://"+host+"/setpassword?token="+rand3;
+    linkse="https://"+host+"/setpassword?token="+rand3;
          let transporter = nodeMailer.createTransport({
             host: 'mail.sts.org.sg',
             port: 465,
@@ -2805,7 +2811,7 @@ var digits = '0123456789';
       ejs
       .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
         user_firstname: results_mem.full_name,
-        confirm_link:"http://"+host+"/setpassword?token=" + rand3
+        confirm_link:"https://"+host+"/setpassword?token=" + rand3
       })
     .then(result => {
       emailTemplatems=result;
@@ -2882,13 +2888,13 @@ var digits = '0123456789';
    
    // host=req.get('host');
    host= process.env.WEB_URL;
-   links="http://"+host+"/setpassword?token="+rand2;
+   links="https://"+host+"/setpassword?token="+rand2;
    
          let emailTemplates;
      ejs
      .renderFile(path.join(__dirname, "views/index.ejs"), {
        user_firstname: results_spouse.full_name,
-       confirm_link:"http://"+host+"/setpassword?token=" + rand2
+       confirm_link:"https://"+host+"/setpassword?token=" + rand2
      })  .then(result => {
        emailTemplates = result;
       let mailOptionse = {
@@ -2952,7 +2958,7 @@ var digits = '0123456789';
             
           // host=req.get('host');
           host= process.env.WEB_URL;
-          linkse="http://"+host+"/setpassword?token="+rand3;
+          linkse="https://"+host+"/setpassword?token="+rand3;
                let transporter = nodeMailer.createTransport({
                   host: 'mail.sts.org.sg',
                   port: 465,
@@ -2966,7 +2972,7 @@ var digits = '0123456789';
             ejs
             .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
               user_firstname: results_mem.full_name,
-              confirm_link:"http://"+host+"/setpassword?token=" + rand3
+              confirm_link:"https://"+host+"/setpassword?token=" + rand3
             })
           .then(result => {
             emailTemplatems=result;
@@ -3039,7 +3045,7 @@ var digits = '0123456789';
               
             // host=req.get('host');
             host= process.env.WEB_URL;
-            linkse="http://"+host+"/setpassword?token="+rand3;
+            linkse="https://"+host+"/setpassword?token="+rand3;
                  let transporter = nodeMailer.createTransport({
                     host: 'mail.sts.org.sg',
                     port: 465,
@@ -3053,7 +3059,7 @@ var digits = '0123456789';
               ejs
               .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
                 user_firstname: results_mem.full_name,
-                confirm_link:"http://"+host+"/setpassword?token=" + rand3
+                confirm_link:"https://"+host+"/setpassword?token=" + rand3
               })
             .then(result => {
               emailTemplatems=result;
@@ -3362,6 +3368,114 @@ AboutUs: (req, res) => {
 
 getAboutUs: (req, res) => {
   getAboutUs( (err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+InvoiceConfig: (req, res) => { 
+  var body = req.body;
+  getInvoiceConfig((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    console.log(results);
+    body.id = 1;
+    UpdateInvoiceConfig(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateInvoiceConfig(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getInvoiceConfig: (req, res) => {
+  getInvoiceConfig((err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+EmailSmtp: (req, res) => { 
+  var body = req.body;
+  getEmailSmtp((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    console.log(results);
+    body.id = 1;
+    UpdateEmailSmtp(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateEmailSmtp(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getEmailSmtp: (req, res) => {
+  getEmailSmtp((err, results) => {
   if (err) {
     console.log(err);
     return;

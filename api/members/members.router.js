@@ -82,6 +82,10 @@ const {
   UploadMembersData,
   getTerminatedMembersList,
   UpdateMemberStatus,
+  InvoiceConfig,
+  getInvoiceConfig,
+  EmailSmtp,
+  getEmailSmtp,
   TestMail
 } = require("./members.controller");
 
@@ -188,6 +192,12 @@ router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
 
 router.get("/paymentdetails/:id",checkToken,getPaymentsDetails);
 router.post("/uploadfile",UploadMembersData);
+
+router.post("/conf_invoice", InvoiceConfig);
+router.get("/conf_invoice", getInvoiceConfig);
+
+router.post("/emailsmtp", EmailSmtp);
+router.get("/emailsmtp", getEmailSmtp);
 
 
 

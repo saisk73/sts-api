@@ -1124,6 +1124,108 @@ module.exports = {
     );
   },
 
+  CreateInvoiceConfig: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into config_master(invoice_address,invoice_mobile,invoice_message) 
+                values(?,?,?)`,
+      [
+        data.invoice_address,
+        data.invoice_mobile,
+        data.invoice_message
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getInvoiceConfig:(callBack) => {
+    pool.query(
+      `select invoice_address,invoice_mobile,invoice_message from config_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateInvoiceConfig: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update config_master set invoice_address=?,invoice_mobile=?,invoice_message=? where id = ?`,
+      [
+        data.invoice_address,
+        data.invoice_mobile,
+        data.invoice_message,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  CreateEmailSmtp: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into config_master(mail_email,mail_pass,mail_smtp) 
+                values(?,?)`,
+      [
+        data.mail_email,
+        data.mail_pass,
+        data.mail_smtp
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getEmailSmtp:(callBack) => {
+    pool.query(
+      `select mail_email,mail_pass,mail_smtp from config_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateEmailSmtp: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update config_master set mail_email=?,mail_pass=?,mail_smtp=? where id = ?`,
+      [
+        data.mail_email,
+        data.mail_pass,
+        data.mail_smtp,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   UpdateIntroduction: (data, callBack) => {
     // console.log(data);
     pool.query(
