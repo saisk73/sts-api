@@ -86,6 +86,8 @@ const {
   getInvoiceConfig,
   EmailSmtp,
   getEmailSmtp,
+  GateWay,
+  getGateWayStatus,
   TestMail
 } = require("./members.controller");
 
@@ -198,6 +200,9 @@ router.get("/conf_invoice", getInvoiceConfig);
 
 router.post("/emailsmtp", EmailSmtp);
 router.get("/emailsmtp", getEmailSmtp);
+
+router.post("/gateway", GateWay);
+router.get("/gateway", getGateWayStatus);
 
 
 

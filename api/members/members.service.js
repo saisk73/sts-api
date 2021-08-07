@@ -1226,6 +1226,53 @@ module.exports = {
     );
   },
 
+  CreateGateWayStatus: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into config_master(gateway_status) 
+                values(?)`,
+      [
+        data.gateway_status
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getGateWayStatus:(callBack) => {
+    pool.query(
+      `select gateway_status from config_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateGateWayStatus: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update config_master set gateway_status=? where id = ?`,
+      [
+        data.gateway_status,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   UpdateIntroduction: (data, callBack) => {
     // console.log(data);
     pool.query(

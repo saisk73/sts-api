@@ -118,7 +118,10 @@ UpdateInvoiceConfig,
 CreateInvoiceConfig,
 getEmailSmtp,
 UpdateEmailSmtp,
-CreateEmailSmtp
+CreateEmailSmtp,
+getGateWayStatus,
+CreateGateWayStatus,
+UpdateGateWayStatus
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3476,6 +3479,60 @@ EmailSmtp: (req, res) => {
 
 getEmailSmtp: (req, res) => {
   getEmailSmtp((err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+GateWay: (req, res) => { 
+  var body = req.body;
+  getGateWayStatus((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    console.log(results);
+    body.id = 1;
+    UpdateGateWayStatus(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateGateWayStatus(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getGateWayStatus: (req, res) => {
+  getGateWayStatus((err, results) => {
   if (err) {
     console.log(err);
     return;
