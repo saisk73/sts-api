@@ -1082,10 +1082,6 @@ var digits = '0123456789';
    body.member_verifycode=rand4;
    
     updateUsersVerification(body, (err, results) => {
-    
-    
-    
-    
       if (err) {
         console.log(err);
     
@@ -2328,8 +2324,8 @@ getSpouseBymemberId(element, (err, results1) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'newinfo@sts.org.sg',
-              pass: '@STSnewinfo1'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
           let emailTemplatems;
@@ -2341,7 +2337,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
     emailTemplatems=result;
       let mailOptions = {
-          from: 'newinfo@sts.org.sg', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: resul1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body
@@ -2384,8 +2380,8 @@ getSpouseBymemberId(element, (err, results1) => {
           port: 465,
           secure: true,
           auth: {
-              user: 'newinfo@sts.org.sg',
-              pass: '@STSnewinfo1'
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
           }
       });
      
@@ -2398,7 +2394,7 @@ getSpouseBymemberId(element, (err, results1) => {
   .then(result => {
       emailTemplate = result;
       let mailOptions = {
-          from: 'newinfo@sts.org.sg', // sender address
+          from: 'otp@sts.org.sg', // sender address
           to: results1.email,// list of receivers
           subject: 'New Member Registration Confirmation', // Subject line
           text:'Thankyou for registering with STS', // plain text body

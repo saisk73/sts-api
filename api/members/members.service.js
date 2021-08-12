@@ -1178,12 +1178,15 @@ module.exports = {
   CreateEmailSmtp: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into config_master(mail_email,mail_pass,mail_smtp) 
+      `insert into config_master(mail_email,mail_pass,mail_smtp,otpmail_email,otpmail_pass,otpmail_smtp) 
                 values(?,?)`,
       [
         data.mail_email,
         data.mail_pass,
-        data.mail_smtp
+        data.mail_smtp,
+        data.otpmail_email,
+        data.otpmail_pass,
+        data.otpmail_smtp
       ],
       (error, results, fields) => {
         if (error) {
@@ -1196,7 +1199,7 @@ module.exports = {
 
   getEmailSmtp:(callBack) => {
     pool.query(
-      `select mail_email,mail_pass,mail_smtp from config_master`,
+      `select mail_email,mail_pass,mail_smtp,otpmail_email,otpmail_pass,otpmail_smtp from config_master`,
       [],
       (error, results, fields) => {
         if (error) {
@@ -1210,11 +1213,14 @@ module.exports = {
   UpdateEmailSmtp: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update config_master set mail_email=?,mail_pass=?,mail_smtp=? where id = ?`,
+      `update config_master set mail_email=?,mail_pass=?,mail_smtp=?,otpmail_email=?,otpmail_pass=?,otpmail_smtp=? where id = ?`,
       [
         data.mail_email,
         data.mail_pass,
         data.mail_smtp,
+        data.otpmail_email,
+        data.otpmail_pass,
+        data.otpmail_smtp,
         data.id
       ],
       (error, results, fields) => {
