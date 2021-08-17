@@ -88,6 +88,8 @@ const {
   getEmailSmtp,
   GateWay,
   getGateWayStatus,
+  EmailTemplate,
+  getEmailTemplate,
   TestMail
 } = require("./members.controller");
 
@@ -203,6 +205,9 @@ router.get("/emailsmtp", getEmailSmtp);
 
 router.post("/gateway", GateWay);
 router.get("/gateway", getGateWayStatus);
+
+router.post("/emailtemplate", EmailTemplate);
+router.get("/emailtemplate", getEmailTemplate);
 
 
 

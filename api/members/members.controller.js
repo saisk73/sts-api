@@ -121,7 +121,10 @@ UpdateEmailSmtp,
 CreateEmailSmtp,
 getGateWayStatus,
 CreateGateWayStatus,
-UpdateGateWayStatus
+UpdateGateWayStatus,
+CreateEmailTemplate,
+UpdateEmailTemplate,
+getEmailTemplate
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -3469,7 +3472,6 @@ EmailSmtp: (req, res) => {
   });
 });
   }
-
   });
 },
 
@@ -3529,6 +3531,60 @@ GateWay: (req, res) => {
 
 getGateWayStatus: (req, res) => {
   getGateWayStatus((err, results) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  if (!results) {
+    return res.json({
+      success: 0,
+      message: "Record not Found"
+    });
+  }
+  return res.json({
+    success: 1,
+    data: results
+  });
+});
+},
+
+EmailTemplate: (req, res) => { 
+  var body = req.body;
+  getEmailTemplate((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  if(results){
+    console.log(results);
+    body.id = 1;
+    UpdateEmailTemplate(body, (err, results1) => {
+      if(err){
+         console.log(err);
+        }
+     return res.json({
+       success: 1,
+       message: "Updated successfully"
+     });
+   });
+
+  }else{
+ CreateEmailTemplate(body, (err, results1) => {
+   if(err){
+      console.log(err);
+     }
+  return res.json({
+    success: 1,
+    message: "Added successfully"
+  });
+});
+  }
+
+  });
+},
+
+getEmailTemplate: (req, res) => {
+  getEmailTemplate((err, results) => {
   if (err) {
     console.log(err);
     return;

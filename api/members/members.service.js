@@ -1279,6 +1279,55 @@ module.exports = {
     );
   },
 
+  CreateEmailTemplate: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into emailtemplates_master(template_name,template) 
+                values(?,?)`,
+      [
+        data.template_name,
+        data.template
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getEmailTemplate:(callBack) => {
+    pool.query(
+      `select * from emailtemplates_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  UpdateEmailTemplate: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update emailtemplates_master set template_name=?, template=? where id = ?`,
+      [
+        data.template_name,
+        data.template,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   UpdateIntroduction: (data, callBack) => {
     // console.log(data);
     pool.query(
