@@ -236,7 +236,7 @@ module.exports = {
       `update members_master set member_verifycode=? where email = ?`,
       [
     data.member_verifycode,
-  data.email
+    data.email
         
       ],
       (error, results, fields) => {
@@ -1301,6 +1301,19 @@ module.exports = {
     pool.query(
       `select * from emailtemplates_master`,
       [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getEmailTemplatecheck:(template_name,callBack) => {
+    pool.query(
+      `select * from emailtemplates_master where template_name=?`,
+      [template_name],
       (error, results, fields) => {
         if (error) {
           callBack(error);

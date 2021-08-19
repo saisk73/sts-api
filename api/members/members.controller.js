@@ -124,7 +124,8 @@ CreateGateWayStatus,
 UpdateGateWayStatus,
 CreateEmailTemplate,
 UpdateEmailTemplate,
-getEmailTemplate
+getEmailTemplate,
+getEmailTemplatecheck
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -1049,6 +1050,12 @@ var digits = '0123456789';
       host= process.env.WEB_URL;
   linksef="https://"+host+"/setpassword?token="+rand4;
       body.member_verifycode=rand4;
+      updateUsersVerification(body, (err, results) => {
+        if (err) {
+          console.log(err);
+      
+          return;
+        }
        let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
           port: 465,
@@ -1082,19 +1089,12 @@ var digits = '0123456789';
           console.log('Message %s sent: %s', info.messageId, info.response);
               res.render('index');
   })});
-   body.member_verifycode=rand4;
-   
-    updateUsersVerification(body, (err, results) => {
-      if (err) {
-        console.log(err);
-    
-        return;
-      }
+  
       return res.json({
         success: 1,
         message: "Verification Sent successfully to your mail"
       });
-    })}; });
+    }) }; });
   },
 
   ForgotUser: (req, res) => {
@@ -3550,14 +3550,14 @@ getGateWayStatus: (req, res) => {
 
 EmailTemplate: (req, res) => { 
   var body = req.body;
-  getEmailTemplate((err, results) => {
+  getEmailTemplatecheck(body.template_name,(err, results) => {
     if (err) {
       console.log(err);
       return;
     }
   if(results){
     console.log(results);
-    body.id = 1;
+    body.id = results.id;
     UpdateEmailTemplate(body, (err, results1) => {
       if(err){
          console.log(err);
