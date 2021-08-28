@@ -3541,9 +3541,14 @@ getGateWayStatus: (req, res) => {
       message: "Record not Found"
     });
   }
+  var gateway_status = 'Payment gateway is inactive';
+  if(results.gateway_status==1){
+    gateway_status = 'Payment gateway is active';
+  }
   return res.json({
     success: 1,
-    data: results
+    data: results,
+    message:gateway_status
   });
 });
 },
