@@ -184,7 +184,7 @@ router.patch("/renewalwitharrears", checkToken, RenewalWithArrears);
 
 router.post("/uploadprofileimage",checkToken,UploadProfileImage);
 
-router.post("/updatemembershipbytreasurer",checkToken,UpdateMemberShipByTreasurer);
+router.post("/updatemembershipbytreasurer",UpdateMemberShipByTreasurer);
 router.post("/changememberpasswordbytreasurer",checkToken,ChangeMemberPasswordByTreasurer);
 router.post("/terminatemember",checkToken,TerminateMember);
 router.get("/membershippaymentshistory",checkToken,MemberShipPaymentsHistory);
