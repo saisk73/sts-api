@@ -590,7 +590,7 @@ module.exports = {
     );
   },
 
-  createMemberShipHistory: (data, callBack) => {
+  createMemberShipHistory: (data, callBack) => { 
     pool.query(
       `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,transaction_id,payment_type,message,created_on) 
                 values(?,?,?,?,?,?,?)`,
