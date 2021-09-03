@@ -1832,7 +1832,7 @@ module.exports = {
 
   getMemberShipHistoryByMemberId: (id, callBack) => {
     pool.query(
-      `select * from memberships_history_master where member_id = ?`,
+      `select *,(select membership_name from membershiptypes_master where id=memberships_history_master.membershiptype_id) as membership_name from memberships_history_master where member_id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
