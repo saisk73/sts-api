@@ -592,7 +592,7 @@ module.exports = {
 
   createMemberShipHistory: (data, callBack) => { 
     pool.query(
-      `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,transaction_id,payment_type,message,created_on) 
+      `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,transaction_id,payment_type,payment_mode,message,created_on) 
                 values(?,?,?,?,?,?,?)`,
       [
         data.id,
@@ -600,6 +600,7 @@ module.exports = {
         data.membership_amount,
         data.transaction_id,
         data.payment_type,
+        data.payment_mode,
         data.message,
         data.created_on
       ],

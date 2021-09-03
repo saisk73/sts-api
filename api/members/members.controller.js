@@ -205,6 +205,7 @@ module.exports = {
       //Create Membership History - Start
       body.id = results.insertId;
       body.created_on=current_date;
+      body.payment_mode= 'Manual';
       createMemberShipHistory(body, (err, results) => {
        if(err){
           console.log(err);
@@ -2050,7 +2051,6 @@ getMemberDetails: (req, res) => {
         return;
       }
       
-
       getChildrensBymemberId(id, (err, results2) => {
       if (err) {
         console.log(err);
