@@ -1830,6 +1830,8 @@ MemberShipUpdate: (req, res) => {
 
   UpdateMemberShipByTreasurer: (req, res) => {
     const body = req.body;
+    var membershiptype_id=body.membershiptype_id;
+    if(membershiptype_id){
     UpdateMemberShipByTreasurer(body, (err, results) => {
       if(err){
         console.log(err);
@@ -1856,6 +1858,12 @@ MemberShipUpdate: (req, res) => {
           });
         });
     });
+  }else{
+    return res.json({
+      success: 0,
+      message: "Membership id is null passed"
+    });
+  }
   },
 
   AdminLogin: (req, res) => {
