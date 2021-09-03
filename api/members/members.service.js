@@ -612,6 +612,29 @@ module.exports = {
     );
   },
 
+  createMemberShipHistory1: (data, callBack) => { 
+    pool.query(
+      `insert into memberships_history_master(member_id, membershiptype_id, membership_amount,transaction_id,payment_type,payment_mode,message,created_on) 
+                values(?,?,?,?,?,?,?)`,
+      [
+        data.id,
+        data.membershiptype_id,
+        data.membership_amount,
+        data.transaction_id,
+        data.payment_type,
+        data.payment_mode,
+        data.message,
+        data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   UpdateLoginOtp: (data, callBack) => {
     pool.query(
       `update members_master set login_otp=?,otp_expiry_time=? where id = ?`,

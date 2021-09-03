@@ -31,6 +31,7 @@ UpdateMemberShip_ChildrensInactive,
 UpdateMemberShipBySpouse,
 UpdateMemberShip_Member,
 createMemberShipHistory,
+createMemberShipHistory1,
 MemberShipHistory,
 UpdateLoginOtp,
 getAdminByMemberEmail,
@@ -1839,7 +1840,7 @@ MemberShipUpdate: (req, res) => {
 
            body.created_on=current_date;
            body.id=body.member_id;
-           createMemberShipHistory(body, (err, results) => {
+           createMemberShipHistory1(body, (err, results) => {
             if(err){
                console.log(err);
              }
