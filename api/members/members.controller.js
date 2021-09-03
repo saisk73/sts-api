@@ -1841,18 +1841,20 @@ MemberShipUpdate: (req, res) => {
             if(err){
                console.log(err);
              }
-           });
+          
            UpdateSpouseMemberShipByTreasurer(body, (err, results) => {
             if(err){
               console.log(err);
               return;
                }
-              })
+              
          //Create Membership History - End
            return res.json({
              success: 1,
              message: "updated successfully"
            });
+          });
+        });
     });
   },
 
