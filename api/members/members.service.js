@@ -749,7 +749,7 @@ module.exports = {
 
   getMemberDetails:(id, callBack) => {
     pool.query(
-      `select * from members_master where id=?`,
+      `select *,(select membership_name from membershiptypes_master where id=members_master.membershiptype_id) as membership_name from members_master where id=?`,
       [id],
       (error, results, fields) => {
         if (error) {
