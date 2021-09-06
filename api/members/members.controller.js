@@ -141,8 +141,17 @@ var current_date =  moment().format('YYYY-MM-DD');
 var current_year =  moment().format('YYYY');
 var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+
+const fs = require('fs');
+const mysql = require('mysql');
 const multer = require('multer');
+const express = require('express');
 const readXlsxFile = require('read-excel-file/node');
+const app = express(); 
+global.__basedir = __dirname;
+
+
+
 
 var rand,rand2,host,link,links,linkse,rand3;
 module.exports = {
@@ -4404,24 +4413,15 @@ CheckTransaction: (req, res) => {
   },
 
   UploadMembersData: (req, res) => {
-    global.__basedir = __dirname;
+    console.log(req.file.filename);
+    if (req.file == undefined) {
+      return res.status(400).send("Please upload an excel file!");
+    }
     const express = require('express');
     const app = express();
- 
-// -> Multer Upload Storage
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-	   cb(null, __basedir + '/uploads/membersdata/')
-	},
-	filename: (req, file, cb) => {
-	   cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
-	}
-});
 
-const upload = multer({storage: storage});
-console.log('sdfghjk : ',req.file);
 // -> Express Upload RestAPIs
-  var filePath = __basedir + '/uploads/' + req.file.filename;
+  var filePath = __basedir + '../../../uploads/membersdata/' + req.file.filename;
 	// importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
 
   readXlsxFile(filePath).then((rows) => {
@@ -4434,8 +4434,6 @@ console.log('sdfghjk : ',req.file);
 	res.json({
 				'msg': 'File uploaded/import successfully!', 'file': req.file
 			});
-
-
   },
 
 
