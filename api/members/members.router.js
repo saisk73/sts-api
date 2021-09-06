@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { checkToken } = require("../../auth/token_validation");
+const upload = require("../../middlewares/upload");
 const {
   createMember,
   MemberLogin,
@@ -195,7 +196,7 @@ router.get("/alldownloadrequests",checkToken,getDownloadRequests);
 router.get("/mydownloadrequests",checkToken,getMyDownloadRequests);
 
 router.get("/paymentdetails/:id",checkToken,getPaymentsDetails);
-router.post("/uploadfile",UploadMembersData);
+router.post("/uploadfile",upload.single("file"),UploadMembersData);
 
 router.post("/conf_invoice", InvoiceConfig);
 router.get("/conf_invoice", getInvoiceConfig);
