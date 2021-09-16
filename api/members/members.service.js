@@ -44,6 +44,22 @@ module.exports = {
     );
   },
 
+  createMemberByExcel: (serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate, callBack) => {
+    pool.query(
+      `insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,created_on,member_type,membership_type,membership_enddate) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [
+        serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
     createSpouseMember: (data, callBack) => {
     pool.query(
       `insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) 
@@ -78,6 +94,22 @@ module.exports = {
         data.member_type,
         data.membership_type,
         data.membership_enddate
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  createSpouseMemberByExcel: (serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate, callBack) => {
+    pool.query(
+      `insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [
+        serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate
       ],
       (error, results, fields) => {
         if (error) {
