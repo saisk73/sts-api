@@ -91,6 +91,9 @@ const {
   getGateWayStatus,
   EmailTemplate,
   getEmailTemplate,
+  AddEvent,
+  getEvents,
+  getEventById,
   TestMail
 } = require("./members.controller");
 
@@ -209,6 +212,11 @@ router.get("/gateway", getGateWayStatus);
 
 router.post("/emailtemplate", EmailTemplate);
 router.get("/emailtemplate", getEmailTemplate);
+
+router.post("/addevent", AddEvent);
+router.get("/events", getEvents);
+router.get("/events/:id", getEventById);
+// router.get("/deleteevent/:id", DeleteEvent);
 
 
 

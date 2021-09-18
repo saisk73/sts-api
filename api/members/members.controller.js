@@ -128,7 +128,14 @@ UpdateEmailTemplate,
 getEmailTemplate,
 getEmailTemplatecheck,
 createMemberByExcel,
-createSpouseMemberByExcel
+createSpouseMemberByExcel,
+createChildrensByExcel,
+CreateEvent,
+UpdateEvent,
+UpdateEventwithimg,
+getEvents,
+getEventById
+
 } = require("./members.service");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -4431,7 +4438,7 @@ CheckTransaction: (req, res) => {
     rows.forEach(row => {
       // console.log(row[0]);
       // console.log(row[1]);
-      // console.log(row[2]);
+      console.log(row[2]);
       // console.log(row[3]);
       var membershiptype_id=0;
       if(row[0]=='Self (Annual)'){ membershiptype_id=1; }
@@ -4471,31 +4478,31 @@ CheckTransaction: (req, res) => {
           rand3=Math.floor((Math.random() * 30000000000000000) + 34);
           var member_verifycode=rand3;
         // serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate
-      var membership_amount = row[1];
-      var full_name = row[2];
-      var nric_no = row[3];
-      var gender = row[4];
-      var dob = row[5];
-      var nationality = row[13];
-      var mobile = row[6];
-      var residential_status = row[8];
-      var email = row[7];
-      var street1 = row[9];
-      var street2 = row[10];
-      var unit_no =row[11];
-      var postal_code = row[12];
+      var membership_amount = row[1] ? row[1] : '';
+      var full_name = row[2]?row[2]:'';
+      var nric_no = row[3]?row[3]:'';
+      var gender = row[4]?row[4]:'';
+      var dob = row[5]?row[5]:null;
+      var nationality = row[13]?row[13]:'';
+      var mobile = row[6]?row[6]:'';
+      var residential_status = row[8]?row[8]:'';
+      var email = row[7]?row[7]:'';
+      var street1 = row[9]?row[9]:'';
+      var street2 = row[10]?row[10]:'';
+      var unit_no =row[11]?row[11]:'';
+      var postal_code = row[12]?row[12]:'';
       var habbies = '';
-      var reference = row[14];
-      var introducer1 =row[15];
-      var introducerNumber1 = row[16];
-      var introducer2 =row[17];
-      var introducerNumber2 = row[18];
-      var comments = row[19];
-      var created_on=current_date;
+      var reference = row[14]?row[14]:'';
+      var introducer1 =row[15]?row[15]:'';
+      var introducerNumber1 = row[16]?row[16]:'';
+      var introducer2 =row[17]?row[17]:'';
+      var introducerNumber2 = row[18]?row[18]:'';
+      var comments = row[19]?row[19]:'';
+      var created_on= current_date;
       var member_type =0;
 
       
-        createMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate, (err, results) => {
+      createMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate, (err, results) => {
         if (err) {
           console.log(err);
           return res.status(500).json({
@@ -4553,10 +4560,10 @@ CheckTransaction: (req, res) => {
            })});
     
         // //mail Send//
-        return res.status(200).json({
-          success: 1,
-          data: results
-        });
+        // return res.status(200).json({
+        //   success: 1,
+        //   data: results
+        // });
       });
     })
       }else{
@@ -4593,25 +4600,25 @@ CheckTransaction: (req, res) => {
       }
       //Create MEmbership end date-end
       var membership_amount = row[1];
-      var full_name = row[2];
-      var nric_no = row[3];
-      var gender = row[4];
-      var dob = row[5];
-      var nationality = row[13];
-      var mobile = row[6];
-      var residential_status = row[8];
-      var email = row[7];
-      var street1 = row[9];
-      var street2 = row[10];
-      var unit_no =row[11];
-      var postal_code = row[12];
+      var full_name = row[2]?row[2]:'';
+      var nric_no = row[3]?row[3]:'';
+      var gender = row[4]?row[4]:'';
+      var dob = row[5]?row[5]:null;
+      var nationality = row[13]?row[13]:'';
+      var mobile = row[6]?row[6]:'';
+      var residential_status = row[8]?row[8]:'';
+      var email = row[7]?row[7]:'';
+      var street1 = row[9]?row[9]:'';
+      var street2 = row[10]?row[10]:'';
+      var unit_no = row[11]?row[11]:'';
+      var postal_code = row[12]?row[12]:'';
       var habbies = '';
-      var reference = row[14];
-      var introducer1 =row[15];
-      var introducerNumber1 = row[16];
-      var introducer2 =row[17];
-      var introducerNumber2 = row[18];
-      var comments = row[19];
+      var reference = row[14]?row[14]:'';
+      var introducer1 = row[15]?row[15]:'';
+      var introducerNumber1 = row[16]?row[16]:'';
+      var introducer2 = row[17]?row[17]:'';
+      var introducerNumber2 = row[18]?row[18]:'';
+      var comments = row[19]?row[19]:'';
       var created_on=current_date;
       var member_type =0;
 
@@ -4679,21 +4686,38 @@ CheckTransaction: (req, res) => {
   
   
         var member_insertid = results.insertId;
-    //     const arr = body.childrens;
-    //     if(arr){
-    //   arr.forEach(element => { 
-    //   element.member_id = member_insertid;
-    //  createChildrens(element, (err, results) => {
-    //     if (err) {
-    //       console.log(err);
-    //       return res.status(500).json({
-    //         success: 0,
-    //         message: "Database connection errror"
-    //       });
-    //     }
-    //   });
-    //    });
-    //   }
+        var child_name1 = row[28]?row[28]:'';
+    var child_dob1 = row[29]?row[29]:null;
+    var child_gender1 = row[30]?row[30]:'';
+
+    var child_name2 = row[31]?row[31]:'';
+    var child_dob2 = row[32]?row[32]:null;
+    var child_gender2 = row[33]?row[33]:'';
+    if(child_name1){
+     createChildrensByExcel(member_insertid,child_name1,child_dob1,child_gender1, (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: 0,
+            message: "Database connection errror"
+          });
+        }
+      });
+    }
+
+    if(child_name2){
+      createChildrensByExcel(member_insertid,child_name2,child_dob2,child_gender2, (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: 0,
+            message: "Database connection errror"
+          });
+        }
+      });
+    }
+
+
       var member_id = member_insertid;
       var member_type = 1;
        //Create MEmbership end date-start
@@ -4726,26 +4750,26 @@ CheckTransaction: (req, res) => {
       var member_verifycode=rand2;
 
      // serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,ember_verifycode,created_on,member_type,membership_type,membership_enddate
-     var membership_amount = row[1];
-     var s_full_name = row[20];
-     var s_nric_no = row[21];
-     var s_gender = row[22];
-     var s_dob = row[23];
-     var s_nationality = row[27];
-     var s_mobile = row[24];
-     var s_residential_status = row[26];
-     var s_email = row[25];
-     var street1 = row[9];
-     var street2 = row[10];
-     var unit_no =row[11];
-     var postal_code = row[12];
+     var membership_amount = row[1]?row[1]:'';
+     var s_full_name = row[20]?row[20]:'';
+     var s_nric_no = row[21]?row[21]:'';
+     var s_gender = row[22]?row[22]:'';
+     var s_dob = row[23]?row[23]:null;
+     var s_nationality = row[27]?row[27]:'';
+     var s_mobile = row[24]?row[24]:'';
+     var s_residential_status = row[26]?row[26]:'';
+     var s_email = row[25]?row[25]:'';
+     var street1 = row[9]?row[9]:'';
+     var street2 = row[10]?row[10]:'';
+     var unit_no = row[11]?row[11]:'';
+     var postal_code = row[12]?row[12]:'';
      var habbies = '';
-     var reference = row[14];
-     var introducer1 =row[15];
-     var introducerNumber1 = row[16];
-     var introducer2 =row[17];
-     var introducerNumber2 = row[18];
-     var comments = row[19];
+     var reference = row[14]?row[14]:'';
+     var introducer1 = row[15]?row[15]:'';
+     var introducerNumber1 = row[16]?row[16]:'';
+     var introducer2 = row[17]?row[17]:'';
+     var introducerNumber2 = row[18]?row[18]:'';
+     var comments = row[19]?row[19]:'';
      var created_on=current_date;
      createSpouseMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate, (err, results) => {
         if (err) {
@@ -4784,15 +4808,15 @@ CheckTransaction: (req, res) => {
                 res.render('index');
             })});
   
-        return res.status(200).json({
-          success: true,
-          data: results
-        });
+        // return res.status(200).json({
+        //   success: true,
+        //   data: results
+        // });
       });
     })
 
+    
 
-    // var member_insertid = results.insertId;
     //     const arr = body.childrens;
     //     if(arr){
     //   arr.forEach(element => { 
@@ -4816,9 +4840,123 @@ CheckTransaction: (req, res) => {
     });
 
   // });
-	// res.json({
-	// 			'msg': 'File uploaded/import successfully!', 'file': req.file
-	// 		});
+	res.json({
+				'msg': 'File uploaded/import successfully!', 'file': req.file
+			});
+  },
+
+
+  AddEvent: (req, res) => { 
+    // const body = req.body.image_url; 
+   const body = req.body;
+   // Some image data uri
+   let dataURI = body.image_url;
+   let id = body.id;
+  if(dataURI){
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/events/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath)
+  //  console.log(image_name);
+   body.image_name = image_name;
+  }
+   if(id){
+     if(dataURI){
+    UpdateEventwithimg(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     }); 
+  
+     }else{
+      UpdateEvent(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     });
+     }
+  
+   }else{
+    body.created_on = current_date;
+   CreateEvent(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+   }
+  },
+
+  getEvents: (req, res) => {
+    getForums( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getEvents: (req, res) => {
+    getEvents( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getEventById: (req, res) => {
+    const id = req.params.id;
+    getEventById(id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
   },
 
 

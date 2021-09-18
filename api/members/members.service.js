@@ -157,6 +157,22 @@ module.exports = {
     );
   },
 
+  createChildrensByExcel: (member_id,child_name,child_dob,child_gender, callBack) => {
+    pool.query(
+      `insert into childrens_master(member_id, child_name, dob, gender) 
+                values(?,?,?,?)`,
+      [
+        member_id,child_name,child_dob,child_gender
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getUserByMemberEmail: (email, callBack) => {
     pool.query(
       `select * from members_master where member_status=0 and status=1 and email = ?`,
@@ -2072,6 +2088,106 @@ module.exports = {
     );
   },
 
+  CreateEvent: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into events_master(event_name,description,image,adult_fee,child_fee,from_date,to_date,max_tickets,closed_date,created_on) 
+                values(?,?,?,?,?,?,?,?,?,?)`,
+      [
+        data.event_name,
+        data.description,
+        data.image_name,
+        data.adult_fee,
+        data.child_fee,
+        data.from_date,
+        data.to_date,
+        data.max_tickets,
+        data.closed_date,
+        data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateEventwithimg: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update events_master set event_name=?,description=?,image=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      [
+        data.event_name,
+        data.description,
+        data.image_name,
+        data.adult_fee,
+        data.child_fee,
+        data.from_date,
+        data.to_date,
+        data.max_tickets,
+        data.closed_date,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateEvent: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update events_master set event_name=?,description=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      [
+        data.event_name,
+        data.description,
+        data.adult_fee,
+        data.child_fee,
+        data.from_date,
+        data.to_date,
+        data.max_tickets,
+        data.closed_date,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getEvents:(callBack) => {
+    pool.query(
+      `select * from events_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getEventById:(id,callBack) => {
+    pool.query(
+      `select * from events_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 
   
 
