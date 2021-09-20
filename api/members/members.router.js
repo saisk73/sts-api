@@ -94,6 +94,7 @@ const {
   AddEvent,
   getEvents,
   getEventById,
+  DeleteEvent,
   TestMail
 } = require("./members.controller");
 
@@ -216,7 +217,7 @@ router.get("/emailtemplate", getEmailTemplate);
 router.post("/addevent", AddEvent);
 router.get("/events", getEvents);
 router.get("/events/:id", getEventById);
-// router.get("/deleteevent/:id", DeleteEvent);
+router.get("/deleteevent/:id", DeleteEvent);
 
 
 

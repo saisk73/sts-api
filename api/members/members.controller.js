@@ -134,7 +134,8 @@ CreateEvent,
 UpdateEvent,
 UpdateEventwithimg,
 getEvents,
-getEventById
+getEventById,
+DeleteEvent
 
 } = require("./members.service");
 require("dotenv").config();
@@ -4919,6 +4920,22 @@ CheckTransaction: (req, res) => {
     });
   });
   },
+
+  DeleteEvent: (req, res) => {
+    // const body = req.body;
+    const id = req.params.id;
+    DeleteEvent(id,(err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        data: "Deleted successfully"
+      });
+    
+    });
+    },
 
   getEvents: (req, res) => {
     getEvents( (err, results) => {

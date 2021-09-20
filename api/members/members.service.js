@@ -2163,6 +2163,19 @@ module.exports = {
     );
   },
 
+  DeleteEvent: (id, callBack) => {
+    pool.query(
+      `delete from events_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
   getEvents:(callBack) => {
     pool.query(
       `select * from events_master`,
