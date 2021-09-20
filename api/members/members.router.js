@@ -95,6 +95,9 @@ const {
   getEvents,
   getEventById,
   DeleteEvent,
+  getUpcomingEvents,
+  getPastEvents,
+  getRecentEvents,
   TestMail
 } = require("./members.controller");
 
@@ -218,6 +221,10 @@ router.post("/addevent", AddEvent);
 router.get("/events", getEvents);
 router.get("/events/:id", getEventById);
 router.get("/deleteevent/:id", DeleteEvent);
+
+router.get("/upcomingevents", getUpcomingEvents);
+router.get("/pastevents", getPastEvents);
+router.get("/recentevents", getRecentEvents);
 
 
 

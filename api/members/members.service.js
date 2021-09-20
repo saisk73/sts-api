@@ -2202,6 +2202,42 @@ module.exports = {
     );
   },
 
+  getUpcomingEvents:(current_date,callBack) => {
+    var test = "select * from events_master where '"+current_date+"' <= from_date";
+    pool.query(test,[],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getPastEvents:(current_date,callBack) => {
+    var test = "select * from events_master where '"+current_date+"' >= from_date";
+    pool.query(test,[],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getRecentEvents:(callBack) => {
+    var test = "select * from events_master where from_date> now() - INTERVAL 15 day;";
+    pool.query(test,[],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   
 
   

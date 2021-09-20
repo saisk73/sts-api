@@ -135,7 +135,10 @@ UpdateEvent,
 UpdateEventwithimg,
 getEvents,
 getEventById,
-DeleteEvent
+DeleteEvent,
+getUpcomingEvents,
+getPastEvents,
+getRecentEvents
 
 } = require("./members.service");
 require("dotenv").config();
@@ -4959,6 +4962,68 @@ CheckTransaction: (req, res) => {
   getEventById: (req, res) => {
     const id = req.params.id;
     getEventById(id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getUpcomingEvents: (req, res) => {
+    var date=current_date;
+    getUpcomingEvents(date, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getPastEvents: (req, res) => {
+    var date=current_date;
+    getPastEvents(date, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getRecentEvents: (req, res) => {
+    // var date=current_date;
+    // var otpexpiry_datetime = moment(date).add(10, 'days').format('YYYY-MM-DD');
+    // console.log(otpexpiry_datetime);
+    getRecentEvents((err, results) => {
     if (err) {
       console.log(err);
       return;
