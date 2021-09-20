@@ -2096,7 +2096,7 @@ module.exports = {
       [
         data.event_name,
         data.description,
-        data.image_name,
+        data.image_name?data.image_name:'',
         data.adult_fee,
         data.child_fee,
         data.from_date,
