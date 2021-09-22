@@ -1,3 +1,4 @@
+const pool = require("../../config/database");
 const {
  createMember,
  createSpouseMember,
@@ -4425,423 +4426,363 @@ CheckTransaction: (req, res) => {
     });
   },
 
-  UploadMembersData: (req, res) => {
+  UploadMembersData: async (req, res) => {
     console.log(req.file.filename);
     if (req.file == undefined) {
       return res.status(400).send("Please upload an excel file!");
     }
     const express = require('express');
     const app = express();
-
-// -> Express Upload RestAPIs
-  var filePath = __basedir + '../../../uploads/membersdata/' + req.file.filename;
-	// importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
-
-  readXlsxFile(filePath).then((rows) => {
-    rows.shift();
-    rows.forEach(row => {
-      // console.log(row[0]);
-      // console.log(row[1]);
-      console.log(row[2]);
-      // console.log(row[3]);
+    var filePath = __basedir + '../../../uploads/membersdata/' + req.file.filename;
+  await readXlsxFile(filePath).then(async(rows) => {
+    for(var i=0;i<rows.length;i++){
+      console.log(i);
       var membershiptype_id=0;
-      if(row[0]=='Self (Annual)'){ membershiptype_id=1; }
-      if(row[0]=='Self (Life)'){ membershiptype_id=2; }
-      if(row[0]=='Family (Annual)'){ membershiptype_id=3; }
-      if(row[0]=='Family (Life)'){ membershiptype_id=4; }
-
+      if(rows[i][0]=='Self (Annual)'){
+         var membershiptype_id=1; 
+        }else if(rows[i][0]=='Self (Life)'){
+          var membershiptype_id=2; 
+        } else if(rows[i][0]=='Family (Annual)'){ 
+          var membershiptype_id=3; 
+        }else if(rows[i][0]=='Family (Life)'){
+          var membershiptype_id=4; 
+        }
       if(membershiptype_id==1 || membershiptype_id==2){
-        getLastLerialNumber(current_year,(err, sresult) => {  
-          if (sresult) {
-            var serial_no = sresult.serial_no+1;
-          }else{
-            var serial_no = 10001;
-          }
-        // var uniqueid = new Date().valueOf();
-        // body.registration_id = uniqueid;
-        var serial_no = serial_no;
+      await new Promise(async function(resolve,reject){
+        await pool.query("SELECT serial_no from members_master where year(created_on)='"+current_year+"' ORDER BY serial_no DESC LIMIT 1", async(err,result1,fields) =>{
+          return resolve(result1);
+       });
+      }).then(async(result2) => {
+        console.log('sno : ',result2);
+        let serial_no = result2[0].serial_no+1;
         var registration_id = 'STS-'+current_year+'-'+serial_no;
         var member_id = '';
         var member_type = 0;
-        //Create MEmbership end date-start
         var membership_enddate = null;
-      if(membershiptype_id==1){
-      var d = new Date();
-      var year = d.getFullYear();
-      var month = d.getMonth();
-      var day = d.getDate();
-      var fulldate = new Date(year + 1, month, day);
-      var toDate = fulldate.toISOString().slice(0, 10);
-      var membership_enddate = toDate;
-      var membership_type = 0;
-      }else{
-        var membership_type = 1;
-      }
-      //Create MEmbership end date-end
-  
-          rand3=Math.floor((Math.random() * 30000000000000000) + 34);
-          var member_verifycode=rand3;
-        // serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate
-      var membership_amount = row[1] ? row[1] : '';
-      var full_name = row[2]?row[2]:'';
-      var nric_no = row[3]?row[3]:'';
-      var gender = row[4]?row[4]:'';
-      var dob = row[5]?row[5]:null;
-      var nationality = row[13]?row[13]:'';
-      var mobile = row[6]?row[6]:'';
-      var residential_status = row[8]?row[8]:'';
-      var email = row[7]?row[7]:'';
-      var street1 = row[9]?row[9]:'';
-      var street2 = row[10]?row[10]:'';
-      var unit_no =row[11]?row[11]:'';
-      var postal_code = row[12]?row[12]:'';
-      var habbies = '';
-      var reference = row[14]?row[14]:'';
-      var introducer1 =row[15]?row[15]:'';
-      var introducerNumber1 = row[16]?row[16]:'';
-      var introducer2 =row[17]?row[17]:'';
-      var introducerNumber2 = row[18]?row[18]:'';
-      var comments = row[19]?row[19]:'';
-      var created_on= current_date;
-      var member_type =0;
+        if(membershiptype_id==1){
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var day = d.getDate();
+        var fulldate = new Date(year + 1, month, day);
+        var toDate = fulldate.toISOString().slice(0, 10);
+        var membership_enddate = "'"+toDate+"'";
+        var membership_type = 0;
+        }else{
+          var membership_type = 1;
+        } 
+        rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+        var member_verifycode=rand3;
 
-      
-      createMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: 0,
-            message: "Database connection errror"
+      var membership_amount = rows[i][1] ? rows[i][1] : '';
+      var full_name = rows[i][2]?rows[i][2]:'';
+      var nric_no = rows[i][3]?rows[i][3]:'';
+      var gender = rows[i][4]?rows[i][4]:'';
+      var dob = rows[i][5]?rows[i][5]:null;
+      var nationality = rows[i][13]?rows[i][13]:'';
+      var mobile = rows[i][6]?rows[i][6]:'';
+      var residential_status = rows[i][8]?rows[i][8]:'';
+      var email = rows[i][7]?rows[i][7]:'';
+      var street1 = rows[i][9]?rows[i][9]:'';
+      var street2 = rows[i][10]?rows[i][10]:'';
+      var unit_no =rows[i][11]?rows[i][11]:'';
+      var postal_code = rows[i][12]?rows[i][12]:'';
+      var habbies = '';
+      var reference = rows[i][14]?rows[i][14]:'';
+      var introducer1 =rows[i][15]?rows[i][15]:'';
+      var introducerNumber1 = rows[i][16]?rows[i][16]:'';
+      var introducer2 =rows[i][17]?rows[i][17]:'';
+      var introducerNumber2 = rows[i][18]?rows[i][18]:'';
+      var comments = rows[i][19]?rows[i][19]:'';
+      var created_on = current_date;
+      var member_type = 0;
+      var dob = moment(dob).format('YYYY-MM-DD');
+
+        await new Promise(async function(resolve,reject){
+          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"','"+dob+"','"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result3,fields) =>{ 
+            return resolve(result3);
           });
-        }
-        // console.log(results.insertId);
-        //Create Membership History - Start
-        // body.id = results.insertId;
-        // body.created_on=current_date;
-        // createMemberShipHistory(body, (err, results) => {
-        //  if(err){
-        //     console.log(err);
-        //   }
-        // });
-      //Create Membership History - End
-  
-        // //mail Sending//
-      
-    // host=req.get('host');
-    host= process.env.WEB_URL;
-    linkse="https://"+host+"/setpassword?token="+rand3;
-         let transporter = nodeMailer.createTransport({
+        }).then(async(result4) => {
+            host= process.env.WEB_URL;
+            linkse="https://"+host+"/setpassword?token="+rand3;
+            let transporter = nodeMailer.createTransport({
             host: 'mail.sts.org.sg',
             port: 465,
             secure: true,
             auth: {
                 user: 'newinfo@sts.org.sg',
                 pass: '@STSnewinfo1'
-            }
-        });
+              }
+            });
             let emailTemplatems;
-      ejs
-      .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
-        user_firstname: full_name,
-        confirm_link:"https://"+host+"/setpassword?token=" + rand3
-      })
-    .then(result => {
-      emailTemplatems=result;
-        let mailOptions = {
+            ejs
+            .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
+            user_firstname: full_name,
+            confirm_link:"https://"+host+"/setpassword?token=" + rand3
+            })
+            .then(result => {
+            emailTemplatems=result;
+            let mailOptions = {
             from: 'newinfo@sts.org.sg', // sender address
             to: email,// list of receivers
             subject: 'New Member Registration', // Subject line
             text:'Thankyou for registering with STS', // plain text body
            //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
-       html:emailTemplatems
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
+            html:emailTemplatems
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }
             console.log('Message %s sent: %s', info.messageId, info.response);
-                res.render('index');
-           })});
-    
-        // //mail Send//
-        // return res.status(200).json({
-        //   success: 1,
-        //   data: results
-        // });
-      });
-    })
-      }else{
-        getLastLerialNumber(current_year,(err, sresult) => {  
-          if (sresult) {
-            var serial_no = sresult.serial_no+1;
-          }else{
-            var serial_no = 10001;
-          }
-          // console.log(sresult);
-        // var uniqueid = new Date().valueOf();
-        // body.registration_id = uniqueid;
-        var serial_no = serial_no;
+                // res.render('index');
+            })});
+
+          // console.log('Success : ',result4);
+          
+        }).catch(err => {
+          console.log(err);
+        })
+      }).catch(err => {
+        console.log(err);
+      })
+    }else{
+      await new Promise(async function(resolve,reject){
+        await pool.query("SELECT serial_no from members_master where year(created_on)='"+current_year+"' ORDER BY serial_no DESC LIMIT 1", async(err,result1,fields) =>{
+          return resolve(result1);
+       });
+      }).then(async(result2) => {
+        console.log('sno : ',result2);
+        let serial_no = result2[0].serial_no+1;
         var registration_id = 'STS-'+current_year+'-'+serial_no;
         var member_id = '';
         var member_type = 0;
-        var member_insertid = '';
-        rand=Math.floor((Math.random() * 10000000000000000) + 94);
-         var member_verifycode=rand;
-  
-        //Create MEmbership end date-start
-      var membership_enddate = null;
-      if(membershiptype_id==3){
-      var d = new Date();
-      var year = d.getFullYear();
-      var month = d.getMonth();
-      var day = d.getDate();
-      var fulldate = new Date(year + 1, month, day);
-      var toDate = fulldate.toISOString().slice(0, 10);
-      var membership_enddate = toDate;
-      var membership_type = 0;
-      }else{
-        var membership_type = 1;
-      }
-      //Create MEmbership end date-end
-      var membership_amount = row[1];
-      var full_name = row[2]?row[2]:'';
-      var nric_no = row[3]?row[3]:'';
-      var gender = row[4]?row[4]:'';
-      var dob = row[5]?row[5]:null;
-      var nationality = row[13]?row[13]:'';
-      var mobile = row[6]?row[6]:'';
-      var residential_status = row[8]?row[8]:'';
-      var email = row[7]?row[7]:'';
-      var street1 = row[9]?row[9]:'';
-      var street2 = row[10]?row[10]:'';
-      var unit_no = row[11]?row[11]:'';
-      var postal_code = row[12]?row[12]:'';
-      var habbies = '';
-      var reference = row[14]?row[14]:'';
-      var introducer1 = row[15]?row[15]:'';
-      var introducerNumber1 = row[16]?row[16]:'';
-      var introducer2 = row[17]?row[17]:'';
-      var introducerNumber2 = row[18]?row[18]:'';
-      var comments = row[19]?row[19]:'';
-      var created_on=current_date;
-      var member_type =0;
+        var membership_enddate = null;
+        if(membershiptype_id==1){
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth();
+        var day = d.getDate();
+        var fulldate = new Date(year + 1, month, day);
+        var toDate = fulldate.toISOString().slice(0, 10);
+        var membership_enddate = "'"+toDate+"'";
+        var membership_type = 0;
+        }else{
+          var membership_type = 1;
+        } 
+        rand3=Math.floor((Math.random() * 30000000000000000) + 34);
+        var member_verifycode=rand3;
 
-      createMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,nric_no,full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,created_on,member_type,membership_type,membership_enddate, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: 0,
-            message: "Database connection errror"
+      var membership_amount = rows[i][1] ? rows[i][1] : '';
+      var full_name = rows[i][2]?rows[i][2]:'';
+      var nric_no = rows[i][3]?rows[i][3]:'';
+      var gender = rows[i][4]?rows[i][4]:'';
+      var dob = rows[i][5]?rows[i][5]:null;
+      var nationality = rows[i][13]?rows[i][13]:'';
+      var mobile = rows[i][6]?rows[i][6]:'';
+      var residential_status = rows[i][8]?rows[i][8]:'';
+      var email = rows[i][7]?rows[i][7]:'';
+      var street1 = rows[i][9]?rows[i][9]:'';
+      var street2 = rows[i][10]?rows[i][10]:'';
+      var unit_no =rows[i][11]?rows[i][11]:'';
+      var postal_code = rows[i][12]?rows[i][12]:'';
+      var habbies = '';
+      var reference = rows[i][14]?rows[i][14]:'';
+      var introducer1 =rows[i][15]?rows[i][15]:'';
+      var introducerNumber1 = rows[i][16]?rows[i][16]:'';
+      var introducer2 =rows[i][17]?rows[i][17]:'';
+      var introducerNumber2 = rows[i][18]?rows[i][18]:'';
+      var comments = rows[i][19]?rows[i][19]:'';
+      var created_on = current_date;
+      var member_type = 0;
+      var dob = moment(dob).format('YYYY-MM-DD');
+
+        await new Promise(async function(resolve,reject){
+          // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"','"+dob+"','"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")";
+          // console.log('qry : ',qry);
+
+          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"','"+dob+"','"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result3,fields) =>{ 
+            return resolve(result3);
           });
-        }
-  
-            //Create Membership History - Start
-            // body.id = results.insertId;
-            // body.created_on=current_date;
-            // createMemberShipHistory(body, (err, results) => {
-            //  if(err){
-            //     console.log(err);
-            //   }
-            // });
-          //Create Membership History - End
-  
-        
-    // host=req.get('host');
-    host= process.env.WEB_URL;
-    link="https://"+host+"/setpassword?token="+rand;
-        var member_id = '';
-        var member_insertid = '';
-     
-         let transporter = nodeMailer.createTransport({
+        }).then(async(result4) => {
+          // host=req.get('host');
+            host= process.env.WEB_URL;
+            linkse="https://"+host+"/setpassword?token="+rand3;
+            let transporter = nodeMailer.createTransport({
             host: 'mail.sts.org.sg',
             port: 465,
             secure: true,
             auth: {
                 user: 'newinfo@sts.org.sg',
                 pass: '@STSnewinfo1'
-            }
-        });
-       
-          let emailTemplate;
-      ejs
-      .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
-        user_firstname: full_name,
-        confirm_link:"https://"+host+"/setpassword?token=" + rand
-      })
-    .then(result => {
-        emailTemplate = result;
-        let mailOptions = {
+              }
+            });
+            let emailTemplatems;
+            ejs
+            .renderFile(path.join(__dirname, "views/member_welcome.ejs"), {
+            user_firstname: full_name,
+            confirm_link:"https://"+host+"/setpassword?token=" + rand3
+            })
+            .then(result => {
+            emailTemplatems=result;
+            let mailOptions = {
             from: 'newinfo@sts.org.sg', // sender address
             to: email,// list of receivers
             subject: 'New Member Registration', // Subject line
             text:'Thankyou for registering with STS', // plain text body
-           //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"  // html body
-        html: emailTemplate
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
+           //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+            html:emailTemplatems
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }
             console.log('Message %s sent: %s', info.messageId, info.response);
-                res.render('index');
+                // res.render('index');
             })});
+
+          // console.log('Success : ',result4);
+//===============================Start Spouse=======================================//
+          await new Promise(async function(resolve,reject){
+            await pool.query("SELECT serial_no from members_master where year(created_on)='"+current_year+"' ORDER BY serial_no DESC LIMIT 1", async(err,result5,fields) =>{
+              return resolve(result5);
+           });
+          }).then(async(result6) => {
+            console.log(result6);
+            let serial_no = result6[0].serial_no+1;
+            var registration_id = 'STS-'+current_year+'-'+serial_no;
+            var member_insertid = result4.insertId;
+            var member_id = member_insertid;
+            var member_type = 1;
+            var membership_enddate = null;
+            if(membershiptype_id==3){
+            var d = new Date();
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var fulldate = new Date(year + 1, month, day);
+            var toDate = fulldate.toISOString().slice(0, 10);
+            var membership_enddate = "'"+toDate+"'";
+            var membership_type = 0;
+            }else{
+              var membership_type = 1;
+            }
+            rand2=Math.floor((Math.random() * 20000000000000000) + 54);
+            var member_verifycode=rand2;
+            var membership_amount = rows[i][1]?rows[i][1]:'';
+            var s_full_name = rows[i][20]?rows[i][20]:'';
+            var s_nric_no = rows[i][21]?rows[i][21]:'';
+            var s_gender = rows[i][22]?rows[i][22]:'';
+            var s_dob = rows[i][23]?rows[i][23]:null;
+            var s_nationality = rows[i][27]?rows[i][27]:'';
+            var s_mobile = rows[i][24]?rows[i][24]:'';
+            var s_residential_status = rows[i][26]?rows[i][26]:'';
+            var s_email = rows[i][25]?rows[i][25]:'';
+            var street1 = rows[i][9]?rows[i][9]:'';
+            var street2 = rows[i][10]?rows[i][10]:'';
+            var unit_no = rows[i][11]?rows[i][11]:'';
+            var postal_code = rows[i][12]?rows[i][12]:'';
+            var habbies = '';
+            var reference = rows[i][14]?rows[i][14]:'';
+            var introducer1 = rows[i][15]?rows[i][15]:'';
+            var introducerNumber1 = rows[i][16]?rows[i][16]:'';
+            var introducer2 = rows[i][17]?rows[i][17]:'';
+            var introducerNumber2 = rows[i][18]?rows[i][18]:'';
+            var comments = rows[i][19]?rows[i][19]:'';
+            var created_on=current_date;
+            var s_dob = moment(s_dob).format('YYYY-MM-DD');
+
+            await new Promise(async function(resolve,reject){
+              // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"','"+s_dob+"','"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")";
+              // console.log('query : ',qry);
+              await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"','"+s_dob+"','"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result7,fields) =>{
+                return resolve(result7);
+              });
+            }).then(async(result8) => {
+              host= process.env.WEB_URL;
+              links="https://"+host+"/setpassword?token="+rand2;
+              
+                    let emailTemplates;
+                ejs
+                .renderFile(path.join(__dirname, "views/index.ejs"), {
+                  user_firstname: s_full_name,
+                  confirm_link:"https://"+host+"/setpassword?token=" + rand2
+                })  .then(result => {
+                  emailTemplates = result;
+                 let mailOptionse = {
+                      from: 'newinfo@sts.org.sg', // sender address
+                      to: req.s_email,// list of receivers
+                      subject: 'New Member Registration', // Subject line
+                      text:'Thankyou for registering with STS', // plain text body
+                      //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
+                  html:emailTemplates
+                  };
+                  transporter.sendMail(mailOptionse, (error, info) => {
+                      if (error) {
+                          return console.log(error);
+                      }
+                      console.log('Message %s sent: %s', info.messageId, info.response);
+                          // res.render('index');
+                      })});
+            //  console.log('loop2 : ',result8);
+            var child_name1 = rows[i][28]?rows[i][28]:'';
+            var child_dob1 = rows[i][29]?rows[i][29]:null;
+            var child_gender1 = rows[i][30]?rows[i][30]:'';
+            var child_dob1 = moment(child_dob1).format('YYYY-MM-DD');
+
+            var child_name2 = rows[i][31]?rows[i][31]:'';
+            var child_dob2 = rows[i][32]?rows[i][32]:null;
+            var child_gender2 = rows[i][33]?rows[i][33]:'';
+            var child_dob2 = moment(child_dob2).format('YYYY-MM-DD');
+
+            if(child_name1){
+              await new Promise(async function(resolve,reject){
+                var qry = "insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name1+"','"+child_dob1+"','"+child_gender1+"','"+created_on+"')";
+                console.log('child1 qry : ',qry);
+                await pool.query("insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name1+"','"+child_dob1+"','"+child_gender1+"','"+created_on+"')",async(err,result9,fields) =>{
+                  return resolve(result9);
+                });
+              }).then(async(result10) => {
+                console.log('child1 : ',result10);
+                if(child_name2){
+                  await new Promise(async function(resolve,reject){
+                    await pool.query("insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name2+"','"+child_dob2+"','"+child_gender2+"','"+created_on+"')",async(err,result11,fields) =>{
+                      return resolve(result11);
+                    });
+                  }).then(async(result12) => {
+                    console.log('child2 : ',result12);
+                  }).catch(err => {
+                    console.log(err);
+                  })
+                }
       
-  
-  
-  
-        var member_insertid = results.insertId;
-        var child_name1 = row[28]?row[28]:'';
-    var child_dob1 = row[29]?row[29]:null;
-    var child_gender1 = row[30]?row[30]:'';
-
-    var child_name2 = row[31]?row[31]:'';
-    var child_dob2 = row[32]?row[32]:null;
-    var child_gender2 = row[33]?row[33]:'';
-    if(child_name1){
-     createChildrensByExcel(member_insertid,child_name1,child_dob1,child_gender1, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: 0,
-            message: "Database connection errror"
-          });
-        }
-      });
-    }
-
-    if(child_name2){
-      createChildrensByExcel(member_insertid,child_name2,child_dob2,child_gender2, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: 0,
-            message: "Database connection errror"
-          });
-        }
-      });
-    }
-
-
-      var member_id = member_insertid;
-      var member_type = 1;
-       //Create MEmbership end date-start
-      var membership_enddate = null;
-      if(membershiptype_id==3){
-      var d = new Date();
-      var year = d.getFullYear();
-      var month = d.getMonth();
-      var day = d.getDate();
-      var fulldate = new Date(year + 1, month, day);
-      var toDate = fulldate.toISOString().slice(0, 10);
-      var membership_enddate = toDate;
-      var membership_type = 0;
-      }else{
-        var membership_type = 1;
-      }
-  
-      getLastLerialNumber(current_year,(err, spresult) => {  
-        if (spresult) {
-          var serial_no = spresult.serial_no+1;
-        }else{
-          var serial_no = 10001;
-        }
-  
-      //Create MEmbership end date-end
-      var serial_no = serial_no;
-      var registration_id = 'STS-'+current_year+'-'+serial_no;
-      // body.registration_id = uniqueid+'S';
-      rand2=Math.floor((Math.random() * 20000000000000000) + 54);
-      var member_verifycode=rand2;
-
-     // serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,ember_verifycode,created_on,member_type,membership_type,membership_enddate
-     var membership_amount = row[1]?row[1]:'';
-     var s_full_name = row[20]?row[20]:'';
-     var s_nric_no = row[21]?row[21]:'';
-     var s_gender = row[22]?row[22]:'';
-     var s_dob = row[23]?row[23]:null;
-     var s_nationality = row[27]?row[27]:'';
-     var s_mobile = row[24]?row[24]:'';
-     var s_residential_status = row[26]?row[26]:'';
-     var s_email = row[25]?row[25]:'';
-     var street1 = row[9]?row[9]:'';
-     var street2 = row[10]?row[10]:'';
-     var unit_no = row[11]?row[11]:'';
-     var postal_code = row[12]?row[12]:'';
-     var habbies = '';
-     var reference = row[14]?row[14]:'';
-     var introducer1 = row[15]?row[15]:'';
-     var introducerNumber1 = row[16]?row[16]:'';
-     var introducer2 = row[17]?row[17]:'';
-     var introducerNumber2 = row[18]?row[18]:'';
-     var comments = row[19]?row[19]:'';
-     var created_on=current_date;
-     createSpouseMemberByExcel(serial_no,member_id,registration_id,membershiptype_id,membership_amount,s_nric_no,s_full_name,s_gender,s_dob,s_nationality,s_mobile,s_residential_status,s_email,street1,street2,unit_no,postal_code,habbies,reference,introducer1,introducerNumber1,introducer2,introducerNumber2,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: false,
-            message: "Database connection error"
-          });
-        }
-  
-    
-    // host=req.get('host');
-    host= process.env.WEB_URL;
-    links="https://"+host+"/setpassword?token="+rand2;
-    
-          let emailTemplates;
-      ejs
-      .renderFile(path.join(__dirname, "views/index.ejs"), {
-        user_firstname: s_full_name,
-        confirm_link:"https://"+host+"/setpassword?token=" + rand2
-      })  .then(result => {
-        emailTemplates = result;
-       let mailOptionse = {
-            from: 'newinfo@sts.org.sg', // sender address
-            to: req.s_email,// list of receivers
-            subject: 'New Member Registration', // Subject line
-            text:'Thankyou for registering with STS', // plain text body
-            //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+links+">Click here to verify</a>"  // html body
-        html:emailTemplates
-        };
-        transporter.sendMail(mailOptionse, (error, info) => {
-            if (error) {
-                return console.log(error);
+                
+              }).catch(err => {
+                console.log(err);
+              })
             }
-            console.log('Message %s sent: %s', info.messageId, info.response);
-                res.render('index');
-            })});
-  
-        // return res.status(200).json({
-        //   success: true,
-        //   data: results
-        // });
-      });
-    })
+
 
     
-
-    //     const arr = body.childrens;
-    //     if(arr){
-    //   arr.forEach(element => { 
-    //   element.member_id = member_insertid;
-    //  createChildrens(element, (err, results) => {
-    //     if (err) {
-    //       console.log(err);
-    //       return res.status(500).json({
-    //         success: 0,
-    //         message: "Database connection errror"
-    //       });
-    //     }
-    //   });
-    //    });
-    //   }
-  
-      });
-    })
-      }
-      });
-    });
+            
+            }).catch(err => {
+              console.log(err);
+            })
+          }).catch(err => {
+            console.log(err);
+          })
+//========================================End Spouse====================================//
+          
+        }).catch(err => {
+          console.log(err);
+        })
+      }).catch(err => {
+        console.log(err);
+      }) 
+      
+    }
+    };
+  });
 
   // });
 	res.json({
