@@ -1040,7 +1040,7 @@ var digits = '0123456789';
         });
       }
   // const result = compareSync(body.currentemailid, results.email);
-  if(body.currentemailid == results.email){
+  if(body.email == results.email){
        changeemailidBymemberId(body, (err, result) => {
       if (err) {
         console.log(err);
