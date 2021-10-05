@@ -1039,8 +1039,8 @@ var digits = '0123456789';
           message: "Record not Found"
         });
       }
-  const result = compareSync(body.email, results.email);
-  if(result){
+  // const result = compareSync(body.currentemailid, results.email);
+  if(body.email == results.email){
        changeemailidBymemberId(body, (err, result) => {
       if (err) {
         console.log(err);
