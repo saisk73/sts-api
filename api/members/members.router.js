@@ -98,6 +98,7 @@ const {
   getUpcomingEvents,
   getPastEvents,
   getRecentEvents,
+  changemailidBymemberId,
   TestMail
 } = require("./members.controller");
 
@@ -109,6 +110,7 @@ router.get("/spouse", checkToken, getSpouseBymemberId);
 router.get("/childrens", checkToken, getChildrensBymemberId);
 router.patch("/reset", updateUsers);
 router.post("/changepassword", checkToken, changepasswordBymemberId);
+router.post("/changemailidbymember", checkToken, changemailidBymemberId);
 router.patch("/forgotpassword", Forgotpassword);
 router.post("/forgotuser", ForgotUser);
 router.patch("/updatepassword", Updatememberpassword);

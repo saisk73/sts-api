@@ -278,6 +278,22 @@ module.exports = {
     );
   },
 
+  changeemailidBymemberId: (data, callBack) => {
+    pool.query(
+      `update members_master set email=? where id = ?`,
+      [
+    data.newemail,
+    data.id   
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   updateUsersVerification: (data, callBack) => {
      console.log(data);
     pool.query(
