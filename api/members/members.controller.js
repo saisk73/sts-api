@@ -4472,8 +4472,8 @@ CheckTransaction: (req, res) => {
     const app = express();
     var filePath = __basedir + '../../../uploads/membersdata/' + req.file.filename;
   await readXlsxFile(filePath).then(async(rows) => {
-    for(var i=0;i<rows.length;i++){
-      console.log(i);
+    for(var i=1;i<rows.length;i++){
+      // console.log(rows[i]);
       var membershiptype_id=0;
       if(rows[i][0]=='Self (Annual)'){
          var membershiptype_id=1; 
@@ -4490,9 +4490,17 @@ CheckTransaction: (req, res) => {
           return resolve(result1);
        });
       }).then(async(result2) => {
+        var membership_no = rows[i][3] ? rows[i][3] : '';
+        if(membership_no != ''){
+          var serial_no = rows[i][2] ? rows[i][2] : '';
+          var registration_id = membership_no;
+        }else{
         console.log('sno : ',result2);
-        let serial_no = result2[0].serial_no+1;
+        var year = rows[i][1] ? rows[i][1] : '';
+        var serial_no = result2[0].serial_no+1;
         var registration_id = 'STS-'+current_year+'-'+serial_no;
+        }
+
         var member_id = '';
         var member_type = 0;
         var membership_enddate = null;
@@ -4511,42 +4519,74 @@ CheckTransaction: (req, res) => {
         rand3=Math.floor((Math.random() * 30000000000000000) + 34);
         var member_verifycode=rand3;
 
-      var membership_amount = rows[i][1] ? rows[i][1] : '';
-      var full_name = rows[i][2]?rows[i][2]:'';
-      var nric_no = rows[i][3]?rows[i][3]:'';
-      var gender = rows[i][4]?rows[i][4]:'';
-      var dob = rows[i][5]?rows[i][5]:null;
+        var expire_on = rows[i][32]?rows[i][32]:null;
+        if(expire_on!=null){
+          var membership_enddate = moment(expire_on).format('YYYY-MM-DD');
+          var membership_enddate = "'"+membership_enddate+"'";
+        }
+       
+
+      var membership_amount = rows[i][4] ? rows[i][4] : '';
+      var full_name = rows[i][5]?rows[i][5]:'';
+      var nric_no = rows[i][6]?rows[i][6]:'';
+      var gender = rows[i][7]?rows[i][7]:'';
+      var dob = rows[i][8]?rows[i][8]:null;
       var nationality = rows[i][13]?rows[i][13]:'';
-      var mobile = rows[i][6]?rows[i][6]:'';
-      var residential_status = rows[i][8]?rows[i][8]:'';
-      var email = rows[i][7]?rows[i][7]:'';
-      var street1 = rows[i][9]?rows[i][9]:'';
-      var street2 = rows[i][10]?rows[i][10]:'';
-      var unit_no =rows[i][11]?rows[i][11]:'';
-      var postal_code = rows[i][12]?rows[i][12]:'';
+      var mobile = rows[i][9]?rows[i][9]:'';
+      var residential_status = rows[i][11]?rows[i][11]:'';
+      var email = rows[i][10]?rows[i][10]:'';
+      var street1 = rows[i][12]?rows[i][12]:'';
+      var street2 = rows[i][13]?rows[i][13]:'';
+      var unit_no =rows[i][14]?rows[i][14]:'';
+      var postal_code = rows[i][15]?rows[i][15]:'';
       var habbies = '';
-      var reference = rows[i][14]?rows[i][14]:'';
-      var introducer1 =rows[i][15]?rows[i][15]:'';
-      var introducerNumber1 = rows[i][16]?rows[i][16]:'';
-      var introducer2 =rows[i][17]?rows[i][17]:'';
-      var introducerNumber2 = rows[i][18]?rows[i][18]:'';
-      var comments = rows[i][19]?rows[i][19]:'';
+      var reference = rows[i][17]?rows[i][17]:'';
+      var introducer1 =rows[i][18]?rows[i][18]:'';
+      var introducerNumber1 = rows[i][19]?rows[i][19]:'';
+      var introducer2 =rows[i][20]?rows[i][20]:'';
+      var introducerNumber2 = rows[i][21]?rows[i][21]:'';
+      var comments = rows[i][22]?rows[i][22]:'';
+      if(rows[i][23]==1){ habbies = habbies+'Prayers/Bhajans'; }
+      if(rows[i][24]==1){ habbies = habbies+',Drama'; }
+      if(rows[i][25]==1){ habbies = habbies+',Dance'; }
+      if(rows[i][26]==1){ habbies = habbies+',Movies'; }
+      if(rows[i][27]==1){ habbies = habbies+',Volunteering'; }
+      if(rows[i][28]==1){ habbies = habbies+',Games'; }
+      if(rows[i][29]==1){ habbies = habbies+',Literary Activities'; }
+      if(rows[i][30]==1){ habbies = habbies+',Music'; }
+      // console.log(habbies);
       var created_on = current_date;
+      var created_on1 = rows[i][34]?rows[i][34]:null;
+      if(created_on1!=null){
+        var created_on = moment(created_on1).format('YYYY-MM-DD');
+      }
+      var updated_on = rows[i][33]?rows[i][33]:null;
+      var issue_date = rows[i][31]?rows[i][31]:null;
+      var remarks = rows[i][52]?rows[i][52]:'';
       var member_type = 0;
       if(dob!=null){
         var dob = moment(dob).format('YYYY-MM-DD');
         var dob = "'"+dob+"'";
       }
+      if(updated_on!=null){
+        var updated_on = moment(updated_on).format('YYYY-MM-DD');
+        var updated_on = "'"+updated_on+"'";
+      }
+      if(issue_date!=null){
+        var issue_date = moment(issue_date).format('YYYY-MM-DD');
+        var issue_date = "'"+issue_date+"'";
+      }
+
       
       
         await new Promise(async function(resolve,reject){
-          var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")";
-          console.log(qry);
-          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result3,fields) =>{ 
+          // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')";
+          // console.log(qry);
+          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')",async(err,result3,fields) =>{ 
             return resolve(result3);
           });
         }).then(async(result4) => {
-            console.log('Success-loop1 : ',result4);
+            // console.log('Success-loop1 : ',result4);
 
             host= process.env.WEB_URL;
             linkse="https://"+host+"/setpassword?token="+rand3;
@@ -4596,9 +4636,16 @@ CheckTransaction: (req, res) => {
           return resolve(result1);
        });
       }).then(async(result2) => {
-        console.log('sno : ',result2);
-        let serial_no = result2[0].serial_no+1;
-        var registration_id = 'STS-'+current_year+'-'+serial_no;
+        var membership_no = rows[i][3] ? rows[i][3] : '';
+        if(membership_no != ''){
+          var serial_no = rows[i][2] ? rows[i][2] : '';
+          var registration_id = membership_no;
+        }else{
+        // console.log('sno : ',result2);
+        var serial_no = result2[0].serial_no+1;
+        var year = rows[i][1] ? rows[i][1] : '';
+        var registration_id = 'STS-'+year+'-'+serial_no;
+        }
         var member_id = '';
         var member_type = 0;
         var membership_enddate = null;
@@ -4617,39 +4664,72 @@ CheckTransaction: (req, res) => {
         rand3=Math.floor((Math.random() * 30000000000000000) + 34);
         var member_verifycode=rand3;
 
-      var membership_amount = rows[i][1] ? rows[i][1] : '';
-      var full_name = rows[i][2]?rows[i][2]:'';
-      var nric_no = rows[i][3]?rows[i][3]:'';
-      var gender = rows[i][4]?rows[i][4]:'';
-      var dob = rows[i][5]?rows[i][5]:null;
-      var nationality = rows[i][13]?rows[i][13]:'';
-      var mobile = rows[i][6]?rows[i][6]:'';
-      var residential_status = rows[i][8]?rows[i][8]:'';
-      var email = rows[i][7]?rows[i][7]:'';
-      var street1 = rows[i][9]?rows[i][9]:'';
-      var street2 = rows[i][10]?rows[i][10]:'';
-      var unit_no =rows[i][11]?rows[i][11]:'';
-      var postal_code = rows[i][12]?rows[i][12]:'';
-      var habbies = '';
-      var reference = rows[i][14]?rows[i][14]:'';
-      var introducer1 =rows[i][15]?rows[i][15]:'';
-      var introducerNumber1 = rows[i][16]?rows[i][16]:'';
-      var introducer2 =rows[i][17]?rows[i][17]:'';
-      var introducerNumber2 = rows[i][18]?rows[i][18]:'';
-      var comments = rows[i][19]?rows[i][19]:'';
-      var created_on = current_date;
-      var member_type = 0;
-      if(dob!=null){
-        var dob = moment(dob).format('YYYY-MM-DD');
-        var dob = "'"+dob+"'";
-      }
+        var expire_on = rows[i][32]?rows[i][32]:null;
+        // console.log('expires on1 : ',expire_on);
+        if(expire_on!=null){
+          // console.log('expires on2 : ',expire_on);
+          var membership_enddate = moment(expire_on).format('YYYY-MM-DD');
+          var membership_enddate = "'"+membership_enddate+"'";
+        }
+        // console.log('expires on3 : ',membership_enddate);
+
+        var membership_amount = rows[i][4] ? rows[i][4] : '';
+        var full_name = rows[i][5]?rows[i][5]:'';
+        var nric_no = rows[i][6]?rows[i][6]:'';
+        var gender = rows[i][7]?rows[i][7]:'';
+        var dob = rows[i][8]?rows[i][8]:null;
+        var nationality = rows[i][13]?rows[i][13]:'';
+        var mobile = rows[i][9]?rows[i][9]:'';
+        var residential_status = rows[i][11]?rows[i][11]:'';
+        var email = rows[i][10]?rows[i][10]:'';
+        var street1 = rows[i][12]?rows[i][12]:'';
+        var street2 = rows[i][13]?rows[i][13]:'';
+        var unit_no =rows[i][14]?rows[i][14]:'';
+        var postal_code = rows[i][15]?rows[i][15]:'';
+        var habbies = '';
+        var reference = rows[i][17]?rows[i][17]:'';
+        var introducer1 =rows[i][18]?rows[i][18]:'';
+        var introducerNumber1 = rows[i][19]?rows[i][19]:'';
+        var introducer2 =rows[i][20]?rows[i][20]:'';
+        var introducerNumber2 = rows[i][21]?rows[i][21]:'';
+        var comments = rows[i][22]?rows[i][22]:'';
+        if(rows[i][23]==1){ habbies = habbies+'Prayers/Bhajans'; }
+        if(rows[i][24]==1){ habbies = habbies+',Drama'; }
+        if(rows[i][25]==1){ habbies = habbies+',Dance'; }
+        if(rows[i][26]==1){ habbies = habbies+',Movies'; }
+        if(rows[i][27]==1){ habbies = habbies+',Volunteering'; }
+        if(rows[i][28]==1){ habbies = habbies+',Games'; }
+        if(rows[i][29]==1){ habbies = habbies+',Literary Activities'; }
+        if(rows[i][30]==1){ habbies = habbies+',Music'; }
+        // console.log('loop2 : ',habbies);
+        var created_on = current_date;
+        var created_on1 = rows[i][34]?rows[i][34]:null;
+        if(created_on1!=null){
+          var created_on = moment(created_on1).format('YYYY-MM-DD');
+        }
+        var updated_on = rows[i][33]?rows[i][33]:null;
+        var issue_date = rows[i][31]?rows[i][31]:null;
+        var remarks = rows[i][52]?rows[i][52]:'';
+        var member_type = 0;
+        if(dob!=null){
+          var dob = moment(dob).format('YYYY-MM-DD');
+          var dob = "'"+dob+"'";
+        }
+        if(updated_on!=null){
+          var updated_on = moment(updated_on).format('YYYY-MM-DD');
+          var updated_on = "'"+updated_on+"'";
+        }
+        if(issue_date!=null){
+          var issue_date = moment(issue_date).format('YYYY-MM-DD');
+          var issue_date = "'"+issue_date+"'";
+        }
      
 
         await new Promise(async function(resolve,reject){
-          // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"','"+dob+"','"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")";
-          // console.log('qry : ',qry);
+          // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')";
+          // console.log('qry2 : ',qry);
 
-          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result3,fields) =>{ 
+          await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+nric_no+"','"+full_name+"','"+gender+"',"+dob+",'"+nationality+"','"+mobile+"','"+residential_status+"','"+email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')",async(err,result3,fields) =>{ 
             return resolve(result3);
           });
         }).then(async(result4) => {
@@ -4689,16 +4769,23 @@ CheckTransaction: (req, res) => {
                 // res.render('index');
             })});
 
-          // console.log('Success : ',result4);
+          // console.log('loop2 member - Success : ',result4);
 //===============================Start Spouse=======================================//
           await new Promise(async function(resolve,reject){
             await pool.query("SELECT serial_no from members_master where year(created_on)='"+current_year+"' ORDER BY serial_no DESC LIMIT 1", async(err,result5,fields) =>{
               return resolve(result5);
            });
           }).then(async(result6) => {
-            console.log(result6);
+            var membership_no = rows[i][37] ? rows[i][37] : '';
+            if(membership_no != ''){
+              var registration_id = membership_no;
+              let serial_no = rows[i][36] ? rows[i][36] : '';
+            }else{
+            // console.log(result6);
+            var year = rows[i][35] ? rows[i][35] : '';
             let serial_no = result6[0].serial_no+1;
-            var registration_id = 'STS-'+current_year+'-'+serial_no;
+            var registration_id = 'STS-'+year+'-'+serial_no;
+            }
             var member_insertid = result4.insertId;
             var member_id = member_insertid;
             var member_type = 1;
@@ -4717,26 +4804,34 @@ CheckTransaction: (req, res) => {
             }
             rand2=Math.floor((Math.random() * 20000000000000000) + 54);
             var member_verifycode=rand2;
+
+            var expire_on = rows[i][32]?rows[i][32]:null;
+            if(expire_on!=null){
+              var membership_enddate = moment(expire_on).format('YYYY-MM-DD');
+              var membership_enddate = "'"+membership_enddate+"'";
+            }
+
             var membership_amount = rows[i][1]?rows[i][1]:'';
-            var s_full_name = rows[i][20]?rows[i][20]:'';
-            var s_nric_no = rows[i][21]?rows[i][21]:'';
-            var s_gender = rows[i][22]?rows[i][22]:'';
-            var s_dob = rows[i][23]?rows[i][23]:null;
-            var s_nationality = rows[i][27]?rows[i][27]:'';
-            var s_mobile = rows[i][24]?rows[i][24]:'';
-            var s_residential_status = rows[i][26]?rows[i][26]:'';
-            var s_email = rows[i][25]?rows[i][25]:'';
-            var street1 = rows[i][9]?rows[i][9]:'';
-            var street2 = rows[i][10]?rows[i][10]:'';
-            var unit_no = rows[i][11]?rows[i][11]:'';
-            var postal_code = rows[i][12]?rows[i][12]:'';
+            var s_full_name = rows[i][38]?rows[i][38]:'';
+            var s_nric_no = rows[i][39]?rows[i][39]:'';
+            var s_gender = rows[i][40]?rows[i][40]:'';
+            var s_dob = rows[i][41]?rows[i][41]:null;
+            var s_nationality = rows[i][45]?rows[i][45]:'';
+            var s_mobile = rows[i][42]?rows[i][42]:'';
+            var s_residential_status = rows[i][44]?rows[i][44]:'';
+            var s_email = rows[i][43]?rows[i][43]:'';
+            
+            var street1 = rows[i][12]?rows[i][12]:'';
+            var street2 = rows[i][13]?rows[i][13]:'';
+            var unit_no =rows[i][14]?rows[i][14]:'';
+            var postal_code = rows[i][15]?rows[i][15]:'';
             var habbies = '';
-            var reference = rows[i][14]?rows[i][14]:'';
-            var introducer1 = rows[i][15]?rows[i][15]:'';
-            var introducerNumber1 = rows[i][16]?rows[i][16]:'';
-            var introducer2 = rows[i][17]?rows[i][17]:'';
-            var introducerNumber2 = rows[i][18]?rows[i][18]:'';
-            var comments = rows[i][19]?rows[i][19]:'';
+            var reference = rows[i][17]?rows[i][17]:'';
+            var introducer1 =rows[i][18]?rows[i][18]:'';
+            var introducerNumber1 = rows[i][19]?rows[i][19]:'';
+            var introducer2 =rows[i][20]?rows[i][20]:'';
+            var introducerNumber2 = rows[i][21]?rows[i][21]:'';
+            var comments = rows[i][22]?rows[i][22]:'';
             var created_on=current_date;
             if(s_dob!=null){
               var s_dob = moment(s_dob).format('YYYY-MM-DD');
@@ -4744,9 +4839,9 @@ CheckTransaction: (req, res) => {
             }
 
             await new Promise(async function(resolve,reject){
-              // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"','"+s_dob+"','"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")";
-              // console.log('query : ',qry);
-              await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"',"+s_dob+",'"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+")",async(err,result7,fields) =>{
+              // var qry = "insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"',"+s_dob+",'"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')";
+              // console.log('query spouse : ',qry);
+              await pool.query("insert into members_master(serial_no,member_id, registration_id, membershiptype_id, membership_amount, nric_no, full_name,gender,dob,nationality,mobile,residential_status,email,street1,street2,unit_no,postal_code,habbies,reference_by,introducer1,introducer1_mobile,introducer2,introducer2_mobile,comments,member_verifycode,created_on,member_type,membership_type,membership_enddate,updated_on,issue_date,remarks) values('"+serial_no+"','"+member_id+"','"+registration_id+"','"+membershiptype_id+"','"+membership_amount+"','"+s_nric_no+"','"+s_full_name+"','"+s_gender+"',"+s_dob+",'"+s_nationality+"','"+s_mobile+"','"+s_residential_status+"','"+s_email+"','"+street1+"','"+street2+"','"+unit_no+"','"+postal_code+"','"+habbies+"','"+reference+"','"+introducer1+"','"+introducerNumber1+"','"+introducer2+"','"+introducerNumber2+"','"+comments+"','"+member_verifycode+"','"+created_on+"','"+member_type+"','"+membership_type+"',"+membership_enddate+","+updated_on+","+issue_date+",'"+remarks+"')",async(err,result7,fields) =>{
                 return resolve(result7);
               });
             }).then(async(result8) => {
@@ -4775,7 +4870,7 @@ CheckTransaction: (req, res) => {
                       console.log('Message %s sent: %s', info.messageId, info.response);
                           // res.render('index');
                       })});
-            //  console.log('loop2 : ',result8);
+            //  console.log('loop2 spouse : ',result8);
             var child_name1 = rows[i][28]?rows[i][28]:'';
             var child_dob1 = rows[i][29]?rows[i][29]:null;
             var child_gender1 = rows[i][30]?rows[i][30]:'';
@@ -4794,20 +4889,20 @@ CheckTransaction: (req, res) => {
 
             if(child_name1){
               await new Promise(async function(resolve,reject){
-                var qry = "insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name1+"',"+child_dob1+",'"+child_gender1+"','"+created_on+"')";
-                console.log('child1 qry : ',qry);
+                // var qry = "insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name1+"',"+child_dob1+",'"+child_gender1+"','"+created_on+"')";
+                // console.log('child1 qry : ',qry);
                 await pool.query("insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name1+"',"+child_dob1+",'"+child_gender1+"','"+created_on+"')",async(err,result9,fields) =>{
                   return resolve(result9);
                 });
               }).then(async(result10) => {
-                console.log('child1 : ',result10);
+                // console.log('child1 : ',result10);
                 if(child_name2){
                   await new Promise(async function(resolve,reject){
                     await pool.query("insert into childrens_master(member_id, child_name, dob, gender,created_on) values('"+member_insertid+"','"+child_name2+"',"+child_dob2+",'"+child_gender2+"','"+created_on+"')",async(err,result11,fields) =>{
                       return resolve(result11);
                     });
                   }).then(async(result12) => {
-                    console.log('child2 : ',result12);
+                    // console.log('child2 : ',result12);
                   }).catch(err => {
                     console.log(err);
                   })
