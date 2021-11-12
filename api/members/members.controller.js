@@ -2597,7 +2597,7 @@ getSpouseBymemberId(element, (err, results1) => {
          if (err) {
         console.log(err);
       }
-      if (results) {
+    if (results) {
 var digits = '0123456789'; 
     let OTP = ''; 
     for (let i = 0; i < 6; i++ ) { 
@@ -2651,6 +2651,12 @@ var digits = '0123456789';
   
       });
     });
+  }else{
+    return res.json({
+      success: 0,
+      message: "No mail exist."
+    });
+   
   }
    });
   },
