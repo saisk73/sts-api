@@ -2254,6 +2254,50 @@ module.exports = {
     );
   },
 
+  addeventimages: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into eventsimages_master(event_id,image) 
+                values(?,?)`,
+      [
+        data.event_id,
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  DeleteEventImage: (id, callBack) => {
+    pool.query(
+      `delete from eventsimages_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
+  getEventImages:(event_id,callBack) => {
+    pool.query(
+      `select * from eventsimages_master where event_id=?`,
+      [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   
 
   

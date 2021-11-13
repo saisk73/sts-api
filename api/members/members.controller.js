@@ -140,7 +140,10 @@ DeleteEvent,
 getUpcomingEvents,
 getPastEvents,
 getRecentEvents,
-changeemailidBymemberId
+changeemailidBymemberId,
+addeventimages,
+DeleteEventImage,
+getEventImages
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5039,6 +5042,42 @@ CheckTransaction: (req, res) => {
     });
     },
 
+    DeleteEventImage: (req, res) => {
+      // const body = req.body;
+      const id = req.params.id;
+      DeleteEventImage(id,(err, results) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        return res.json({
+          success: 1,
+          data: "Deleted successfully"
+        });
+      
+      });
+      },
+
+      getEventImages: (req, res) => {
+        const event_id = req.params.event_id;
+        getEventImages(event_id, (err, results) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (!results) {
+          return res.json({
+            success: 0,
+            message: "Record not Found"
+          });
+        }
+        return res.json({
+          success: 1,
+          data: results
+        });
+      });
+      },
+
   getEvents: (req, res) => {
     getEvents( (err, results) => {
     if (err) {
@@ -5136,6 +5175,34 @@ CheckTransaction: (req, res) => {
     return res.json({
       success: 1,
       data: results
+    });
+  });
+  },
+
+  addeventimages: (req, res) => { 
+    // const body = req.body.image_url; 
+    const body = req.body;
+   // Some image data uri
+   let dataURI = body.image_url;
+   let event_id = body.event_id;
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   if(dataURI){
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/eventimages/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath)
+  //  console.log(image_name);
+   body.image_name = image_name;
+   }
+   addeventimages(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
     });
   });
   },

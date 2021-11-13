@@ -99,6 +99,9 @@ const {
   getPastEvents,
   getRecentEvents,
   changemailidBymemberId,
+  addeventimages,
+  DeleteEventImage,
+  getEventImages,
   TestMail
 } = require("./members.controller");
 
@@ -228,6 +231,8 @@ router.get("/upcomingevents", getUpcomingEvents);
 router.get("/pastevents", getPastEvents);
 router.get("/recentevents", getRecentEvents);
 
-
+router.post("/addeventimages", addeventimages);
+router.get("/deleteeventimage/:id", DeleteEventImage);
+router.get("/eventimages/:event_id", getEventImages);
 
 module.exports = router;
