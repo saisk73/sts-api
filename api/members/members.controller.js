@@ -5148,10 +5148,14 @@ AddCommiteeMembers: (req, res) => {
      if(err){
         console.log('err : ',err);
        }
+    if(results){
     return res.json({
       success: 1,
       message: "Added successfully"
     });
+  }else{
+    console.log('err : ',err);
+  }
   });
    }
   },

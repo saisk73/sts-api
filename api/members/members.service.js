@@ -2359,6 +2359,7 @@ module.exports = {
   },
 
   AddCommiteeMembers: (data, callBack) => {
+    // console.log('fghjhgfdgh : ',data);
     pool.query(
       `insert into commiteemembers_master(membership_id,name,commitee_id,designation_id,image) values(?,?,?,?,?)`,
       [
@@ -2369,6 +2370,10 @@ module.exports = {
         data.image_name
       ],
       (error, results, fields) => {
+        // console.log({
+        //   'err':error,
+        //   'results':results
+        // });
         if (error) {
           callBack(error);
         }
