@@ -2334,7 +2334,7 @@ module.exports = {
 
   getCommitee:(callBack) => {
     pool.query(
-      `select * from committee_master`,
+      `select *,concat(from_year,'-',to_year) as commitee_year from committee_master`,
       [],
       (error, results, fields) => {
         if (error) {
