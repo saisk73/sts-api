@@ -2345,6 +2345,19 @@ module.exports = {
     );
   },
 
+  getCommiteeDesignations:(callBack) => {
+    pool.query(
+      `select * from commiteedesignations_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getCommitteeById:(id,callBack) => {
     pool.query(
       `select * from committee_master where id=?`,

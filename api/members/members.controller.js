@@ -147,7 +147,8 @@ getEventImages,
 UpdateCommitee,
 AddCommitee,
 getCommitee,
-getCommitteeById
+getCommitteeById,
+getCommiteeDesignations
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5059,6 +5060,25 @@ CheckTransaction: (req, res) => {
   getCommitteeById: (req, res) => {
     const id = req.params.id;
     getCommitteeById(id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getCommiteeDesignations: (req, res) => {
+    getCommiteeDesignations( (err, results) => {
     if (err) {
       console.log(err);
       return;
