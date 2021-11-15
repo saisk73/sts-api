@@ -5146,7 +5146,7 @@ AddCommiteeMembers: (req, res) => {
     body.created_on = current_date;
     AddCommiteeMembers(body, (err, results) => {
      if(err){
-        console.log(err);
+        console.log('err : ',err);
        }
     return res.json({
       success: 1,
