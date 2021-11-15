@@ -2347,7 +2347,7 @@ module.exports = {
 
   getCommiteeDesignations:(callBack) => {
     pool.query(
-      `select * from commiteedesignations_master`,
+      `select * from committeedesignations_master`,
       [],
       (error, results, fields) => {
         if (error) {
@@ -2361,7 +2361,7 @@ module.exports = {
   AddCommiteeMembers: (data, callBack) => {
     // console.log('fghjhgfdgh : ',data);
     pool.query(
-      `insert into commiteemembers_master(membership_id,name,commitee_id,designation_id,image) values(?,?,?,?,?)`,
+      `insert into committeemembers_master(membership_id,name,commitee_id,designation_id,image) values(?,?,?,?,?)`,
       [
         data.membership_id,
         data.name,
@@ -2385,7 +2385,7 @@ module.exports = {
   UpdateCommiteeMemberswithimg: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update commiteemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=?,image=? where id=?`,
+      `update committeemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=?,image=? where id=?`,
       [
         data.membership_id,
         data.name,
@@ -2406,7 +2406,7 @@ module.exports = {
   UpdateCommiteeMembers: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update commiteemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=? where id=?`,
+      `update committeemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=? where id=?`,
       [
         data.membership_id,
         data.name,
@@ -2438,7 +2438,7 @@ module.exports = {
 
   getCommiteeMembers:(commitee_id,callBack) => {
     pool.query(
-      `select commiteemembers_master.*,(select designation from commiteedesignations_master where id=commiteemembers_master.designation_id) as designation from commiteemembers_master where commiteemembers_master.commitee_id=?`,
+      `select committeemembers_master.*,(select designation from committeedesignations_master where id=committeemembers_master.designation_id) as designation from committeemembers_master where committeemembers_master.commitee_id=?`,
       [commitee_id],
       (error, results, fields) => {
         if (error) {
@@ -2451,7 +2451,7 @@ module.exports = {
 
   getCommitteeMemberById:(id,callBack) => {
     pool.query(
-      `select * from commiteemembers_master where id=?`,
+      `select * from committeemembers_master where id=?`,
       [id],
       (error, results, fields) => {
         if (error) {
