@@ -2433,7 +2433,7 @@ module.exports = {
 
   getCommiteeMembers:(commitee_id,callBack) => {
     pool.query(
-      `select * from commiteemembers_master where commitee_id=?`,
+      `select commiteemembers_master.*,(select designation from commiteedesignations_master where id=commiteemembers_master.designation_id) as designation from commiteemembers_master where commitee_id=?`,
       [commitee_id],
       (error, results, fields) => {
         if (error) {
