@@ -2334,7 +2334,7 @@ module.exports = {
 
   getCommitee:(callBack) => {
     pool.query(
-      `select *,concat(from_year,'-',to_year) as commitee_year from committee_master`,
+      `select *,concat(from_year,'-',to_year) as commitee_year,(select max(id) from sts.committee_master) as maxid from committee_master order by from_year desc`,
       [],
       (error, results, fields) => {
         if (error) {
