@@ -2358,9 +2358,95 @@ module.exports = {
     );
   },
 
+  AddCommiteeMembers: (data, callBack) => {
+    pool.query(
+      `insert into commiteemembers_master(membership_id,name,commitee_id,designation_id,image) values(?,?,?,?,?)`,
+      [
+        data.membership_id,
+        data.name,
+        data.commitee_id,
+        data.designation_id,
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateCommiteeMemberswithimg: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update commiteemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=?,image=? where id=?`,
+      [
+        data.membership_id,
+        data.name,
+        data.commitee_id,
+        data.designation_id,
+        data.image_name,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateCommiteeMembers: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update commiteemembers_master set membership_id=?,name=?,commitee_id=?,designation_id=? where id=?`,
+      [
+        data.membership_id,
+        data.name,
+        data.commitee_id,
+        data.designation_id,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getCommitteeById:(id,callBack) => {
     pool.query(
       `select * from committee_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getCommiteeMembers:(committee_id,callBack) => {
+    pool.query(
+      `select * from commiteemembers_master where committee_id=?`,
+      [committee_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getCommitteeMemberById:(id,callBack) => {
+    pool.query(
+      `select * from commiteemembers_master where id=?`,
       [id],
       (error, results, fields) => {
         if (error) {

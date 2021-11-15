@@ -106,6 +106,9 @@ const {
   getCommitee,
   getCommitteeById,
   getCommiteeDesignations,
+  AddCommiteeMembers,
+  getCommiteeMembers,
+  getCommitteeMemberById,
   TestMail
 } = require("./members.controller");
 
@@ -244,6 +247,10 @@ router.get("/commitee", getCommitee);
 router.get("/committee/:id", getCommitteeById);
 
 router.get("/commiteedesignations", getCommiteeDesignations);
+
+router.post("/commiteemembers", AddCommiteeMembers);
+router.get("/commiteemembers/:committee_id", getCommiteeMembers);
+router.get("/commiteemember/:id", getCommitteeMemberById);
 
 
 module.exports = router;
