@@ -2431,10 +2431,10 @@ module.exports = {
     );
   },
 
-  getCommiteeMembers:(committee_id,callBack) => {
+  getCommiteeMembers:(commitee_id,callBack) => {
     pool.query(
-      `select * from commiteemembers_master where committee_id=?`,
-      [committee_id],
+      `select * from commiteemembers_master where commitee_id=?`,
+      [commitee_id],
       (error, results, fields) => {
         if (error) {
           callBack(error);
