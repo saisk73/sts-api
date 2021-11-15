@@ -102,6 +102,9 @@ const {
   addeventimages,
   DeleteEventImage,
   getEventImages,
+  AddCommitee,
+  getCommitee,
+  getCommitteeById,
   TestMail
 } = require("./members.controller");
 
@@ -234,5 +237,9 @@ router.get("/recentevents", getRecentEvents);
 router.post("/addeventimages", addeventimages);
 router.get("/deleteeventimage/:id", DeleteEventImage);
 router.get("/eventimages/:event_id", getEventImages);
+
+router.post("/addcommitee", AddCommitee);
+router.get("/commitee", getCommitee);
+router.get("/committee/:id", getCommitteeById);
 
 module.exports = router;

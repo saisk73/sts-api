@@ -143,7 +143,11 @@ getRecentEvents,
 changeemailidBymemberId,
 addeventimages,
 DeleteEventImage,
-getEventImages
+getEventImages,
+UpdateCommitee,
+AddCommitee,
+getCommitee,
+getCommitteeById
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5007,8 +5011,73 @@ CheckTransaction: (req, res) => {
    }
   },
 
+  AddCommitee: (req, res) => { 
+   const body = req.body;
+   let id = body.id;
+   if(id){
+      UpdateCommitee(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     });  
+   }else{
+    AddCommitee(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+   }
+  },
+
+  getCommitee: (req, res) => {
+    getCommitee( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getCommitteeById: (req, res) => {
+    const id = req.params.id;
+    getCommitteeById(id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
   getEvents: (req, res) => {
-    getForums( (err, results) => {
+    getEvents( (err, results) => {
     if (err) {
       console.log(err);
       return;

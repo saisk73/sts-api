@@ -2298,6 +2298,67 @@ module.exports = {
     );
   },
 
+  AddCommitee: (data, callBack) => {
+    pool.query(
+      `insert into committee_master(from_year,to_year) values(?,?)`,
+      [
+        data.from_year,
+        data.to_year
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateCommitee: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update committee_master set from_year=?,to_year=? where id=?`,
+      [
+        data.from_year,
+        data.to_year,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getCommitee:(callBack) => {
+    pool.query(
+      `select * from committee_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getCommitteeById:(id,callBack) => {
+    pool.query(
+      `select * from committee_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+
   
 
   
