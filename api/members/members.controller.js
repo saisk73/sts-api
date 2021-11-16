@@ -5065,7 +5065,7 @@ CheckTransaction: (req, res) => {
   
    }else{
     body.created_on = current_date;
-   AddService(body, (err, results) => {
+    addService(body, (err, results) => {
      if(err){
         console.log(err);
        }
