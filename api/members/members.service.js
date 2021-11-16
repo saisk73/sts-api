@@ -2468,7 +2468,7 @@ module.exports = {
       `insert into services_master(name,description,image) 
                 values(?,?,?)`,
       [
-        data.event_name,
+        data.name,
         data.description,
         data.image_name?data.image_name:'',
       ],
