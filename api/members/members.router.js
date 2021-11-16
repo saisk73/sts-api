@@ -112,6 +112,11 @@ const {
   addService,
   getServices,
   getServiceById,
+  addServiceContent,
+  getServiceContents,
+  addServiceGallery,
+  getServiceGallery,
+  DeleteServiceGallery,
   TestMail
 } = require("./members.controller");
 
@@ -258,7 +263,13 @@ router.get("/commiteemember/:id", getCommitteeMemberById);
 router.post("/addservice", addService);
 router.get("/services", getServices);
 router.get("/service/:id", getServiceById);
-// router.get("/deleteevent/:id", DeleteEvent);
+
+router.post("/addservicecontent", addServiceContent);
+router.get("/servicecontents/:service_id", getServiceContents);
+
+router.post("/addservicegallery", addServiceGallery);
+router.get("/servicegallery/:service_id", getServiceGallery);
+router.get("/deleteservicegallery/:id", DeleteServiceGallery);
 
 
 module.exports = router;

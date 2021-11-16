@@ -158,7 +158,11 @@ addService,
 UpdateServicewithimg,
 UpdateService,
 getServices,
-getServiceById
+getServiceById,
+getServiceContents,
+getServiceGallery,
+addServiceGallery,
+DeleteServiceGallery
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5077,6 +5081,105 @@ CheckTransaction: (req, res) => {
    }
   },
 
+  addServiceContent: (req, res) => { 
+   const body = req.body;
+   let id = body.id;
+   if(id){
+      UpdateServiceContent(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     });
+   }else{
+    body.created_on = current_date;
+    addServiceContent(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+   }
+  },
+
+  getServiceContents: (req, res) => {
+    const service_id = req.params.service_id;
+    getServiceContents(service_id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    getServiceGallery(service_id, (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    return res.json({
+      success: 1,
+      contents: results,
+      gallery: result
+    });
+  });
+  });
+  },
+
+  addServiceGallery: (req, res) => { 
+    // const body = req.body.image_url; 
+   const body = req.body;
+   let dataURI = body.image_url;
+  if(dataURI){
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/services/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath)
+  //  console.log(image_name);
+   body.image_name = image_name;
+   addServiceGallery(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+ }else{
+  return res.json({
+    success: 0,
+    message: "No Image Selected"
+  });
+ } 
+  },
+
+  getServiceGallery: (req, res) => {
+    const service_id = req.params.service_id;
+    getServiceGallery(service_id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
   getServices: (req, res) => {
     getServices( (err, results) => {
     if (err) {
@@ -5095,6 +5198,22 @@ CheckTransaction: (req, res) => {
     });
   });
   },
+
+  DeleteServiceGallery: (req, res) => {
+    // const body = req.body;
+    const id = req.params.id;
+    DeleteServiceGallery(id,(err, results) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      return res.json({
+        success: 1,
+        data: "Deleted successfully"
+      });
+    
+    });
+    },
 
   getServiceById: (req, res) => {
     const id = req.params.id;

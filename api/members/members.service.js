@@ -2187,7 +2187,7 @@ module.exports = {
         if (error) {
           callBack(error);
         }
-        return callBack(null, results[0]);
+        return callBack(null, results);
       }
     );
   },
@@ -2280,7 +2280,7 @@ module.exports = {
         if (error) {
           callBack(error);
         }
-        return callBack(null, results[0]);
+        return callBack(null, results);
       }
     );
   },
@@ -2545,11 +2545,100 @@ module.exports = {
   },
 
 
-  
+  addServiceContent: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into servicecontents_master(service_id,title,description) 
+                values(?,?,?)`,
+      [
+        data.service_id,
+        data.title,
+        data.description
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 
-  
+  UpdateServiceContent: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update servicecontents_master set service_id=?,title=?,description=? where id=?`,
+      [
+        data.service_id,
+        data.title,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 
-  
+  getServiceContents:(service_id, callBack) => {
+    pool.query(
+      `select * from servicecontents_master where service_id=?`,
+      [service_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getServiceGallery:(service_id, callBack) => {
+    pool.query(
+      `select * from servicesgallery_master where service_id=?`,
+      [service_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  addServiceGallery: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into servicesgallery_master(service_id,image) 
+                values(?,?)`,
+      [
+        data.service_id,
+        data.image_name
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  DeleteServiceGallery: (id, callBack) => {
+    pool.query(
+      `delete from servicesgallery_master where id = ?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
   
   
 
