@@ -2462,6 +2462,88 @@ module.exports = {
     );
   },
 
+  addService: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into services_master(name,description,image) 
+                values(?,?,?)`,
+      [
+        data.event_name,
+        data.description,
+        data.image_name?data.image_name:'',
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateServicewithimg: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update services_master set name=?,image=?,description=? where id=?`,
+      [
+        data.name,
+        data.image_name,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateService: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update services_master set name=?,description=? where id=?`,
+      [
+        data.name,
+        data.description,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getServices:(callBack) => {
+    pool.query(
+      `select * from services_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getServiceById:(id, callBack) => {
+    pool.query(
+      `select * from services_master where id=?`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
 
   
 

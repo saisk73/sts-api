@@ -153,7 +153,12 @@ AddCommiteeMembers,
 UpdateCommiteeMemberswithimg,
 UpdateCommiteeMembers,
 getCommiteeMembers,
-getCommitteeMemberById
+getCommitteeMemberById,
+addService,
+UpdateServicewithimg,
+UpdateService,
+getServices,
+getServiceById
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5015,6 +5020,100 @@ CheckTransaction: (req, res) => {
     });
   });
    }
+  },
+
+  addService: (req, res) => { 
+    // const body = req.body.image_url; 
+   const body = req.body;
+   // Some image data uri
+   let dataURI = body.image_url;
+   let id = body.id;
+  if(dataURI){
+   // It will create the full path in case it doesn't exist
+   // If the extension is defined (e.g. fileName.png), it will be preserved, otherwise the lib will try to guess from the Data URI
+   rand =Math.floor((Math.random() * 30000000000000000) + 34);
+   let filePath = './uploads/services/'+rand+'.png';
+   var image_name = rand+'.png';
+   // Returns a Promise
+   imageDataURI.outputFile(dataURI, filePath)
+  //  console.log(image_name);
+   body.image_name = image_name;
+  }
+   if(id){
+     if(dataURI){
+    UpdateServicewithimg(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     }); 
+  
+     }else{
+      UpdateService(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+       return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     });
+     }
+  
+   }else{
+    body.created_on = current_date;
+   AddService(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+   }
+  },
+
+  getServices: (req, res) => {
+    getServices( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getServiceById: (req, res) => {
+    const id = req.params.id;
+    getServiceById(id, (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
   },
 
   AddCommitee: (req, res) => { 
