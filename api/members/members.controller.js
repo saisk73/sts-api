@@ -2154,7 +2154,6 @@ getMemberDetails: (req, res) => {
           console.log(err);
           return;
         }
-
         getEventsHistoryByMemberId(id, (err, results4) => {
           if (err) {
             console.log(err);
@@ -2206,7 +2205,6 @@ getMemberDetails: (req, res) => {
               console.log(err);
               return;
             }
-        
         if(results){
           return res.status(200).json({
           success: 1,
