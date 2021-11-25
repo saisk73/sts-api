@@ -121,7 +121,7 @@ module.exports = {
   },
      AddMemberOtp: (data, callBack) => {
     pool.query(
-      `insert into  membersverify_otp(member_email,member_verifyotp,otp_expiry_time,created_on) 
+      `insert into membersverify_otp(member_email,member_verifyotp,otp_expiry_time,created_on) 
                 values(?,?,?,?)`,
       [
         data.email,
@@ -331,7 +331,7 @@ module.exports = {
     );
   },
     deleteOtp: (data, callBack) => {
-     console.log(data);
+    //  console.log(data);
     pool.query(
       `delete from  membersverify_otp  where member_verifyotpid = ?`,
       [
@@ -1268,7 +1268,7 @@ module.exports = {
     // console.log(data);
     pool.query(
       `insert into config_master(mail_email,mail_pass,mail_smtp,otpmail_email,otpmail_pass,otpmail_smtp) 
-                values(?,?)`,
+                values(?,?,?,?,?,?)`,
       [
         data.mail_email,
         data.mail_pass,

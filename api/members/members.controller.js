@@ -521,6 +521,7 @@ module.exports = {
    var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
    var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
    body.otpexpiry_datetime = otpexpiry_datetime;
+   console.log(body);
     UpdateLoginOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
@@ -711,13 +712,13 @@ module.exports = {
       } else {
         return res.json({
           success: 0,
-          data: "Invalid OTP"
+          data: "Invalid OTP1"
         });
       }
     }else{
       return res.json({
           success: 0,
-          data: "Invalid OTP"
+          data: "Invalid OTP2"
         });
     }
 
@@ -1961,11 +1962,9 @@ MemberShipUpdate: (req, res) => {
           data: "Email id doesn't exist"
         });
       }
-      console.log(body.password);
-      console.log(results.password);
       const result = compareSync(body.password, results.password);
-      console.log(result);
-      if (!result) {
+
+      if (result) {
         var digits = '0123456789'; 
     let OTP = ''; 
     for (let i = 0; i < 6; i++ ) { 
@@ -2630,6 +2629,9 @@ var digits = '0123456789';
     } 
    body.member_verifyotp = OTP;
    body.created_on = current_date;
+   var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+   var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+   body.otpexpiry_datetime = otpexpiry_datetime;
     AddMemberOtp(body, (err, results) => {
     let transporter = nodeMailer.createTransport({
           host: 'mail.sts.org.sg',
@@ -3470,6 +3472,9 @@ AboutUs: (req, res) => {
 },
 
 getAboutUs: (req, res) => {
+  const salt = genSaltSync(10);
+  var password = hashSync('123456789', salt);
+  console.log(password);
   getAboutUs( (err, results) => {
   if (err) {
     console.log(err);
