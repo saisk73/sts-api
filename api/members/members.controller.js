@@ -161,6 +161,7 @@ getServices,
 getServiceById,
 getServiceContents,
 addServiceContent,
+UpdateServiceContent,
 getServiceGallery,
 addServiceGallery,
 DeleteServiceGallery
