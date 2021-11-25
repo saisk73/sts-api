@@ -160,6 +160,7 @@ UpdateService,
 getServices,
 getServiceById,
 getServiceContents,
+addServiceContent,
 getServiceGallery,
 addServiceGallery,
 DeleteServiceGallery
