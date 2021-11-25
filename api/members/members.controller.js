@@ -1961,8 +1961,11 @@ MemberShipUpdate: (req, res) => {
           data: "Email id doesn't exist"
         });
       }
+      console.log(body.password);
+      console.log(results.password);
       const result = compareSync(body.password, results.password);
-      if (result) {
+      console.log(result);
+      if (!result) {
         var digits = '0123456789'; 
     let OTP = ''; 
     for (let i = 0; i < 6; i++ ) { 
