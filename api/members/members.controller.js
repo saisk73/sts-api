@@ -3474,9 +3474,9 @@ AboutUs: (req, res) => {
 },
 
 getAboutUs: (req, res) => {
-  const salt = genSaltSync(10);
-  var password = hashSync('123456789', salt);
-  console.log(password);
+  // var content = '<p>text 123</p>';
+  // var txt = content.replace(/<\/?[^>]+(>|$)/g, "");
+  // console.log(txt);
   getAboutUs( (err, results) => {
   if (err) {
     console.log(err);
@@ -5129,6 +5129,13 @@ CheckTransaction: (req, res) => {
       if (err) {
         console.log(err);
         return;
+      }
+      if(results){
+        results.forEach(element => { 
+        var content = element.description;
+        element.description = content.replace(/<\/?[^>]+(>|$)/g, "");
+        console.log(element.description);
+        })
       }
     return res.json({
       success: 1,
