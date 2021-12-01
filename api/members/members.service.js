@@ -2107,9 +2107,10 @@ module.exports = {
   CreateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into events_master(event_name,description,image,adult_fee,child_fee,from_date,to_date,max_tickets,closed_date,created_on) 
-                values(?,?,?,?,?,?,?,?,?,?)`,
+      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,from_date,to_date,max_tickets,closed_date,created_on) 
+                values(?,?,?,?,?,?,?,?,?,?,?)`,
       [
+        data.eventtype_id,
         data.event_name,
         data.description,
         data.image_name?data.image_name:'',
@@ -2133,8 +2134,9 @@ module.exports = {
   UpdateEventwithimg: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set event_name=?,description=?,image=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?,event_name=?,description=?,image=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
       [
+        data.eventtype_id,
         data.event_name,
         data.description,
         data.image_name,
@@ -2158,8 +2160,9 @@ module.exports = {
   UpdateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set event_name=?,description=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?, event_name=?,description=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
       [
+        data.eventtype_id,
         data.event_name,
         data.description,
         data.adult_fee,
