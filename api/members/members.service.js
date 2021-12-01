@@ -2205,6 +2205,19 @@ module.exports = {
     );
   },
 
+  getEventstypes:(callBack) => {
+    pool.query(
+      `select * from eventtypes_master`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getEventById:(id,callBack) => {
     pool.query(
       `select * from events_master where id=?`,

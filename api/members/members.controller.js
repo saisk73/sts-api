@@ -164,7 +164,8 @@ addServiceContent,
 UpdateServiceContent,
 getServiceGallery,
 addServiceGallery,
-DeleteServiceGallery
+DeleteServiceGallery,
+getEventstypes
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5437,6 +5438,25 @@ AddCommiteeMembers: (req, res) => {
 
   getEvents: (req, res) => {
     getEvents( (err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (!results) {
+      return res.json({
+        success: 0,
+        message: "Record not Found"
+      });
+    }
+    return res.json({
+      success: 1,
+      data: results
+    });
+  });
+  },
+
+  getEventstypes: (req, res) => {
+    getEventstypes( (err, results) => {
     if (err) {
       console.log(err);
       return;
