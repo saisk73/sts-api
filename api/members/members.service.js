@@ -2107,8 +2107,8 @@ module.exports = {
   CreateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,from_date,to_date,max_tickets,closed_date,created_on) 
-                values(?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,adult_fee_nm,child_fee_nm,from_date,to_date,max_tickets,closed_date,created_on) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2116,6 +2116,8 @@ module.exports = {
         data.image_name?data.image_name:'',
         data.adult_fee,
         data.child_fee,
+        data.adult_fee_nm,
+        data.child_fee_nm,
         data.from_date,
         data.to_date,
         data.max_tickets,
@@ -2134,7 +2136,7 @@ module.exports = {
   UpdateEventwithimg: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set eventtype_id=?,event_name=?,description=?,image=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?,event_name=?,description=?,image=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2142,6 +2144,8 @@ module.exports = {
         data.image_name,
         data.adult_fee,
         data.child_fee,
+        data.adult_fee_nm,
+        data.child_fee_nm,
         data.from_date,
         data.to_date,
         data.max_tickets,
@@ -2160,13 +2164,15 @@ module.exports = {
   UpdateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set eventtype_id=?, event_name=?,description=?,adult_fee=?,child_fee=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?, event_name=?,description=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,closed_date=? where id=?`,
       [
         data.eventtype_id,
         data.event_name,
         data.description,
         data.adult_fee,
         data.child_fee,
+        data.adult_fee_nm,
+        data.child_fee_nm,
         data.from_date,
         data.to_date,
         data.max_tickets,
