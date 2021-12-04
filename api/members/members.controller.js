@@ -5684,7 +5684,7 @@ AddCommiteeMembers: (req, res) => {
 VerifyMember: (req, res) => {
   const body = req.body;
   var membership_id = body.membership_id;
-  var email = body.email;
+  // var email = body.email;
   if(membership_id!='' && membership_id!=null && membership_id!=undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
       if(result){
@@ -5755,8 +5755,8 @@ VerifyMember: (req, res) => {
         // });
       }else{
         return res.json({
-          success: 00,
-          message: "Invalid Membeship ID"
+          success: 0,
+          message: "Invalid Membeship ID123"
         }); 
       }
     });
