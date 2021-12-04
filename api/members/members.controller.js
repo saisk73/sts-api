@@ -5685,6 +5685,7 @@ VerifyMember: (req, res) => {
   const body = req.body;
   var membership_id = body.membership_id;
   var email = body.email;
+  console.log('body : ',body);
   console.log('membership_id :', membership_id);
   console.log('email :',email);
   if(membership_id!=undefined && email==undefined){
