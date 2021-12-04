@@ -5685,7 +5685,7 @@ VerifyMember: (req, res) => {
   const body = req.body;
   var membership_id = body.membership_id;
   var email = body.email;
-  if(membership_id!='' && membership_id!=null && membership_id!=undefined){
+  if(membership_id!=undefined && email==undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
       console.log('dfdffdsfd : ',result.length);
       if(result.length==0){
@@ -5763,7 +5763,7 @@ VerifyMember: (req, res) => {
       }
     });
 
-  }else if(email!=''){
+  }else if(email!=undefined && membership_id==undefined){
     var digits = '0123456789'; 
   let OTP = ''; 
   for (let i = 0; i < 6; i++ ) { 
