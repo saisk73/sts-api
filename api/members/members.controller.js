@@ -5687,6 +5687,12 @@ VerifyMember: (req, res) => {
   // var email = body.email;
   if(membership_id!='' && membership_id!=null && membership_id!=undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
+      if(!result){
+        return res.json({
+          success: 0,
+          message: "Invalid Membeship ID123"
+        });
+      }
       if(result){
         var digits = '0123456789'; 
         let OTP = ''; 
@@ -5753,11 +5759,6 @@ VerifyMember: (req, res) => {
         //   message: "Otp sent to your email please verify it",
         //   data: result
         // });
-      }else{
-        return res.json({
-          success: 0,
-          message: "Invalid Membeship ID123"
-        }); 
       }
     });
 
