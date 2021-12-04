@@ -5684,7 +5684,7 @@ AddCommiteeMembers: (req, res) => {
 VerifyMember: (req, res) => {
   const body = req.body;
   var membership_id = body.membership_id;
-  // var email = body.email;
+  var email = body.email;
   if(membership_id!='' && membership_id!=null && membership_id!=undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
       console.log('dfdffdsfd : ',result.length);
@@ -5763,7 +5763,7 @@ VerifyMember: (req, res) => {
       }
     });
 
-  }else{
+  }else if(email!=''){
     var digits = '0123456789'; 
   let OTP = ''; 
   for (let i = 0; i < 6; i++ ) { 
