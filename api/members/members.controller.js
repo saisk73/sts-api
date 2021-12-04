@@ -5687,7 +5687,7 @@ VerifyMember: (req, res) => {
   // var email = body.email;
   if(membership_id!='' && membership_id!=null && membership_id!=undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
-      if(!result){
+      if(result.length==0){
         return res.json({
           success: 0,
           message: "Invalid Membeship ID123"
