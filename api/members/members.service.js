@@ -2652,6 +2652,46 @@ module.exports = {
     );
   },
 
+  AddEventBooking: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into events_bookings_master(event_id,member_id,membership_id,full_name,email,mobile,address,adult_tickets,child_tickets,total_amount,txn_no,payment_mode) 
+                values(?,?,?,?,?,?,?,?,?)`,
+      [
+        data.event_id,
+        data.member_id,
+        data.membership_id,
+        data.full_name,
+        data.email,
+        data.mobile,
+        data.address,
+        data.adult_tickets,
+        data.child_tickets,
+        data.total_amount,
+        data.txn_no,
+        data.payment_mode
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  CheckMemberShipid:(membership_id,current_date,callBack) =>{
+    var test = "select * from members_master where '"+current_date+"' <= membership_enddate and registration_id=?";
+    pool.query(test,[membership_id],
+    (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results[0]);
+      }
+    );
+  },
+
   DeleteServiceGallery: (id, callBack) => {
     pool.query(
       `delete from servicesgallery_master where id = ?`,

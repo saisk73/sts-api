@@ -165,7 +165,9 @@ UpdateServiceContent,
 getServiceGallery,
 addServiceGallery,
 DeleteServiceGallery,
-getEventstypes
+getEventstypes,
+AddEventBooking,
+CheckMemberShipid
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5654,6 +5656,171 @@ AddCommiteeMembers: (req, res) => {
     });
   });
   },
+
+  AddEventBooking: (req, res) => { 
+    // const body = req.body.image_url; 
+   const body = req.body;
+   var membership_id = body.membership_id;
+   CheckMemberShipid(membership_id,current_date, (err, result) => {
+    if(!result){
+      return res.json({
+        success: 1,
+        message: "Added successfully"
+      });
+    }
+    body.member_id = result.id;
+    AddEventBooking(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+});
+},
+
+VerifyMember: (req, res) => {
+  const body = req.body;
+  var membership_id = body.membership_id;
+  var email = body.email;
+  if(membership_id!='' || membership_id!=null || membership_id!=undefined){
+    CheckMemberShipid(membership_id,current_date, (err, result) => {
+      if(result){
+        var digits = '0123456789'; 
+        let OTP = ''; 
+        for (let i = 0; i < 6; i++ ) { 
+            OTP += digits[Math.floor(Math.random() * 10)]; 
+        } 
+       body.member_verifyotp = OTP;
+       body.created_on = current_date;
+       var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+       var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+       body.otpexpiry_datetime = otpexpiry_datetime;
+       body.email = result.email;
+      deleteOldMemberOtp(body.email, (err, results1) => {
+      AddMemberOtp(body, (err, results) => {
+        let transporter = nodeMailer.createTransport({
+              host: 'mail.sts.org.sg',
+              port: 465,
+              secure: true,
+              auth: {
+                  user: 'otp@sts.org.sg',
+                  pass: '@STSotpsend1'
+              }
+          });
+              let emailTemplatemswaw;
+        ejs
+        .renderFile(path.join(__dirname, "views/eventotp.ejs"), {
+          user_firstname: result.full_name,
+        user_otp:body.member_verifyotp
+      
+        })
+      .then(result => {
+        emailTemplatemswaw=result;
+          let mailOptions = {
+              from: 'otp@sts.org.sg', // sender address
+              to: body.email,// list of receivers
+              subject: 'Otp Verification', // Subject line
+              text:'Please Verify Your Otp', // plain text body
+             //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+         html:emailTemplatemswaw
+          };
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                  return console.log(error);
+              }
+              console.log('Message %s sent: %s', info.messageId, info.response);
+                  res.render('index');
+             })});
+        
+          if (err) {
+            console.log(err);
+        
+            return;
+          }
+          return res.json({
+            success: 1,
+            message: "Otp sent to your email please verify it",
+            data: result
+      
+          });
+        });
+        })
+        // return res.json({
+        //   success: 1,
+        //   message: "Otp sent to your email please verify it",
+        //   data: result
+        // });
+      }else{
+        return res.json({
+          success: 0,
+          message: "Invalid Membeship ID"
+        }); 
+      }
+    });
+
+  }else{
+    var digits = '0123456789'; 
+  let OTP = ''; 
+  for (let i = 0; i < 6; i++ ) { 
+      OTP += digits[Math.floor(Math.random() * 10)]; 
+  } 
+ body.member_verifyotp = OTP;
+ body.created_on = current_date;
+ var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
+ var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+ body.otpexpiry_datetime = otpexpiry_datetime;
+deleteOldMemberOtp(body.email, (err, results1) => {
+AddMemberOtp(body, (err, results) => {
+  let transporter = nodeMailer.createTransport({
+        host: 'mail.sts.org.sg',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'otp@sts.org.sg',
+            pass: '@STSotpsend1'
+        }
+    });
+        let emailTemplatemswaw;
+  ejs
+  .renderFile(path.join(__dirname, "views/eventotp.ejs"), {
+    user_firstname: 'Member',
+  user_otp:body.member_verifyotp
+
+  })
+.then(result => {
+  emailTemplatemswaw=result;
+    let mailOptions = {
+        from: 'otp@sts.org.sg', // sender address
+        to: body.email,// list of receivers
+        subject: 'Otp Verification', // Subject line
+        text:'Please Verify Your Otp', // plain text body
+       //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+   html:emailTemplatemswaw
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+            res.render('index');
+       })});
+  
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.json({
+      success: 1,
+      message: "Otp sent to your email please verify it"
+    });
+  });
+  })
+  }
+
+},
 
 
 
