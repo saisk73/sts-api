@@ -5687,13 +5687,14 @@ VerifyMember: (req, res) => {
   // var email = body.email;
   if(membership_id!='' && membership_id!=null && membership_id!=undefined){
     CheckMemberShipid(membership_id,current_date, (err, result) => {
+      console.log('dfdffdsfd : ',result.length);
       if(result.length==0){
         return res.json({
           success: 0,
           message: "Invalid Membeship ID123"
         });
       }
-      if(result){
+      if(result.length!=0){
         var digits = '0123456789'; 
         let OTP = ''; 
         for (let i = 0; i < 6; i++ ) { 
@@ -5704,7 +5705,7 @@ VerifyMember: (req, res) => {
        var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
        var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
        body.otpexpiry_datetime = otpexpiry_datetime;
-       body.email = result.email;
+       body.email = result[0].email;
       deleteOldMemberOtp(body.email, (err, results1) => {
       AddMemberOtp(body, (err, results) => {
         let transporter = nodeMailer.createTransport({
