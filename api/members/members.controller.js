@@ -5755,7 +5755,7 @@ VerifyMember: (req, res) => {
         // });
       }else{
         return res.json({
-          success: 0,
+          success: 00,
           message: "Invalid Membeship ID"
         }); 
       }
