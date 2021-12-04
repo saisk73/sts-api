@@ -280,8 +280,8 @@ router.post("/verifymember", VerifyMember);
 
 router.post("/bookevent", AddEventBooking);
 
-router.post("/homepageeventdesc", AddHomePageEventDesc);
-router.get("/homepageeventdesc", getHomePageEventDesc);
+// router.post("/homepageeventdesc", AddHomePageEventDesc);
+// router.get("/homepageeventdesc", getHomePageEventDesc);
 
 
 
