@@ -5753,7 +5753,7 @@ VerifyMember: (req, res) => {
           return res.json({
             success: 1,
             message: "Otp sent to your email please verify it",
-            data: result
+            data: result[0]
       
           });
         });
