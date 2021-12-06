@@ -286,7 +286,7 @@ router.post("/bookevent", AddEventBooking);
 router.get("/myeventbookings",checkToken, getEventBookings);
 router.get("/membereventbookings", checkToken, getMemberEventsBookings);
 
-router.get("/geteventbooking/:event_id", getEventbookingById);
+router.get("/geteventbooking/:event_id",checkToken, getEventbookingById);
 
 // router.post("/homepageeventdesc", AddHomePageEventDesc);
 // router.get("/homepageeventdesc", getHomePageEventDesc);
