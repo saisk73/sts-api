@@ -2704,7 +2704,32 @@ module.exports = {
       }
     );
   },
-  
+
+  getEventBookings:(member_id, callBack) => {
+    pool.query(
+      `select b.*,(select event_name from events_master where id=b.event_id) as event_name,(select image from events_master where id=b.event_id) as image from events_bookings_master b where member_id=?`,
+      [member_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+ 
+  getMemberEventsBookings:(callBack) => {
+    pool.query(
+      `select b.*,(select event_name from events_master where id=b.event_id) as event_name,(select image from events_master where id=b.event_id) as image from events_bookings_master b`,
+      [],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
   
 
 

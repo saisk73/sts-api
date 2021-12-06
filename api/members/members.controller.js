@@ -167,7 +167,9 @@ addServiceGallery,
 DeleteServiceGallery,
 getEventstypes,
 AddEventBooking,
-CheckMemberShipid
+CheckMemberShipid,
+getEventBookings,
+getMemberEventsBookings
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5826,6 +5828,33 @@ AddMemberOtp(body, (err, results) => {
   })
   }
 
+},
+
+getEventBookings: (req, res) => {
+  member_id = req.decoded.result.id;
+  getEventBookings(member_id,(err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.status(200).json({
+      success: 1,
+      data: results
+    });
+  });
+},
+
+getMemberEventsBookings: (req, res) => {
+  getMemberEventsBookings((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.status(200).json({
+      success: 1,
+      data: results
+    });
+  });
 },
 
 

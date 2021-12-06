@@ -120,6 +120,8 @@ const {
   getEventstypes,
   AddEventBooking,
   VerifyMember,
+  getEventBookings,
+  getMemberEventsBookings,
   TestMail
 } = require("./members.controller");
 
@@ -279,6 +281,9 @@ router.get("/eventtypes", getEventstypes);
 router.post("/verifymember", VerifyMember);
 
 router.post("/bookevent", AddEventBooking);
+
+router.get("/myeventbookings",checkToken, getEventBookings);
+router.get("/membereventbookings", checkToken, getMemberEventsBookings);
 
 // router.post("/homepageeventdesc", AddHomePageEventDesc);
 // router.get("/homepageeventdesc", getHomePageEventDesc);
