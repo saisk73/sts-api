@@ -5832,7 +5832,7 @@ AddMemberOtp(body, (err, results) => {
 },
 
 getEventBookings: (req, res) => {
-  member_id = req.decoded.result.id;
+  var member_id = req.decoded.result.id;
   getEventBookings(member_id,(err, results) => {
     if (err) {
       console.log(err);
