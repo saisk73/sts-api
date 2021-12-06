@@ -169,7 +169,8 @@ getEventstypes,
 AddEventBooking,
 CheckMemberShipid,
 getEventBookings,
-getMemberEventsBookings
+getMemberEventsBookings,
+getEventbookingById
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5846,6 +5847,20 @@ getEventBookings: (req, res) => {
 
 getMemberEventsBookings: (req, res) => {
   getMemberEventsBookings((err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.status(200).json({
+      success: 1,
+      data: results
+    });
+  });
+},
+
+getEventbookingById: (req, res) => {
+  const event_id = req.params.event_id;
+  getEventbookingById(event_id,(err, results) => {
     if (err) {
       console.log(err);
       return;

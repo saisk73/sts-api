@@ -2730,6 +2730,19 @@ module.exports = {
       }
     );
   },
+
+  getEventbookingById:(event_id,callBack) => {
+    pool.query(
+      `select b.*,(select event_name from events_master where id=b.event_id) as event_name,(select image from events_master where id=b.event_id) as image from events_bookings_master b where id=?`,
+      [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
   
 
 
