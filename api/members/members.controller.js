@@ -697,7 +697,7 @@ module.exports = {
       if (body.otp==results.login_otp) {
         results.password = undefined;
         const jsontoken = sign({ result: results }, "qwe1234", {
-          expiresIn: "1h"
+          expiresIn: "24h"
         });
 
     createMemberLoginHistory(results, (err, results) => {
