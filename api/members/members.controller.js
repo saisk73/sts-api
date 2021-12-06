@@ -5819,7 +5819,8 @@ AddMemberOtp(body, (err, results) => {
     }
     return res.json({
       success: 1,
-      message: "Otp sent to your email please verify it"
+      message: "Otp sent to your email please verify it",
+      data:{'membership_id':0}
     });
   });
   })
