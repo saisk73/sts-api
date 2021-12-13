@@ -124,6 +124,7 @@ const {
   getMemberEventsBookings,
   getEventbookingById,
   AddEventType,
+  getBarcode,
   TestMail
 } = require("./members.controller");
 
@@ -289,6 +290,8 @@ router.get("/myeventbookings",checkToken, getEventBookings);
 router.get("/membereventbookings", checkToken, getMemberEventsBookings);
 
 router.get("/geteventbooking/:event_id",checkToken, getEventbookingById);
+
+router.get("/barcode", getBarcode);
 
 // router.post("/homepageeventdesc", AddHomePageEventDesc);
 // router.get("/homepageeventdesc", getHomePageEventDesc);
