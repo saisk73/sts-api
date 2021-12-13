@@ -123,6 +123,7 @@ const {
   getEventBookings,
   getMemberEventsBookings,
   getEventbookingById,
+  AddEventType,
   TestMail
 } = require("./members.controller");
 
@@ -277,6 +278,7 @@ router.post("/addservicegallery", addServiceGallery);
 router.get("/servicegallery/:service_id", getServiceGallery);
 router.get("/deleteservicegallery/:id", DeleteServiceGallery);
 
+router.post("/addeventtype", AddEventType);
 router.get("/eventtypes", getEventstypes);
 
 router.post("/verifymember", VerifyMember);

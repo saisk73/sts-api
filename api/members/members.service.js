@@ -2743,6 +2743,45 @@ module.exports = {
       }
     );
   },
+
+  CreateEventType: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into eventtypes_master(event_type,event_template,email_template,created_on) 
+                values(?,?,?,?)`,
+      [
+        data.event_type,
+        data.event_template,
+        data.email_template,
+        data.created_on
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  UpdateEventType: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `update eventtypes_master set event_type=?,event_template=?,email_template=? where id=?`,
+      [
+        data.event_type,
+        data.event_template,
+        data.email_template,
+        data.id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
   
 
 

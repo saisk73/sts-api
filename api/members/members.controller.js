@@ -170,7 +170,9 @@ AddEventBooking,
 CheckMemberShipid,
 getEventBookings,
 getMemberEventsBookings,
-getEventbookingById
+getEventbookingById,
+CreateEventType,
+UpdateEventType
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5042,6 +5044,35 @@ CheckTransaction: (req, res) => {
    }else{
     body.created_on = current_date;
    CreateEvent(body, (err, results) => {
+     if(err){
+        console.log(err);
+       }
+    return res.json({
+      success: 1,
+      message: "Added successfully"
+    });
+  });
+   }
+  },
+
+  AddEventType: (req, res) => { 
+    // const body = req.body.image_url; 
+   const body = req.body;
+   // Some image data uri
+   let id = body.id;
+   if(id){
+      UpdateEventType(body, (err, results) => {
+        if(err){
+           console.log(err);
+          }
+        return res.json({
+         success: 1,
+         message: "Update successfully"
+       });
+     });
+   }else{
+    body.created_on = current_date;
+   CreateEventType(body, (err, results) => {
      if(err){
         console.log(err);
        }
