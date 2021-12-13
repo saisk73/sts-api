@@ -5514,6 +5514,15 @@ AddCommiteeMembers: (req, res) => {
         message: "Record not Found"
       });
     }
+
+    results.forEach(element => { 
+      var content1 = element.event_template;
+      element.event_template = content1.replace(/<\/?[^>]+(>|$)/g, "");
+      var content2 = element.email_template;
+      element.email_template = content2.replace(/<\/?[^>]+(>|$)/g, "");
+      // console.log(element.description);
+      })
+
     return res.json({
       success: 1,
       data: results
