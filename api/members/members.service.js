@@ -2672,7 +2672,7 @@ module.exports = {
     // console.log(data);
     pool.query(
       `insert into events_bookings_master(event_id,member_id,membership_id,full_name,email,mobile,address,adult_tickets,child_tickets,total_amount,txn_no,payment_mode) 
-                values(?,?,?,?,?,?,?,?,?)`,
+                values(?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.event_id,
         data.member_id,
@@ -2791,6 +2791,30 @@ module.exports = {
         data.id
       ],
       (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  AddBookingMembers: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into eventbookings_members_master(booking_id,name,mobile,email,age,member_type) 
+                values(?,?,?,?,?,?)`,
+      [
+        data['booking_id'],
+        data['name'],
+        data['mobile'],
+        data['email'],
+        data['age'],
+        data['member_type']
+      ],
+      (error, results, fields) => {
+        // console.log('error :', error);
+        // console.log('results :', results);
         if (error) {
           callBack(error);
         }
