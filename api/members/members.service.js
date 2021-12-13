@@ -2107,8 +2107,8 @@ module.exports = {
   CreateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,adult_fee_nm,child_fee_nm,from_date,to_date,max_tickets,max_tickets_child,closed_date,created_on) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,adult_fee_nm,child_fee_nm,from_date,to_date,max_tickets,max_tickets_child,closed_date,created_on,status) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2123,7 +2123,8 @@ module.exports = {
         data.max_tickets,
         data.max_tickets_child,
         data.closed_date,
-        data.created_on
+        data.created_on,
+        data.status
       ],
       (error, results, fields) => {
         if (error) {
@@ -2137,7 +2138,7 @@ module.exports = {
   UpdateEventwithimg: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set eventtype_id=?,event_name=?,description=?,image=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,max_tickets_child=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?,event_name=?,description=?,image=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,max_tickets_child=?,closed_date=?,status=? where id=?`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2152,6 +2153,7 @@ module.exports = {
         data.max_tickets,
         data.max_tickets_child,
         data.closed_date,
+        data.status,
         data.id
       ],
       (error, results, fields) => {
@@ -2166,7 +2168,7 @@ module.exports = {
   UpdateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `update events_master set eventtype_id=?, event_name=?,description=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,max_tickets_child=?,closed_date=? where id=?`,
+      `update events_master set eventtype_id=?, event_name=?,description=?,adult_fee=?,child_fee=?,adult_fee_nm=?,child_fee_nm=?,from_date=?,to_date=?,max_tickets=?,max_tickets_child=?,closed_date=?,status=? where id=?`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2180,6 +2182,7 @@ module.exports = {
         data.max_tickets,
         data.max_tickets_child,
         data.closed_date,
+        data.status,
         data.id
       ],
       (error, results, fields) => {
@@ -2204,17 +2207,30 @@ module.exports = {
     );
   },
 
-  getEvents:(callBack) => {
-    pool.query(
-      `select * from events_master`,
-      [],
-      (error, results, fields) => {
-        if (error) {
-          callBack(error);
+  getEvents:(status,callBack) => {
+    if(status==0){
+      pool.query(
+        `select * from events_master`,
+        [],
+        (error, results, fields) => {
+          if (error) {
+            callBack(error);
+          }
+          return callBack(null, results);
         }
-        return callBack(null, results);
-      }
-    );
+      );
+    }else{
+      pool.query(
+        `select * from events_master where status=?`,
+        [status],
+        (error, results, fields) => {
+          if (error) {
+            callBack(error);
+          }
+          return callBack(null, results);
+        }
+      );
+    }
   },
 
   getEventstypes:(callBack) => {
@@ -2244,7 +2260,7 @@ module.exports = {
   },
 
   getUpcomingEvents:(current_date,callBack) => {
-    var test = "select * from events_master where '"+current_date+"' <= from_date";
+    var test = "select * from events_master where '"+current_date+"' <= from_date and status=1";
     pool.query(test,[],
       (error, results, fields) => {
         if (error) {
@@ -2256,7 +2272,7 @@ module.exports = {
   },
 
   getPastEvents:(current_date,callBack) => {
-    var test = "select * from events_master where '"+current_date+"' >= from_date";
+    var test = "select * from events_master where '"+current_date+"' >= from_date and status=1";
     pool.query(test,[],
       (error, results, fields) => {
         if (error) {
@@ -2268,7 +2284,7 @@ module.exports = {
   },
 
   getRecentEvents:(callBack) => {
-    var test = "select * from events_master where from_date> now() - INTERVAL 15 day;";
+    var test = "select * from events_master where from_date> now() - INTERVAL 15 day and status=1";
     pool.query(test,[],
       (error, results, fields) => {
         if (error) {

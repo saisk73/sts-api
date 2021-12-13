@@ -5484,7 +5484,8 @@ AddCommiteeMembers: (req, res) => {
   },
 
   getEvents: (req, res) => {
-    getEvents( (err, results) => {
+    const status = req.body.status; //0->all,1->active,2->inactive
+    getEvents(status, (err, results) => {
     if (err) {
       console.log(err);
       return;
