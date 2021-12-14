@@ -191,11 +191,6 @@ var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYY
 
 
 
-const bwipjs = require('bwip-js');
-
-
-
-
 
 const fs = require('fs');
 const mysql = require('mysql');
