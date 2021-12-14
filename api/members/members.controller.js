@@ -172,8 +172,7 @@ getEventBookings,
 getMemberEventsBookings,
 getEventbookingById,
 CreateEventType,
-UpdateEventType,
-AddBookingMembers
+UpdateEventType
 
 } = require("./members.service");
 require("dotenv").config();
@@ -189,8 +188,13 @@ var current_date =  moment().format('YYYY-MM-DD');
 var current_year =  moment().format('YYYY');
 var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-// var JsBarcode = require('jsbarcode');
+
+
+
 const bwipjs = require('bwip-js');
+
+
+
 
 
 const fs = require('fs');
@@ -5721,13 +5725,13 @@ AddCommiteeMembers: (req, res) => {
    const body = req.body;
    var membership_id = body.membership_id;
    CheckMemberShipid(membership_id,current_date, (err, result) => {
-    if(result.length==0){
+    if(!result){
       return res.json({
         success: 0,
         message: "No Data"
       });
     }
-    body.member_id = result[0].id;
+    body.member_id = result.id;
     AddEventBooking(body, (err, results) => {
      if(err){
         console.log(err);
@@ -5739,26 +5743,8 @@ AddCommiteeMembers: (req, res) => {
           adult['mobile'] = body.mobile1[i]
           adult['email'] = body.email1[i]
           adult['age'] = body.age1[i] 
-          adult['booking_id'] = 1
-          adult['member_type'] = 0
-          AddBookingMembers(adult, (err, results1) => {
-            console.log(results1);
-          })
+          console.log(adult);
         }
-
-        var child = []
-        for (let j = 0; j < body.name2.length; j++) {
-          child['name'] = body.name2[j]
-          child['mobile'] = body.mobile2[j]
-          child['email'] = body.email2[j]
-          child['age'] = body.age2[j] 
-          child['booking_id'] = 1
-          child['member_type'] = 1
-          AddBookingMembers(child, (err, results2) => {
-            console.log(results2);
-          })
-        }
-
        }
 
     return res.json({
@@ -5999,7 +5985,7 @@ getBarcode: (req, res) => {
 
 
 
-TestMail: (req, res) => {
+   TestMail: (req, res) => {
     // var d = new Date("2014-10-29");
     // var year = d.getFullYear();
     // var month = d.getMonth();
