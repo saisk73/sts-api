@@ -190,6 +190,7 @@ var current_year =  moment().format('YYYY');
 var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 // var JsBarcode = require('jsbarcode');
+const bwipjs = require('bwip-js');
 
 
 const fs = require('fs');
@@ -5964,9 +5965,36 @@ getEventbookingById: (req, res) => {
 },
 
 getBarcode: (req, res) => {
-  console.log('hhh');
-  var bc = JsBarcode("#barcode", "Hi!");
-  console.log(bc);
+  bwipjs.toBuffer({
+    bcid:        'code128',       // Barcode type
+    text:        '0123456789',    // Text to encode
+    scale:       3,               // 3x scaling factor
+    height:      10,              // Bar height, in millimeters
+    includetext: false,            // Show human-readable text
+    textxalign:  'center',        // Always good to set this
+})
+.then(png => {
+  // console.log('success :',png);
+  const b64 = Buffer.from(png).toString('base64');
+    // IF THE ABOVE LINE DOES NOT WORK, TRY THIS:
+    // const b64 = rest.Body.toString('base64');
+
+    // CHANGE THIS IF THE IMAGE YOU ARE WORKING WITH IS .jpg OR WHATEVER
+    const mimeType = 'image/png'; // e.g., image/png
+    const img = `"data:${mimeType};base64,${b64}"`;
+    fs.writeFile('test.jpg', img, 'binary', function(err) {
+        console.log(err);
+        let filePath = './uploads/barcodes/test.jpg';
+        imageDataURI.outputFile(img, filePath)
+    });
+    console.log('img :',img)
+    res.send(`<img src="data:${mimeType};base64,${b64}" />`);
+    // `png` is a Buffer as in the example above
+})
+.catch(err => {
+  console.log('err :',err);
+    // `err` may be a string or Error object
+});
 },
 
 
