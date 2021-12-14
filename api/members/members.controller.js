@@ -173,7 +173,10 @@ getMemberEventsBookings,
 getEventbookingById,
 CreateEventType,
 UpdateEventType,
-AddBookingMembers
+AddBookingMembers,
+Createeventfields,
+DeleteEventFields,
+getEventFields
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5027,6 +5030,17 @@ CheckTransaction: (req, res) => {
         if(err){
            console.log(err);
           }
+        DeleteEventFields(body.id,(err, results5) => {
+          if(results5){
+        var efields = (body.fields).split(',');
+        efields.forEach((element) => {
+        console.log(element);
+           Createeventfields(body.id,element, (err, results3) => {
+             console.log('results1 :',results3);
+           });
+         });
+        }
+        });
        return res.json({
          success: 1,
          message: "Update successfully"
@@ -5038,6 +5052,19 @@ CheckTransaction: (req, res) => {
         if(err){
            console.log(err);
           }
+       
+          DeleteEventFields(body.id,(err, results6) => {
+            if(results6){
+          var efields = (body.fields).split(',');
+          efields.forEach((element) => {
+          console.log(element);
+             Createeventfields(body.id,element, (err, results2) => {
+               console.log('results1 :',results2);
+             });
+           });
+          }
+          });
+
        return res.json({
          success: 1,
          message: "Update successfully"
@@ -5051,6 +5078,16 @@ CheckTransaction: (req, res) => {
      if(err){
         console.log(err);
        }
+
+       var efields = (body.fields).split(',');
+       efields.forEach((element) => {
+        console.log(element);
+        Createeventfields(results.insertId,element, (err, results1) => {
+          console.log('results1 :',results1);
+        });
+
+      });
+
     return res.json({
       success: 1,
       message: "Added successfully"
@@ -5489,7 +5526,6 @@ AddCommiteeMembers: (req, res) => {
 
   getEvents: (req, res) => {
     const status = req.body.status; //0->all,1->active,2->inactive
-    console.log('dfghjk :',status);
     getEvents(status, (err, results) => {
     if (err) {
       console.log(err);
@@ -5736,28 +5772,76 @@ AddCommiteeMembers: (req, res) => {
        if(results){
          var adult = []
         for (let i = 0; i < body.name1.length; i++) {
-          adult['name'] = body.name1[i]
-          adult['mobile'] = body.mobile1[i]
-          adult['email'] = body.email1[i]
-          adult['age'] = body.age1[i] 
-          adult['booking_id'] = 1
-          adult['member_type'] = 0
-          AddBookingMembers(adult, (err, results1) => {
-            console.log(results1);
+          var lkn = body.mobile1[i]+body.age1[i];
+          bwipjs.toBuffer({
+            bcid:        'code128',       // Barcode type
+            text:        lkn,    // Text to encode
+            scale:       3,               // 3x scaling factor
+            height:      10,              // Bar height, in millimeters
+            includetext: false,            // Show human-readable text
+            textxalign:  'center',        // Always good to set this
           })
+          .then(png => {
+            const b64 = Buffer.from(png).toString('base64');
+            const mimeType = 'image/png'; // e.g., image/png
+            const img = `"data:${mimeType};base64,${b64}"`;
+            rand=Math.floor((Math.random() * 10000000000000000) + 94);
+            fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
+                console.log(err);
+                let filePath = './uploads/barcodes/'+rand+'.jpg';
+                imageDataURI.outputFile(img, filePath)
+                  adult['name'] = body.name1[i]
+                  adult['mobile'] = body.mobile1[i]
+                  adult['email'] = body.email1[i]
+                  adult['age'] = body.age1[i] 
+                  adult['booking_id'] = 1
+                  adult['member_type'] = 0
+                  AddBookingMembers(adult, (err, results1) => {
+                    console.log(results1);
+                  })
+              });
+            })
+          .catch(err => {
+            console.log('err :',err);
+          });
+          
         }
 
         var child = []
         for (let j = 0; j < body.name2.length; j++) {
-          child['name'] = body.name2[j]
-          child['mobile'] = body.mobile2[j]
-          child['email'] = body.email2[j]
-          child['age'] = body.age2[j] 
-          child['booking_id'] = 1
-          child['member_type'] = 1
-          AddBookingMembers(child, (err, results2) => {
-            console.log(results2);
+          var lknc = body.mobile2[j]+body.age2[j];
+          bwipjs.toBuffer({
+            bcid:        'code128',       // Barcode type
+            text:        lknc,    // Text to encode
+            scale:       3,               // 3x scaling factor
+            height:      10,              // Bar height, in millimeters
+            includetext: false,            // Show human-readable text
+            textxalign:  'center',        // Always good to set this
           })
+          .then(png => {
+            const b64 = Buffer.from(png).toString('base64');
+            const mimeType = 'image/png'; // e.g., image/png
+            const img = `"data:${mimeType};base64,${b64}"`;
+            rand=Math.floor((Math.random() * 10000000000000000) + 94);
+            fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
+                console.log(err);
+                let filePath = './uploads/barcodes/'+rand+'.jpg';
+                imageDataURI.outputFile(img, filePath)
+                    child['name'] = body.name2[j]
+                    child['mobile'] = body.mobile2[j]
+                    child['email'] = body.email2[j]
+                    child['age'] = body.age2[j] 
+                    child['booking_id'] = 1
+                    child['member_type'] = 1
+                    AddBookingMembers(child, (err, results2) => {
+                      console.log(results2);
+                    })
+              });
+            })
+          .catch(err => {
+            console.log('err :',err);
+          });
+         
         }
 
        }
@@ -5966,29 +6050,30 @@ getEventbookingById: (req, res) => {
 },
 
 getBarcode: (req, res) => {
+  // var name = 'Sathish';
+  // var email = 'sathish.svapps@yopmail.com';
+  var mobile = '8074507837';
+  var age = 29;
+  var lkn = mobile+age;
+  // console.log('gfdfggfggdhjgd :',lkn);
   bwipjs.toBuffer({
     bcid:        'code128',       // Barcode type
-    text:        '0123456789',    // Text to encode
+    text:        lkn,    // Text to encode
     scale:       3,               // 3x scaling factor
     height:      10,              // Bar height, in millimeters
     includetext: false,            // Show human-readable text
     textxalign:  'center',        // Always good to set this
 })
 .then(png => {
-  // console.log('success :',png);
-  const b64 = Buffer.from(png).toString('base64');
-    // IF THE ABOVE LINE DOES NOT WORK, TRY THIS:
-    // const b64 = rest.Body.toString('base64');
-
-    // CHANGE THIS IF THE IMAGE YOU ARE WORKING WITH IS .jpg OR WHATEVER
+    const b64 = Buffer.from(png).toString('base64');
     const mimeType = 'image/png'; // e.g., image/png
     const img = `"data:${mimeType};base64,${b64}"`;
-    fs.writeFile('test.jpg', img, 'binary', function(err) {
+    rand=Math.floor((Math.random() * 10000000000000000) + 94);
+    fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
         console.log(err);
-        let filePath = './uploads/barcodes/test.jpg';
+        let filePath = './uploads/barcodes/'+rand+'.jpg';
         imageDataURI.outputFile(img, filePath)
     });
-    console.log('img :',img)
     res.send(`<img src="data:${mimeType};base64,${b64}" />`);
     // `png` is a Buffer as in the example above
 })
@@ -5996,6 +6081,20 @@ getBarcode: (req, res) => {
   console.log('err :',err);
     // `err` may be a string or Error object
 });
+},
+
+getEventFields: (req, res) => {
+  var event_id = req.body.event_id;
+  getEventFields(event_id,(err, results) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    return res.status(200).json({
+      success: 1,
+      data: results
+    });
+  });
 },
 
 

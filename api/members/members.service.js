@@ -346,6 +346,19 @@ module.exports = {
     );
   },
 
+  DeleteEventFields: (event_id, callBack) => {
+    pool.query(
+      `delete from  events_fields_master  where event_id = ?`,
+      [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   deleteOldMemberOtp: (email, callBack) => {
    pool.query(
      `delete from  membersverify_otp  where member_email = ?`,
@@ -2194,6 +2207,24 @@ module.exports = {
     );
   },
 
+  Createeventfields: (event_id,efield,callBack)=>{
+    pool.query(
+      `insert into events_fields_master(event_id,type,name) 
+                values(?,?,?)`,
+      [
+        event_id,
+        'input',
+        efield
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   DeleteEvent: (id, callBack) => {
     pool.query(
       `delete from events_master where id = ?`,
@@ -2822,6 +2853,19 @@ module.exports = {
       }
     );
   },
+
+  getEventFields: (event_id, callBack) =>{
+    pool.query(
+      `select * from events_fields_master where event_id=?`,
+      [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  }
   
 
 

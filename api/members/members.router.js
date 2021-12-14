@@ -125,6 +125,7 @@ const {
   getEventbookingById,
   AddEventType,
   getBarcode,
+  getEventFields,
   TestMail
 } = require("./members.controller");
 
@@ -290,6 +291,8 @@ router.get("/myeventbookings",checkToken, getEventBookings);
 router.get("/membereventbookings", checkToken, getMemberEventsBookings);
 
 router.get("/geteventbooking/:event_id",checkToken, getEventbookingById);
+
+router.post("/eventfields", getEventFields);
 
 router.get("/barcode", getBarcode);
 
