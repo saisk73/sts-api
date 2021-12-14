@@ -190,9 +190,6 @@ var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
 
-
-
-
 const fs = require('fs');
 const mysql = require('mysql');
 const multer = require('multer');
@@ -5723,8 +5720,8 @@ AddCommiteeMembers: (req, res) => {
    CheckMemberShipid(membership_id,current_date, (err, result) => {
     if(!result){
       return res.json({
-        success: 0,
-        message: "No Data"
+        success: 1,
+        message: "Added successfully"
       });
     }
     body.member_id = result.id;
@@ -5732,17 +5729,6 @@ AddCommiteeMembers: (req, res) => {
      if(err){
         console.log(err);
        }
-       if(results){
-         var adult = []
-        for (let i = 0; i < body.name1.length; i++) {
-          adult['name'] = body.name1[i]
-          adult['mobile'] = body.mobile1[i]
-          adult['email'] = body.email1[i]
-          adult['age'] = body.age1[i] 
-          console.log(adult);
-        }
-       }
-
     return res.json({
       success: 1,
       message: "Added successfully"
@@ -5946,38 +5932,6 @@ getEventbookingById: (req, res) => {
   });
 },
 
-getBarcode: (req, res) => {
-  bwipjs.toBuffer({
-    bcid:        'code128',       // Barcode type
-    text:        '0123456789',    // Text to encode
-    scale:       3,               // 3x scaling factor
-    height:      10,              // Bar height, in millimeters
-    includetext: false,            // Show human-readable text
-    textxalign:  'center',        // Always good to set this
-})
-.then(png => {
-  // console.log('success :',png);
-  const b64 = Buffer.from(png).toString('base64');
-    // IF THE ABOVE LINE DOES NOT WORK, TRY THIS:
-    // const b64 = rest.Body.toString('base64');
-
-    // CHANGE THIS IF THE IMAGE YOU ARE WORKING WITH IS .jpg OR WHATEVER
-    const mimeType = 'image/png'; // e.g., image/png
-    const img = `"data:${mimeType};base64,${b64}"`;
-    fs.writeFile('test.jpg', img, 'binary', function(err) {
-        console.log(err);
-        let filePath = './uploads/barcodes/test.jpg';
-        imageDataURI.outputFile(img, filePath)
-    });
-    console.log('img :',img)
-    res.send(`<img src="data:${mimeType};base64,${b64}" />`);
-    // `png` is a Buffer as in the example above
-})
-.catch(err => {
-  console.log('err :',err);
-    // `err` may be a string or Error object
-});
-},
 
 
 
