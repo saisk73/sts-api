@@ -5785,10 +5785,11 @@ AddCommiteeMembers: (req, res) => {
             const b64 = Buffer.from(png).toString('base64');
             const mimeType = 'image/png'; // e.g., image/png
             const img = `"data:${mimeType};base64,${b64}"`;
-            rand=Math.floor((Math.random() * 10000000000000000) + 94);
-            fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
-                console.log(err);
-                let filePath = './uploads/barcodes/'+rand+'.jpg';
+            var rand1 =Math.floor((Math.random() * 10000000000000000) + 94);
+            fs.writeFile(rand1+'.jpg', img, 'binary', function(err) {
+                console.log('err1 :',err);
+                let filePath = './uploads/barcodes/'+rand1+'.jpg';
+                var imag = rand1+'.jpg';
                 imageDataURI.outputFile(img, filePath)
                   adult['name'] = body.name1[i]
                   adult['mobile'] = body.mobile1[i]
@@ -5796,6 +5797,7 @@ AddCommiteeMembers: (req, res) => {
                   adult['age'] = body.age1[i] 
                   adult['booking_id'] = 1
                   adult['member_type'] = 0
+                  adult['barcode'] = imag
                   AddBookingMembers(adult, (err, results1) => {
                     console.log(results1);
                   })
@@ -5822,10 +5824,11 @@ AddCommiteeMembers: (req, res) => {
             const b64 = Buffer.from(png).toString('base64');
             const mimeType = 'image/png'; // e.g., image/png
             const img = `"data:${mimeType};base64,${b64}"`;
-            rand=Math.floor((Math.random() * 10000000000000000) + 94);
+            var rand =Math.floor((Math.random() * 10000000000000000) + 94);
             fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
-                console.log(err);
+                console.log('err : ',err);
                 let filePath = './uploads/barcodes/'+rand+'.jpg';
+                var imag1 = rand+'.jpg';
                 imageDataURI.outputFile(img, filePath)
                     child['name'] = body.name2[j]
                     child['mobile'] = body.mobile2[j]
@@ -5833,6 +5836,7 @@ AddCommiteeMembers: (req, res) => {
                     child['age'] = body.age2[j] 
                     child['booking_id'] = 1
                     child['member_type'] = 1
+                    child['barcode'] = imag1
                     AddBookingMembers(child, (err, results2) => {
                       console.log(results2);
                     })

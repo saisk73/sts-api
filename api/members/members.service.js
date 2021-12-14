@@ -2833,19 +2833,20 @@ module.exports = {
   AddBookingMembers: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into eventbookings_members_master(booking_id,name,mobile,email,age,member_type) 
-                values(?,?,?,?,?,?)`,
+      `insert into eventbookings_members_master(booking_id,name,mobile,email,age,member_type,barcode) 
+                values(?,?,?,?,?,?,?)`,
       [
         data['booking_id'],
         data['name'],
         data['mobile'],
         data['email'],
         data['age'],
-        data['member_type']
+        data['member_type'],
+        data['barcode']
       ],
       (error, results, fields) => {
-        // console.log('error :', error);
-        // console.log('results :', results);
+        console.log('error :', error);
+        console.log('results :', results);
         if (error) {
           callBack(error);
         }
