@@ -172,7 +172,8 @@ getEventBookings,
 getMemberEventsBookings,
 getEventbookingById,
 CreateEventType,
-UpdateEventType
+UpdateEventType,
+AddBookingMembers
 
 } = require("./members.service");
 require("dotenv").config();
@@ -188,6 +189,8 @@ var current_date =  moment().format('YYYY-MM-DD');
 var current_year =  moment().format('YYYY');
 var current_datetime =  moment().format('YYYY-MM-DD HH:mm:ss');
 var otpexpiry_datetime = moment(current_datetime).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+// var JsBarcode = require('jsbarcode');
+const bwipjs = require('bwip-js');
 
 
 const fs = require('fs');
@@ -5486,6 +5489,7 @@ AddCommiteeMembers: (req, res) => {
 
   getEvents: (req, res) => {
     const status = req.body.status; //0->all,1->active,2->inactive
+    console.log('dfghjk :',status);
     getEvents(status, (err, results) => {
     if (err) {
       console.log(err);
@@ -5584,24 +5588,24 @@ AddCommiteeMembers: (req, res) => {
       });
       },
 
-  getEvents: (req, res) => {
-    getEvents( (err, results) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    if (!results) {
-      return res.json({
-        success: 0,
-        message: "Record not Found"
-      });
-    }
-    return res.json({
-      success: 1,
-      data: results
-    });
-  });
-  },
+  // getEvents: (req, res) => {
+  //   getEvents( (err, results) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  //   if (!results) {
+  //     return res.json({
+  //       success: 0,
+  //       message: "Record not Found"
+  //     });
+  //   }
+  //   return res.json({
+  //     success: 1,
+  //     data: results
+  //   });
+  // });
+  // },
 
   getEventById: (req, res) => {
     const id = req.params.id;
@@ -5718,17 +5722,46 @@ AddCommiteeMembers: (req, res) => {
    const body = req.body;
    var membership_id = body.membership_id;
    CheckMemberShipid(membership_id,current_date, (err, result) => {
-    if(!result){
+    if(result.length==0){
       return res.json({
-        success: 1,
-        message: "Added successfully"
+        success: 0,
+        message: "No Data"
       });
     }
-    body.member_id = result.id;
+    body.member_id = result[0].id;
     AddEventBooking(body, (err, results) => {
      if(err){
         console.log(err);
        }
+       if(results){
+         var adult = []
+        for (let i = 0; i < body.name1.length; i++) {
+          adult['name'] = body.name1[i]
+          adult['mobile'] = body.mobile1[i]
+          adult['email'] = body.email1[i]
+          adult['age'] = body.age1[i] 
+          adult['booking_id'] = 1
+          adult['member_type'] = 0
+          AddBookingMembers(adult, (err, results1) => {
+            console.log(results1);
+          })
+        }
+
+        var child = []
+        for (let j = 0; j < body.name2.length; j++) {
+          child['name'] = body.name2[j]
+          child['mobile'] = body.mobile2[j]
+          child['email'] = body.email2[j]
+          child['age'] = body.age2[j] 
+          child['booking_id'] = 1
+          child['member_type'] = 1
+          AddBookingMembers(child, (err, results2) => {
+            console.log(results2);
+          })
+        }
+
+       }
+
     return res.json({
       success: 1,
       message: "Added successfully"
@@ -5932,10 +5965,42 @@ getEventbookingById: (req, res) => {
   });
 },
 
+getBarcode: (req, res) => {
+  bwipjs.toBuffer({
+    bcid:        'code128',       // Barcode type
+    text:        '0123456789',    // Text to encode
+    scale:       3,               // 3x scaling factor
+    height:      10,              // Bar height, in millimeters
+    includetext: false,            // Show human-readable text
+    textxalign:  'center',        // Always good to set this
+})
+.then(png => {
+  // console.log('success :',png);
+  const b64 = Buffer.from(png).toString('base64');
+    // IF THE ABOVE LINE DOES NOT WORK, TRY THIS:
+    // const b64 = rest.Body.toString('base64');
+
+    // CHANGE THIS IF THE IMAGE YOU ARE WORKING WITH IS .jpg OR WHATEVER
+    const mimeType = 'image/png'; // e.g., image/png
+    const img = `"data:${mimeType};base64,${b64}"`;
+    fs.writeFile('test.jpg', img, 'binary', function(err) {
+        console.log(err);
+        let filePath = './uploads/barcodes/test.jpg';
+        imageDataURI.outputFile(img, filePath)
+    });
+    console.log('img :',img)
+    res.send(`<img src="data:${mimeType};base64,${b64}" />`);
+    // `png` is a Buffer as in the example above
+})
+.catch(err => {
+  console.log('err :',err);
+    // `err` may be a string or Error object
+});
+},
 
 
 
-   TestMail: (req, res) => {
+TestMail: (req, res) => {
     // var d = new Date("2014-10-29");
     // var year = d.getFullYear();
     // var month = d.getMonth();
