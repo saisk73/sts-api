@@ -176,7 +176,11 @@ UpdateEventType,
 AddBookingMembers,
 Createeventfields,
 DeleteEventFields,
-getEventFields
+getEventFields,
+AddBookingFields,
+getbookingfieldsBybookid,
+getbookingticketsBybookid
+
 
 } = require("./members.service");
 require("dotenv").config();
@@ -5030,17 +5034,17 @@ CheckTransaction: (req, res) => {
         if(err){
            console.log(err);
           }
-        DeleteEventFields(body.id,(err, results5) => {
-          if(results5){
-        var efields = (body.fields).split(',');
-        efields.forEach((element) => {
-        console.log(element);
-           Createeventfields(body.id,element, (err, results3) => {
-             console.log('results1 :',results3);
-           });
-         });
-        }
-        });
+        // DeleteEventFields(body.id,(err, results5) => {
+        //   if(results5){
+        // var efields = (body.fields).split(',');
+        // efields.forEach((element) => {
+        // console.log(element);
+        //    Createeventfields(body.id,element, (err, results3) => {
+        //      console.log('results1 :',results3);
+        //    });
+        //  });
+        // }
+        // });
        return res.json({
          success: 1,
          message: "Update successfully"
@@ -5053,17 +5057,17 @@ CheckTransaction: (req, res) => {
            console.log(err);
           }
        
-          DeleteEventFields(body.id,(err, results6) => {
-            if(results6){
-          var efields = (body.fields).split(',');
-          efields.forEach((element) => {
-          console.log(element);
-             Createeventfields(body.id,element, (err, results2) => {
-               console.log('results1 :',results2);
-             });
-           });
-          }
-          });
+          // DeleteEventFields(body.id,(err, results6) => {
+          //   if(results6){
+          // var efields = (body.fields).split(',');
+          // efields.forEach((element) => {
+          // console.log(element);
+          //    Createeventfields(body.id,element, (err, results2) => {
+          //      console.log('results1 :',results2);
+          //    });
+          //  });
+          // }
+          // });
 
        return res.json({
          success: 1,
@@ -5795,7 +5799,7 @@ AddCommiteeMembers: (req, res) => {
                   adult['mobile'] = body.mobile1[i]
                   adult['email'] = body.email1[i]
                   adult['age'] = body.age1[i] 
-                  adult['booking_id'] = 1
+                  adult['booking_id'] = results.insertId
                   adult['member_type'] = 0
                   adult['barcode'] = imag
                   AddBookingMembers(adult, (err, results1) => {
@@ -5834,7 +5838,7 @@ AddCommiteeMembers: (req, res) => {
                     child['mobile'] = body.mobile2[j]
                     child['email'] = body.email2[j]
                     child['age'] = body.age2[j] 
-                    child['booking_id'] = 1
+                    child['booking_id'] = results.insertId
                     child['member_type'] = 1
                     child['barcode'] = imag1
                     AddBookingMembers(child, (err, results2) => {
@@ -5846,6 +5850,16 @@ AddCommiteeMembers: (req, res) => {
             console.log('err :',err);
           });
          
+        }
+
+        var bkflds = []
+        for (let x = 0; x < body.event_field_ids.length; x++) {
+          bkflds['booking_id'] = results.insertId
+          bkflds['field_id'] = body.event_field_ids[x]
+          bkflds['field_value'] = body.event_field_values[x]
+          AddBookingFields(bkflds, (err, results8) => {
+            console.log(results8);
+          })
         }
 
        }
@@ -6040,10 +6054,19 @@ getEventbookingById: (req, res) => {
       return;
     }
     if(results.length>0){
+    getbookingfieldsBybookid(event_id,(err, results1) => {
+    getbookingticketsBybookid(event_id,(err, results2) => {  
     return res.status(200).json({
       success: 1,
-      data: results[0]
+      data: {
+        booking_data : results[0],
+        fields : results1,
+        tickets : results2
+      }
     });
+  });
+});
+
   }else{
     return res.status(200).json({
       success: 0,
@@ -6104,41 +6127,39 @@ getEventFields: (req, res) => {
 
 
 TestMail: (req, res) => {
-    // var d = new Date("2014-10-29");
-    // var year = d.getFullYear();
-    // var month = d.getMonth();
-    // var day = d.getDate();
-    // var fulldate = new Date(year + 1, month, day);
-    // var toDate = fulldate.toISOString().slice(0, 10);
-    var months = moment("2020-12-25").diff(current_date, "months");
-    console.log(months);
-    // var date = new Date("2014-10-29"); 
-    //  var todate = date.setFullYear(date.getFullYear() + 1);
-    // console.log(todate);
-// const nodemailer = require('nodemailer');
-// let transporter = nodemailer.createTransport({
-//     host: 'mail.sts.org.sg',
-//     port: 587,
-//     secure: false,
-//     requireTLS: true,
-//     auth: {
-//         user: 'sathish.svapps@gmail.com',
-//         pass: 'sathish586'
-//     } 
-// });
-// let mailOptions = {
-//     from: 'sathish.svapps@gmail.com',
-//     to: 'msthsh5@gmail.com',
-//     subject: 'Test',
-//     text: 'Hello World!',
-//     html: '<b>Welcome Email From Sts</b>'
-// };
-// transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//         return console.log(error.message);
-//     }
-//     console.log('success');
-// });
+  let transporter = nodeMailer.createTransport({
+    host: 'mail.sts.org.sg',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'otp@sts.org.sg',
+        pass: '@STSotpsend1'
+    }
+});
+    let emailTemplatemswaw;
+ejs
+.renderFile(path.join(__dirname, "./views/eventmail.ejs"), {
+user_firstname: 'Member',
+user_otp:'345678'
+
+})
+.then(result => {
+emailTemplatemswaw=result;
+let mailOptions = {
+    from: 'otp@sts.org.sg', // sender address
+    to: 'sathish.svapps@yopmail.com',// list of receivers
+    subject: 'Otp Verification', // Subject line
+    text:'Please Verify Your Otp', // plain text body
+   //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+html:emailTemplatemswaw
+};
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message %s sent: %s', info.messageId, info.response);
+        res.render('index');
+   })});
 
   }
   

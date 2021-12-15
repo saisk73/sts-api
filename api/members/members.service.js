@@ -2845,8 +2845,8 @@ module.exports = {
         data['barcode']
       ],
       (error, results, fields) => {
-        console.log('error :', error);
-        console.log('results :', results);
+        // console.log('error :', error);
+        // console.log('results :', results);
         if (error) {
           callBack(error);
         }
@@ -2859,6 +2859,53 @@ module.exports = {
     pool.query(
       `select * from events_fields_master where event_id=?`,
       [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  AddBookingFields: (data, callBack) => {
+    // console.log(data);
+    pool.query(
+      `insert into eventbookings_fields_master(eventbooking_id,eventfield_id,eventfield_value) 
+                values(?,?,?)`,
+      [
+        data['booking_id'],
+        data['field_id'],
+        data['field_value']
+      ],
+      (error, results, fields) => {
+        // console.log('error :', error);
+        // console.log('results :', results);
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getbookingfieldsBybookid: (book_id, callBack) => {
+    pool.query(
+      `select b.*,(select name from events_fields_master where id=d.eventfield_id) as field_name from eventbookings_fields_master b where eventbooking_id=?`,
+      [book_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  getbookingticketsBybookid: (book_id, callBack) => {
+    pool.query(
+      `select * from eventbookings_members_master where booking_id=?`,
+      [book_id],
       (error, results, fields) => {
         if (error) {
           callBack(error);
