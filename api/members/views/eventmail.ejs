@@ -40,8 +40,10 @@
 <body>
     <div class="mail-part" style="color: #000">
    <img src="http://drpt.in/frontend/setpassword-mail.jpg" alt="" width="100%">
-   <p>Hello <%= user_firstname %></p>
-    <h4>Thanks for trusting us and to become a member of sts please enter otp <%=user_otp%> </h4>
+   <p>Hello <%= user_name %></p>
+   &nbsp;&nbsp;<%= desc %> 
+   <br><br>
+    <a href=<%= tk_link  %> ><h4><font style="color:green">Click here for your Ticket Details</font></h4></a>
   
   
 </div>

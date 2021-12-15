@@ -179,7 +179,8 @@ DeleteEventFields,
 getEventFields,
 AddBookingFields,
 getbookingfieldsBybookid,
-getbookingticketsBybookid
+getbookingticketsBybookid,
+getemailtemplateByEventID
 
 
 } = require("./members.service");
@@ -5797,8 +5798,8 @@ AddCommiteeMembers: (req, res) => {
             const mimeType = 'image/png'; // e.g., image/png
             const img = `"data:${mimeType};base64,${b64}"`;
             var rand1 =Math.floor((Math.random() * 10000000000000000) + 94);
-            fs.writeFile(rand1+'.jpg', img, 'binary', function(err) {
-                console.log('err1 :',err);
+            fs.writeFile('./uploads/barcodes_temp/'+rand1+'.jpg', img, 'binary', function(err) {
+                console.log('err1 :',err); 
                 let filePath = './uploads/barcodes/'+rand1+'.jpg';
                 var imag = rand1+'.jpg';
                 imageDataURI.outputFile(img, filePath)
@@ -5843,7 +5844,7 @@ AddCommiteeMembers: (req, res) => {
             const img = `"data:${mimeType};base64,${b64}"`;
             var rand =Math.floor((Math.random() * 10000000000000000) + 94);
             
-            fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
+            fs.writeFile('./uploads/barcodes_temp/'+rand+'.jpg', img, 'binary', function(err) {
                 console.log('err : ',err);
                 let filePath = './uploads/barcodes/'+rand+'.jpg';
                 var imag1 = rand+'.jpg';
@@ -5878,6 +5879,48 @@ AddCommiteeMembers: (req, res) => {
           })
         }
 
+        getemailtemplateByEventID(body.event_id, (err, results9) => {
+          if(results9.length >0){
+            var template = results9[0].email_template.replace(/<\/?[^>]+(>|$)/g, "");
+            host= process.env.WEB_URL;
+            linkse="https://"+host+"/gettickets?bookid="+results.insertId;
+        let transporter = nodeMailer.createTransport({
+          host: 'mail.sts.org.sg',
+          port: 465,
+          secure: true,
+          auth: {
+              user: 'otp@sts.org.sg',
+              pass: '@STSotpsend1'
+          }
+      });
+          let emailTemplatemswaw;
+      ejs
+      .renderFile(path.join(__dirname, "./views/eventmail.ejs"), {
+      user_name: body.full_name,
+      tk_link: linkse,
+      desc: template
+      
+      })
+      .then(result => {
+      emailTemplatemswaw=result;
+      let mailOptions = {
+          from: 'otp@sts.org.sg', // sender address
+          to: body.email,// list of receivers
+          subject: 'Event Tickets Details', // Subject line
+          text:'123456789', // plain text body
+         //html : "Hello,"+req.body.full_name+" Thankyou for register with STS<br> Please Click on the link to verify your email.<br><a href="+linkse+">Click here to verify</a>"  // html body
+      html:emailTemplatemswaw
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+         })}) 
+          }
+        });
+         
        }
 
     return res.json({

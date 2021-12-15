@@ -2917,6 +2917,19 @@ module.exports = {
         return callBack(null, results);
       }
     );
+  },
+
+  getemailtemplateByEventID: (event_id, callBack) => {
+    pool.query(
+      `select * from eventtypes_master where id=(select eventtype_id from events_master where id=?)`,
+      [event_id],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
   }
   
 
