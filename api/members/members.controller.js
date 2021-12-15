@@ -5078,6 +5078,7 @@ CheckTransaction: (req, res) => {
   
    }else{
     body.created_on = current_date;
+    body.event_code =Math.floor((Math.random() * 10000000000) + 94);
    CreateEvent(body, (err, results) => {
      if(err){
         console.log(err);
@@ -5757,11 +5758,11 @@ AddCommiteeMembers: (req, res) => {
   });
   },
 
-  AddEventBooking: (req, res) => { 
+  AddEventBooking: async (req, res) => { 
     // const body = req.body.image_url; 
    const body = req.body;
    var membership_id = body.membership_id;
-   CheckMemberShipid(membership_id,current_date, (err, result) => {
+   await CheckMemberShipid(membership_id,current_date, async (err, result) => {
     if(result.length==0){
       return res.json({
         success: 0,
@@ -5769,23 +5770,25 @@ AddCommiteeMembers: (req, res) => {
       });
     }
     body.member_id = result[0].id;
-    AddEventBooking(body, (err, results) => {
-     if(err){
+    await AddEventBooking(body, async (err, results) => {
+      if(err){
         console.log(err);
        }
-       if(results){
-         var adult = []
-        for (let i = 0; i < body.name1.length; i++) {
-          var lkn = body.mobile1[i]+body.age1[i];
-          bwipjs.toBuffer({
+      if(results){  
+      for (let i = 0; i < body.name1.length; i++) {
+          var adult = []
+          // var lkn = body.mobile1[i]+body.age1[i];
+          var ticket_no = await Math.floor((Math.random() * 1111111111) + i);
+         await bwipjs.toBuffer({
             bcid:        'code128',       // Barcode type
-            text:        lkn,    // Text to encode
+            text:        String(ticket_no),    // Text to encode
             scale:       3,               // 3x scaling factor
             height:      10,              // Bar height, in millimeters
-            includetext: false,            // Show human-readable text
+            includetext: true,            // Show human-readable text
             textxalign:  'center',        // Always good to set this
           })
           .then(png => {
+            // console.log('gfhgdsfsjfh :',png);
             const b64 = Buffer.from(png).toString('base64');
             const mimeType = 'image/png'; // e.g., image/png
             const img = `"data:${mimeType};base64,${b64}"`;
@@ -5802,6 +5805,7 @@ AddCommiteeMembers: (req, res) => {
                   adult['booking_id'] = results.insertId
                   adult['member_type'] = 0
                   adult['barcode'] = imag
+                  adult['ticket_no'] = ticket_no
                   AddBookingMembers(adult, (err, results1) => {
                     console.log(results1);
                   })
@@ -5813,15 +5817,17 @@ AddCommiteeMembers: (req, res) => {
           
         }
 
-        var child = []
+        
         for (let j = 0; j < body.name2.length; j++) {
-          var lknc = body.mobile2[j]+body.age2[j];
-          bwipjs.toBuffer({
+          var child = []
+          // var lknc = body.mobile2[j]+body.age2[j];
+          var ticket_no1 = await Math.floor((Math.random() * 1111111111) + j);
+        await  bwipjs.toBuffer({
             bcid:        'code128',       // Barcode type
-            text:        lknc,    // Text to encode
+            text:        String(ticket_no1),    // Text to encode
             scale:       3,               // 3x scaling factor
             height:      10,              // Bar height, in millimeters
-            includetext: false,            // Show human-readable text
+            includetext: true,            // Show human-readable text
             textxalign:  'center',        // Always good to set this
           })
           .then(png => {
@@ -5829,6 +5835,7 @@ AddCommiteeMembers: (req, res) => {
             const mimeType = 'image/png'; // e.g., image/png
             const img = `"data:${mimeType};base64,${b64}"`;
             var rand =Math.floor((Math.random() * 10000000000000000) + 94);
+            
             fs.writeFile(rand+'.jpg', img, 'binary', function(err) {
                 console.log('err : ',err);
                 let filePath = './uploads/barcodes/'+rand+'.jpg';
@@ -5841,6 +5848,7 @@ AddCommiteeMembers: (req, res) => {
                     child['booking_id'] = results.insertId
                     child['member_type'] = 1
                     child['barcode'] = imag1
+                    child['ticket_no'] = ticket_no1
                     AddBookingMembers(child, (err, results2) => {
                       console.log(results2);
                     })

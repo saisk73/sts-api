@@ -2120,8 +2120,8 @@ module.exports = {
   CreateEvent: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,adult_fee_nm,child_fee_nm,from_date,to_date,max_tickets,max_tickets_child,closed_date,created_on,status) 
-                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into events_master(eventtype_id,event_name,description,image,adult_fee,child_fee,adult_fee_nm,child_fee_nm,from_date,to_date,max_tickets,max_tickets_child,closed_date,created_on,status,event_code) 
+                values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.eventtype_id,
         data.event_name,
@@ -2137,7 +2137,8 @@ module.exports = {
         data.max_tickets_child,
         data.closed_date,
         data.created_on,
-        data.status
+        data.status,
+        data.event_code
       ],
       (error, results, fields) => {
         if (error) {
@@ -2833,8 +2834,8 @@ module.exports = {
   AddBookingMembers: (data, callBack) => {
     // console.log(data);
     pool.query(
-      `insert into eventbookings_members_master(booking_id,name,mobile,email,age,member_type,barcode) 
-                values(?,?,?,?,?,?,?)`,
+      `insert into eventbookings_members_master(booking_id,name,mobile,email,age,member_type,barcode,ticket_no) 
+                values(?,?,?,?,?,?,?,?)`,
       [
         data['booking_id'],
         data['name'],
@@ -2842,7 +2843,8 @@ module.exports = {
         data['email'],
         data['age'],
         data['member_type'],
-        data['barcode']
+        data['barcode'],
+        data['ticket_no']
       ],
       (error, results, fields) => {
         // console.log('error :', error);
