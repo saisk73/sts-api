@@ -5763,6 +5763,7 @@ AddCommiteeMembers: (req, res) => {
    const body = req.body;
    var membership_id = body.membership_id;
    await CheckMemberShipid(membership_id,current_date, async (err, result) => {
+    //  console.log('hhhhhhhhhhhh :',result);
     if(result.length==0){
       return res.json({
         success: 0,
@@ -5774,8 +5775,11 @@ AddCommiteeMembers: (req, res) => {
       if(err){
         console.log(err);
        }
-      if(results){  
-      for (let i = 0; i < body.name1.length; i++) {
+      if(results){ 
+      // var i = 0;
+    await body.name1.forEach(async function (item,i) {
+      // console.log('ggsgsgsgsgssg :',i);
+      // for (let i = 0; i < body.name1.length; i++) {
           var adult = []
           // var lkn = body.mobile1[i]+body.age1[i];
           var ticket_no = await Math.floor((Math.random() * 1111111111) + i);
@@ -5806,8 +5810,9 @@ AddCommiteeMembers: (req, res) => {
                   adult['member_type'] = 0
                   adult['barcode'] = imag
                   adult['ticket_no'] = ticket_no
+                  console.log('gggggggggggg :',adult);
                   AddBookingMembers(adult, (err, results1) => {
-                    console.log(results1);
+                    // console.log(results1);
                   })
               });
             })
@@ -5815,10 +5820,12 @@ AddCommiteeMembers: (req, res) => {
             console.log('err :',err);
           });
           
-        }
+        // }
+        // i += 1;
+      });
 
-        
-        for (let j = 0; j < body.name2.length; j++) {
+      await body.name2.forEach(async function (item1,j) {
+        // for (let j = 0; j < body.name2.length; j++) {
           var child = []
           // var lknc = body.mobile2[j]+body.age2[j];
           var ticket_no1 = await Math.floor((Math.random() * 1111111111) + j);
@@ -5850,7 +5857,7 @@ AddCommiteeMembers: (req, res) => {
                     child['barcode'] = imag1
                     child['ticket_no'] = ticket_no1
                     AddBookingMembers(child, (err, results2) => {
-                      console.log(results2);
+                      // console.log(results2);
                     })
               });
             })
@@ -5858,7 +5865,8 @@ AddCommiteeMembers: (req, res) => {
             console.log('err :',err);
           });
          
-        }
+        // }
+      });
 
         var bkflds = []
         for (let x = 0; x < body.event_field_ids.length; x++) {

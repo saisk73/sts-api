@@ -2732,6 +2732,8 @@ module.exports = {
     var test = "select * from members_master where '"+current_date+"' <= membership_enddate and registration_id=?";
     pool.query(test,[membership_id],
     (error, results, fields) => {
+      // console.log('error :',error);
+      // console.log('results :',results);
         if (error) {
           callBack(error);
         }
