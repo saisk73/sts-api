@@ -2783,7 +2783,7 @@ module.exports = {
 
   getEventbookingById:(event_id,callBack) => {
     pool.query(
-      `select b.*,(select event_name from events_master where id=b.event_id) as event_name,(select image from events_master where id=b.event_id) as image from events_bookings_master b where id=?`,
+      `select b.*,(select event_name from events_master where id=b.event_id) as event_name,(select image from events_master where id=b.event_id) as image,(select from_date from events_master where id=b.event_id) as from_date,(select to_date from events_master where id=b.event_id) as to_date from events_bookings_master b where id=?`,
       [event_id],
       (error, results, fields) => {
         if (error) {
