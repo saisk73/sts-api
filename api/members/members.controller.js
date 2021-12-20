@@ -5656,11 +5656,18 @@ AddCommiteeMembers: (req, res) => {
       console.log(err);
       return;
     }
-    if (!results) {
+    if (results.length == 0) {
       return res.json({
         success: 0,
         message: "Record not Found"
       });
+    }
+    
+    var date1 = new Date(results[0].closed_date);
+    var date2 = new Date(current_date);
+    results[0].event_status = 1;
+    if(date2>date1){
+      results[0].event_status = 0;
     }
     return res.json({
       success: 1,
@@ -6106,7 +6113,7 @@ getMemberEventsBookings: (req, res) => {
 },
 
 getEventbookingById: (req, res) => {
-  const event_id = req.params.event_id;
+  const event_id = req.params.eventbook_id;
   getEventbookingById(event_id,(err, results) => {
     if (err) {
       console.log(err);

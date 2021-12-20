@@ -2895,7 +2895,7 @@ module.exports = {
 
   getbookingfieldsBybookid: (book_id, callBack) => {
     pool.query(
-      `select b.*,(select name from events_fields_master where id=d.eventfield_id) as field_name from eventbookings_fields_master b where eventbooking_id=?`,
+      `select b.*,(select name from events_fields_master where id=b.eventfield_id) as field_name from eventbookings_fields_master b where eventbooking_id=?`,
       [book_id],
       (error, results, fields) => {
         if (error) {

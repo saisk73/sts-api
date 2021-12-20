@@ -290,7 +290,7 @@ router.post("/bookevent", AddEventBooking);
 router.get("/myeventbookings",checkToken, getEventBookings);
 router.get("/membereventbookings", checkToken, getMemberEventsBookings);
 
-router.get("/geteventbooking/:event_id",checkToken, getEventbookingById);
+router.get("/geteventinvoice/:eventbook_id",checkToken, getEventbookingById);
 
 router.post("/eventfields", getEventFields);
 
